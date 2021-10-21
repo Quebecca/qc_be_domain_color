@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en"
+		  target-language="fr"
+		  datatype="plaintext"
+		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang.xlf"
+		  date="2021-07-23T12:00:00Z"
+		  product-name="pgu_be_domaincolor">
+		<header/>
+		<body>
+			<trans-unit id="new" >
+				<target>Nouveau domaine</target>
+			</trans-unit>
+			<trans-unit id="new.placeholder" >
+				<target>Regexp valide, e.g. prod, dev.*, etc</target>
+			</trans-unit>
+			<trans-unit id="delete" >
+				<target>Supprimer ce domaine</target>
+			</trans-unit>
+			<trans-unit id="regexp-error" >
+				<target>Expression régulière invalide</target>
+			</trans-unit>
+			<trans-unit id="description" >
+				<target>Identifiez votre environnement en un coup d'œil, en définissant des expressions régulières pour vos domaines web, associées à la couleur de fond du menu de gauche.</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

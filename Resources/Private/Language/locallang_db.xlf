@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en"
+		  target-language="fr"
+		  datatype="plaintext"
+		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang_db.xlf"
+		  date="2021-07-23T12:00:00Z"
+		  product-name="pgu_be_domaincolor">
+		<header/>
+		<body>
+			<trans-unit id="be_users.tabs.beDomainColor" >
+				<source>Domain color</source>
+			</trans-unit>
+			<trans-unit id="be_users.fields.beDomainColor" >
+				<source>Domain color</source>
+			</trans-unit>
+
+
+		</body>
+	</file>
+</xliff>

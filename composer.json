@@ -1,0 +1,42 @@
+{
+    "name": "qc/qc-be-domain-color",
+    "type": "typo3-cms-extension",
+    "description": "This extension inject CSS in the BE interface to modify the color of the left/Modules frame. The color is associated to one or many domains. It can be useful when you get many TYPO3 instances, local DDEV/Docker installations or development servers and you want to really make the production server stand out.",
+    "authors": [],
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "typo3/cms-core": "^10.4.0 || ^11.4.0"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "^6.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qc\\QcInfoRights\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Qc\\QcInfoRights\\Tests\\": "Tests"
+        }
+    },
+    "replace": {
+        "typo3-ter/qc-info-rights": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/public",
+            "extension-key": "qc_be_domain_color"
+        }
+    }
+}

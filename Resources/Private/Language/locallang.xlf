@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en"
+		  target-language="fr"
+		  datatype="plaintext"
+		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang.xlf"
+		  date="2021-07-23T12:00:00Z"
+		  product-name="pgu_be_domaincolor">
+		<header/>
+		<body>
+			<trans-unit id="new" >
+				<source>New domain</source>
+			</trans-unit>
+			<trans-unit id="new.placeholder" >
+				<source>Valid regexp, e.g. prod, dev.*, etc</source>
+			</trans-unit>
+			<trans-unit id="delete" >
+				<source>Delete this domain</source>
+			</trans-unit>
+			<trans-unit id="regexp-error" >
+				<source>Invalid regexp</source>
+			</trans-unit>
+			<trans-unit id="description" >
+				<source>Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

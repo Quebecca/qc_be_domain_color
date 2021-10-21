@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en"
+		  target-language="fr"
+		  datatype="plaintext"
+		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang_csh_mod.xlf"
+		  date="2021-07-23T12:00:00Z"
+		  product-name="setup">
+		<header/>
+		<body>
+			<trans-unit id="option_beDomainColor.alttitle" resname="option_beDomainColor.alttitle">
+				<source>Assign color by domain</source>
+			</trans-unit>
+			<trans-unit id="option_beDomainColor.description" resname="option_beDomainColor.description">
+				<source>À traduire</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

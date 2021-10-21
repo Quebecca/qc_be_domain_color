@@ -1,0 +1,139 @@
+<html
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        data-namespace-typo3-fluid="true">
+<f:variable name="l">{</f:variable>
+<f:variable name="r">}</f:variable>
+<section class="domainColorapp">
+
+    <span class="text-muted">{f:translate(key:'description', extensionName:'PguBeDomaincolor')}</span>
+
+<!--    {l}{l}domainColorsJson{r}{r}-->
+    <input
+            type="hidden"
+            name="data[tx_pgu_be_domain_color]"
+            :value="domainColorsJson"
+            id="field_tx_pgu_be_domain_color"
+    />
+    <div class="row">
+        <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4 col-lg-3">
+            <div :class="'formengine-field-item t3js-formengine-field-item ' + newDomainHasErrorClass">
+                <div class="form-control-wrap">
+                    <div class="form-wizards-wrap">
+                        <div class="form-wizards-element">
+                            <input
+                                    id="new-domain"
+                                    class="new-domain form-control"
+                                    autofocus
+                                    autocomplete="off"
+                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'PguBeDomaincolor')}"
+                                    v-model="newDomain"
+                                    @keyup="validateNew(newDomain)"
+                                    @keydown.enter.prevent="add"
+                            />
+                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'PguBeDomaincolor')}</span>
+                        </div>
+                        <div class="form-wizards-items-aside">
+                            <div class="btn-group">
+                                <button @click.prevent.stop="add"
+                                        class="btn btn-default"
+                                        :disabled="newDomainHasErrorClass != '' || newDomain == ''"
+                                >
+                                    {f:translate(key:'new', extensionName:'PguBeDomaincolor')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <section class="main" >
+
+        <div
+                v-for="(domainColor,index) in domainColors"
+                class="row"
+
+        >
+
+            <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-6 checkbox-column col-sm-6 col-md-4 col-lg-2">
+                <div :class="'formengine-field-item t3js-formengine-field-item ' + domainColor.errorClass ">
+                    <div class="form-control-wrap">
+                        <div class="form-wizards-wrap">
+                            <div class="form-wizards-element">
+                                <input
+                                        class="edit form-control"
+                                        type="text"
+                                        v-model="domainColor.domain"
+                                        v-domaincolor-focus="domainColor == editedDomainColor"
+                                        @keydown.enter.prevent=""
+                                        @keyup="validateEdit(domainColor)"
+                                />
+                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'PguBeDomaincolor')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-5 col-md-3 col-lg-2">
+                <div class="formengine-field-item t3js-formengine-field-item">
+                    <div class="form-control-wrap" style="max-width: 156px">
+                        <div class="form-wizards-wrap">
+
+                            <div class="form-wizards-element">
+                                <input
+                                        type="text"
+                                        autocomplete="off"
+                                        :id="'domain-color-' + domainColor.id + '-picker'"
+                                        class="form-control hasDefaultValue t3js-clearable t3js-color-picker"
+                                        :data-formengine-input-name="'domain-color-' + index"
+                                        v-model="domainColor.color"
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group  t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-1 checkbox-column col-sm-1 col-md-3 col-lg-2">
+                <div class="formengine-field-item t3js-formengine-field-item">
+
+                    <div class="form-control-wrap">
+                        <div class="form-wizards-wrap">
+                            <div class="form-wizards-element">
+                                <button
+                                        aria-label="{f:translate(key:'delete', extensionName:'PguBeDomaincolor')}"
+                                        class="btn btn-default  t3js-editform-delete-record"
+                                        @click.prevent="remove(domainColor)">
+                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
+                                        <span class="icon-markup">
+                                            <svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
+                                        </span>
+	                                </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</section>
+<script>
+    const pguDomainColors = {pguDomainColors -> f:format.raw()}
+</script>
+<style>
+    .error-message {
+        display:none;
+        color: #c83c3c;
+    }
+    .has-error .error-message {
+        display: inline;
+    }
+</style>
+
+</html>
+

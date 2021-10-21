@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en"
+		  target-language="fr"
+		  datatype="plaintext"
+		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang_csh_mod.xlf"
+		  date="2021-07-23T12:00:00Z"
+		  product-name="setup">
+		<header/>
+		<body>
+			<trans-unit id="option_beDomainColor.alttitle" resname="option_beDomainColor.alttitle">
+				<target>Assigner des couleurs par domaine</target>
+			</trans-unit>
+			<trans-unit id="option_beDomainColor.description" resname="option_beDomainColor.description">
+				<target><![CDATA[
+				<div>Cette option vous permet de modifier la couleur de fond du menu gauche - celui des modules - en fonction du domaine sur lequel vous vous trouvez. Chacune des valeurs de domaine saisies sera testée par expression régulière au domaine web courant - correspondant à la variable $_SERVER[HTTP_HOST]: en cas de correspondance, la couleur assignée sera appliquée. Il vous est possible de saisir plusieurs domaines, pour le cas où votre base de données serait exportée et importée dans un de vos sous-domaines.</div>
+				<div>Par exemple, pour les domaines suivants:<br/>
+				www.exemple.com -> www\.exemple, <br/>
+				www.dev.exemple.com -> dev ou dev\.exemple, etc.
+				</div>
+				]]></target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
