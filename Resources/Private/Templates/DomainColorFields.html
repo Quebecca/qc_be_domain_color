@@ -5,7 +5,7 @@
 <f:variable name="r">}</f:variable>
 <section class="domainColorapp">
 
-    <span class="text-muted">{f:translate(key:'description', extensionName:'QcBeDomaincolor')}</span>
+    <span class="text-muted">{f:translate(key:'description', extensionName:'QcBeDomainColor')}</span>
 
 <!--    {l}{l}domainColorsJson{r}{r}-->
     <input
@@ -25,12 +25,12 @@
                                     class="new-domain form-control"
                                     autofocus
                                     autocomplete="off"
-                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'QcBeDomaincolor')}"
+                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'QcBeDomainColor')}"
                                     v-model="newDomain"
                                     @keyup="validateNew(newDomain)"
                                     @keydown.enter.prevent="add"
                             />
-                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomaincolor')}</span>
+                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomainColor')}</span>
                         </div>
                         <div class="form-wizards-items-aside">
                             <div class="btn-group">
@@ -69,7 +69,7 @@
                                         @keydown.enter.prevent=""
                                         @keyup="validateEdit(domainColor)"
                                 />
-                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomaincolor')}</span>
+                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomainColor')}</span>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element">
                                 <button
-                                        aria-label="{f:translate(key:'delete', extensionName:'QcBeDomaincolor')}"
+                                        aria-label="{f:translate(key:'delete', extensionName:'QcBeDomainColor')}"
                                         class="btn btn-default  t3js-editform-delete-record"
                                         @click.prevent="remove(domainColor)">
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
