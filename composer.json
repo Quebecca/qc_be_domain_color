@@ -12,16 +12,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Qc\\QcInfoRights\\": "Classes"
+            "Qc\\QcBeDomainColor\\": "Classes"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qc\\QcInfoRights\\Tests\\": "Tests"
+            "Qc\\QcBeDomainColor\\Tests\\": "Tests"
         }
     },
     "replace": {
-        "typo3-ter/qc-info-rights": "self.version"
+        "typo3-ter/qc-be-domain-color": "self.version"
     },
     "config": {
         "vendor-dir": ".Build/vendor",
