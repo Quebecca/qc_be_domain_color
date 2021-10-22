@@ -3,23 +3,23 @@
 
 call_user_func(
     function ($extKey) {
-        $lll = 'LLL:EXT:pgu_be_domaincolor/Resources/Private/Language/locallang_db.xlf:';
+        $lll = 'LLL:EXT:qc_be_domain_color/Resources/Private/Language/locallang_db.xlf:';
 
-        $GLOBALS['TYPO3_USER_SETTINGS']['columns']['tx_pgu_be_domain_color'] = array(
+        $GLOBALS['TYPO3_USER_SETTINGS']['columns']['tx_qc_be_domain_color'] = array(
             'label' => $lll.'be_users.fields.beDomainColor',
             'type' => 'select',
             'csh' => 'beDomainColor',
-            'itemsProcFunc' => \Pgu\PguBeDomaincolor\Hooks\ItemsProcFunc::class . '->domainColorsFields',
+            'itemsProcFunc' => \Qc\QcBeDomainColor\Hooks\ItemsProcFunc::class . '->DomainColorsFields',
         );
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings(
-            '--div--;'.$lll.'be_users.tabs.beDomainColor,tx_pgu_be_domain_color'
+            '--div--;'.$lll.'be_users.tabs.beDomainColor,tx_qc_be_domain_color'
         );
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
             '_MOD_user_setup',
-            'EXT:pgu_be_domaincolor/Resources/Private/Language/locallang_csh_mod.xlf'
+            'EXT:qc_be_domain_color/Resources/Private/Language/locallang_csh_mod.xlf'
         );
     },
-    'PguBeDomaincolor'
+    'QcBeDomainColor'
 );
 

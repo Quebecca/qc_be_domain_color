@@ -1,7 +1,7 @@
 BE Domain Color
 ===============
 
-Key: pgu_be_domaincolor
+Key: qc_be_domain_color
 Author: Marc Munos, Québec.ca
 
 **[Documentation en français plus bas](#documentation-française)**

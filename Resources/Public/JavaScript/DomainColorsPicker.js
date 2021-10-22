@@ -7,8 +7,8 @@ define([
     let app = new Vue({
         // app initial state
         data: {
-            // pguDomainColors is declared in EXT:pgu_be_domaincolor/Resources/Private/Templates/DomainColorFields.html
-            domainColors: pguDomainColors || [],
+            // qcDomainColors is declared in EXT:qc_be_domain_color/Resources/Private/Templates/DomainColorFields.html
+            domainColors: qcDomainColors || [],
             newDomain:'',
             newDomainHasErrorClass: '',
             editedDomainColor: null,

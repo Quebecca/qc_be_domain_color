@@ -5,14 +5,14 @@
 <f:variable name="r">}</f:variable>
 <section class="domainColorapp">
 
-    <span class="text-muted">{f:translate(key:'description', extensionName:'PguBeDomaincolor')}</span>
+    <span class="text-muted">{f:translate(key:'description', extensionName:'QcBeDomaincolor')}</span>
 
 <!--    {l}{l}domainColorsJson{r}{r}-->
     <input
             type="hidden"
-            name="data[tx_pgu_be_domain_color]"
+            name="data[tx_qc_be_domain_color]"
             :value="domainColorsJson"
-            id="field_tx_pgu_be_domain_color"
+            id="field_tx_qc_be_domain_color"
     />
     <div class="row">
         <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4 col-lg-3">
@@ -25,12 +25,12 @@
                                     class="new-domain form-control"
                                     autofocus
                                     autocomplete="off"
-                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'PguBeDomaincolor')}"
+                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'QcBeDomaincolor')}"
                                     v-model="newDomain"
                                     @keyup="validateNew(newDomain)"
                                     @keydown.enter.prevent="add"
                             />
-                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'PguBeDomaincolor')}</span>
+                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomaincolor')}</span>
                         </div>
                         <div class="form-wizards-items-aside">
                             <div class="btn-group">
@@ -38,7 +38,7 @@
                                         class="btn btn-default"
                                         :disabled="newDomainHasErrorClass != '' || newDomain == ''"
                                 >
-                                    {f:translate(key:'new', extensionName:'PguBeDomaincolor')}
+                                    {f:translate(key:'new', extensionName:'QcBeDomaincolor')}
                                 </button>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                         @keydown.enter.prevent=""
                                         @keyup="validateEdit(domainColor)"
                                 />
-                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'PguBeDomaincolor')}</span>
+                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomaincolor')}</span>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element">
                                 <button
-                                        aria-label="{f:translate(key:'delete', extensionName:'PguBeDomaincolor')}"
+                                        aria-label="{f:translate(key:'delete', extensionName:'QcBeDomaincolor')}"
                                         class="btn btn-default  t3js-editform-delete-record"
                                         @click.prevent="remove(domainColor)">
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
@@ -123,7 +123,7 @@
 
 </section>
 <script>
-    const pguDomainColors = {pguDomainColors -> f:format.raw()}
+    const qcDomainColors = {qcDomainColors -> f:format.raw()}
 </script>
 <style>
     .error-message {

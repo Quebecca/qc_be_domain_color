@@ -3,9 +3,9 @@
 	<file source-language="en"
 		  target-language="fr"
 		  datatype="plaintext"
-		  original="EXT:pgu_be_domaincolor/Resources/Private/Language/locallang.xlf"
+		  original="EXT:qc_be_domain_color/Resources/Private/Language/locallang.xlf"
 		  date="2021-07-23T12:00:00Z"
-		  product-name="pgu_be_domaincolor">
+		  product-name="qc_be_domain_color">
 		<header/>
 		<body>
 			<trans-unit id="new" >

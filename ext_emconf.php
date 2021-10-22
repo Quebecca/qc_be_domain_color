@@ -1,6 +1,6 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
-    'title' => 'PGU BE Domain color',
+    'title' => 'QC BE Domain color',
     'description' => 'Allows to set custom bg color by domain',
     'category' => 'be',
     'author' => 'Techno - Québec.ca',
@@ -22,7 +22,7 @@ $EM_CONF[$_EXTKEY] = array(
     ),
     'autoload' => [
         'psr-4' => [
-            'Pgu\\PguBeDomainColor\\' => 'Classes'
+            'QC\\QcBeDomainColor\\' => 'Classes'
         ],
     ],
 );
