@@ -1,6 +1,6 @@
 <?php
 
-namespace QC\QcBeDomainColor\Hooks;
+namespace Qc\QcBeDomainColor\Hooks;
 
 /**
  * This file is part of the "QcBeDomainColor" Extension for TYPO3 CMS.
