@@ -55,23 +55,24 @@ Documentation française
 
 ### Description
 
-Cette extension permet de personnaliser la couleur de fond de la barre des modules de la partie d'administration de TYPO3 (le « backend ») en fonction du domaine web. Elle s'adresse donc aux personnes qui travaillent sur plusieurs environnements (production, staging, formation, développement, etc) et souhaitent pouvoir rapidement identifier l'environnement sur lequel ils se trouvent de façon visuelle.
+Cette extension permet de personnaliser la couleur de fond de la barre des modules du panneau  d'administration de TYPO3 (le « backend ») en fonction du domaine web. Elle s'adresse donc aux personnes qui travaillent sur plusieurs environnements (production, acceptation, formation, développement, etc.). Elle leur permet d'identifier visuellement l'environnement sur lequel ils se trouvent.
  
 
 ![alt text](Documentation/Images/module-be-fr.jpg "Saise d'écran")
 
 ### Utilisation
 
-1. aller dans les paramètres de l'utilisateur (en haut à droite)
-2. choisir l'onglet « Couleurs par domaine »
-3. utiliser le formulaire pour ajouter autant de correspondances domaine/couleur que voulu. Si votre BD de production est régulièrement exportée et importée dans d'autres environnements, c'est le bon endroit pour y faire les réglages pour tous les environnements.
+Suivez les étapes suivantes pour appliquer une couleur à un environnement.
+
+1. Ouvrir les paramètres de l'utilisateur (en haut à droite)
+2. Choisir l'onglet «Couleurs par domaine»
+3. Utiliser le formulaire pour ajouter une ou plusieurs correspondances domaine/couleur que voulu. Si votre BD de production est régulièrement exportée et importée dans d'autres environnements, c'est le bon endroit pour y faire les réglages pour tous les environnements.
 
 ![img.png](img.png)
 
 ### Fonctionnalités**
 
-L'identification du domaine se fait par expression régulière. Toutes les correspondances domaine/couleur sont testées,
-la dernière qui correspond au domaine de l'adresse web en cours donne la couleur de fond de la barre de gauche.
+L'identification du domaine se fait par expression régulière. Toutes les correspondances domaine/couleur sont testées. La dernière qui correspond au domaine de l'adresse web en cours donne la couleur de fond de la barre de gauche.
 
 ### Exemples
 Voici quelques exemples d'expressions régulières pour identifier le domaine courant :
