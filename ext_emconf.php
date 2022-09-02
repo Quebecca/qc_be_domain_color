@@ -1,9 +1,9 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
-    'title' => 'QC BE Domain color',
+    'title' => 'QC BE Domain Color',
     'description' => 'Allows to set custom bg color by domain',
     'category' => 'be',
-    'author' => 'Techno - Québec.ca',
+    'author' => 'Quebec.ca',
     'author_email' => 'techno@quebec.ca',
     'state' => 'stable',
     'internal' => '',
