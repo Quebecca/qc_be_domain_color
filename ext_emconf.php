@@ -10,9 +10,10 @@ $EM_CONF[$_EXTKEY] = array(
     'uploadfolder' => '0',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '1.0.1',
+    'version' => '1.0.2',
     'constraints' => array(
         'depends' => array(
+            'php' => '7.4-8.2',
             'typo3' => '10.4.0-11.5.99',
         ),
         'conflicts' => array(
