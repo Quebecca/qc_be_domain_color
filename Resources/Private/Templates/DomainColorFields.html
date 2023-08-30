@@ -7,12 +7,12 @@
 
     <span class="text-muted">{f:translate(key:'description', extensionName:'QcBeDomainColor')}</span>
 
-<!--    {l}{l}domainColorsJson{r}{r}-->
+    <!--{l}{l}domainColorsJson{r}{r}-->
     <input
             type="hidden"
-            name="data[tx_qc_be_domain_color]"
+            name="data[be_users][domain_color_json]"
             :value="domainColorsJson"
-            id="field_tx_qc_be_domain_color"
+            id="field_domain_color_json"
     />
     <div class="row">
         <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4 col-lg-3">
@@ -124,6 +124,7 @@
 </section>
 <script>
     const qcDomainColors = {qcDomainColors -> f:format.raw()}
+    document.getElementById("field_tx_qc_be_domain_color_values").parentNode.parentNode.parentNode.classList.add("section-display-none");
 </script>
 <style>
     .error-message {
@@ -132,6 +133,17 @@
     }
     .has-error .error-message {
         display: inline;
+    }
+    .new-domain {
+        margin-top: 0.5rem;
+    }
+    #field_tx_qc_be_domain_color_values {
+        display : none;
+    }
+    .section-display-none {
+        height: 0;
+        padding: 0;
+        border:none;
     }
 </style>
 

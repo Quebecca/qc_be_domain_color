@@ -36,8 +36,7 @@ class ItemsProcFunc
             $pageRenderer->addJsFile('EXT:vuejs/Resources/Public/JavaScript/Contrib/Vue/vue.min.js'); // silent production version
         }
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/QcBeDomainColor/DomainColorsPicker');
-
-        $view->assign('qcDomainColors', html_entity_decode(($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]') ?: '[]'));
+        $view->assign('qcDomainColors', html_entity_decode((string) (($GLOBALS['BE_USER']->user['tx_qc_be_domain_color_values'] ?? '[]') ?: '[]')));
 
         return  $view->render();
     }
@@ -57,10 +56,10 @@ class ItemsProcFunc
     public function injectDomainColor($conf = [], BackendController $controller)
     {
 
-        $domainColors = json_decode(html_entity_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color']),true);
+        $domainColors = json_decode(html_entity_decode((string) $GLOBALS['BE_USER']->user['tx_qc_be_domain_color_values']),true, 512, JSON_THROW_ON_ERROR);
         foreach ($domainColors ?? [] as $domainColor) {
             $pattern = "/$domainColor[domain]/";
-            if (@preg_match($pattern, $_SERVER['HTTP_HOST'])) {
+            if (@preg_match($pattern, (string) $_SERVER['HTTP_HOST'])) {
                 $controller->addCss("#modulemenu {background: $domainColor[color];}");
             }
         }
