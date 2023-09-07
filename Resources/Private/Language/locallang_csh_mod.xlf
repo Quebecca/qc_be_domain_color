@@ -12,7 +12,13 @@
 				<source>Assign color by domain</source>
 			</trans-unit>
 			<trans-unit id="option_beDomainColor.description" resname="option_beDomainColor.description">
-				<source>À traduire</source>
+				<source><![CDATA[
+				<div>This option allows you to modify the background color of the left menu - modules menu - according to the domain on which you are. Each domain values will be tested by regular expression to the current web domain - matching the $_SERVER[HTTP_HOST] variable: if there is a match, the assigned color will be applied. You can enter several domains, in case your database is exported and imported into one of your subdomains.</div>
+				<div>For example, for the following domains:<br/>
+				www.example.com -> www\.example, <br/>
+				www.dev.example.com -> dev ou dev\.example, etc.
+				</div>
+				]]></source>
 			</trans-unit>
 		</body>
 	</file>

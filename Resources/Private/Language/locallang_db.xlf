@@ -14,7 +14,9 @@
 			<trans-unit id="be_users.fields.beDomainColor" >
 				<source>Domain color</source>
 			</trans-unit>
-
+			<trans-unit id="be_users.fields.beDomainColorValues" >
+				<source>JSON list of domains with their color</source>
+			</trans-unit>
 
 		</body>
 	</file>

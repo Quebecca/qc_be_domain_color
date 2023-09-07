@@ -24,8 +24,17 @@ define([
         },
         updated: function () {
             update()
+            setTimeout(function() {
+                document.getElementById("field_tx_qc_be_domain_color_values").value = document.getElementById("field_domain_color_json").value;
+            }, 100);
         },
-
+        watch: {
+            domainColors(val) {
+                setTimeout(function() {
+                    document.getElementById("field_tx_qc_be_domain_color_values").value = document.getElementById("field_domain_color_json").value;
+                }, 100);
+            },
+        },
         methods: {
 
             validateEdit: function (domainColor) {
