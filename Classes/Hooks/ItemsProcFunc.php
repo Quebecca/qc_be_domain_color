@@ -57,7 +57,7 @@ class ItemsProcFunc
     public function injectDomainColor($conf = [], BackendController $controller)
     {
 
-        $domainColors = json_decode(html_entity_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color']),true);
+        $domainColors = json_decode(html_entity_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]'),true);
         foreach ($domainColors ?? [] as $domainColor) {
             $pattern = "/$domainColor[domain]/";
             if (@preg_match($pattern, $_SERVER['HTTP_HOST'])) {
