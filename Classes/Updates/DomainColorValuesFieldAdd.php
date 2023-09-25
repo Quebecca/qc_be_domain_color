@@ -17,7 +17,7 @@ final class DomainColorValuesFieldAdd implements UpgradeWizardInterface
     */
     public function getTitle(): string
     {
-        return 'Transfert domain color values';
+        return 'EXT:qc_be_domain_color: Transfert domain color values';
     }
 
     /**
@@ -25,7 +25,7 @@ final class DomainColorValuesFieldAdd implements UpgradeWizardInterface
      */
     public function getDescription(): string
     {
-        return 'Transfert domain color values from UC field to tx_qc_be_domain_color_values field (Table : be_users)';
+        return 'If you upgrade to v1.0.4, you may transfert domain color values from UC field to tx_qc_be_domain_color_values field (Table : be_users)';
     }
 
     /**

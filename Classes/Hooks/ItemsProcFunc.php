@@ -55,14 +55,11 @@ class ItemsProcFunc
 
     public function injectDomainColor($conf = [], BackendController $controller)
     {
-        $domainColorsFieldValue = $GLOBALS['BE_USER']->user['tx_qc_be_domain_color_values'] ?? '"[]"';
-        $domainColors = json_decode(html_entity_decode($domainColorsFieldValue),true, 512, JSON_THROW_ON_ERROR);
-        if(is_array($domainColors)){
-            foreach ($domainColors ?? [] as $domainColor) {
-                $pattern = "/$domainColor[domain]/";
-                if (@preg_match($pattern, (string) $_SERVER['HTTP_HOST'])) {
-                    $controller->addCss("#modulemenu {background: $domainColor[color];}");
-                }
+        $domainColors = json_decode(html_entity_decode($GLOBALS['BE_USER']->user['tx_qc_be_domain_color_values'] ?? '[]'),true);
+        foreach ($domainColors ?? [] as $domainColor) {
+            $pattern = "/$domainColor[domain]/";
+            if (@preg_match($pattern, (string) $_SERVER['HTTP_HOST'])) {
+                $controller->addCss("#modulemenu {background: $domainColor[color];}");
             }
         }
     }
