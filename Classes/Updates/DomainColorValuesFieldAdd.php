@@ -6,7 +6,7 @@ namespace Qc\QcBeDomainColor\Updates;
 
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
-use Scg\GabaritPgu\Traits\DbUtilityHelper;
+use Qc\QcBeDomainColor\Traits\DbUtilityHelper;
 
 final class DomainColorValuesFieldAdd implements UpgradeWizardInterface
 {
