@@ -1,0 +1,6 @@
+Qc\QcBeDomainColor\Event\ItemsProcFunc:
+  public: true
+  tags:
+    - name: event.listener
+      identifier: 'items-proc-func'
+      event: \TYPO3\CMS\Backend\Controller\Event\AfterBackendPageRenderEvent
