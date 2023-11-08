@@ -1,6 +1,6 @@
 <?php
 
-namespace Qc\QcBeDomainColor\Event;
+namespace Qc\QcBeDomainColor\Events;
 
 /**
  * This file is part of the "QcBeDomainColor" Extension for TYPO3 CMS.

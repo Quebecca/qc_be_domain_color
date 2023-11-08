@@ -1,4 +1,4 @@
-Qc\QcBeDomainColor\Event\ItemsProcFunc:
+Qc\QcBeDomainColor\Events\ItemsProcFunc:
   public: true
   tags:
     - name: event.listener
