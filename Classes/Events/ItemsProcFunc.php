@@ -11,7 +11,6 @@ namespace Qc\QcBeDomainColor\Events;
 use TYPO3\CMS\Backend\Controller\Event\AfterBackendPageRenderEvent;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -45,8 +44,7 @@ class ItemsProcFunc
     protected function getStandaloneView()
     {
         $templatePath = GeneralUtility::getFileAbsFileName('EXT:qc_be_domain_color/Resources/Private/Templates');
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $standaloneView = $objectManager->get(StandaloneView::class);
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setFormat('html');
         $standaloneView->setTemplateRootPaths((array)$templatePath);
         $standaloneView->setTemplate('DomainColorFields.html');
