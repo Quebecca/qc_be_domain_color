@@ -3,6 +3,8 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+  Qc\QcBeDomainColor\:
+    resource: '../Classes/*'
   Qc\QcBeDomainColor\Events\ItemsProcFunc:
     public: true
     tags:
