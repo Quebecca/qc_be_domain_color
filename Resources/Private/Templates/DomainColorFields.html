@@ -1,6 +1,11 @@
 <html
         xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
         data-namespace-typo3-fluid="true">
+<f:be.pageRenderer
+    includeJavaScriptModules="{
+         0: '@qc/qc-be-domain-color/DomainColorsPicker.js'
+      }"
+/>
 <f:variable name="l">{</f:variable>
 <f:variable name="r">}</f:variable>
 <section class="domainColorapp">
@@ -15,7 +20,8 @@
             id="field_tx_qc_be_domain_color"
     />
     <div class="row">
-        <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group t3js-formengine-validation-marker
+                    t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
             <div :class="'formengine-field-item t3js-formengine-field-item ' + newDomainHasErrorClass">
                 <div class="form-control-wrap">
                     <div class="form-wizards-wrap">
@@ -32,17 +38,22 @@
                             />
                             <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomainColor')}</span>
                         </div>
-                        <div class="form-wizards-items-aside">
-                            <div class="btn-group">
-                                <button @click.prevent.stop="add"
-                                        class="btn btn-default"
-                                        :disabled="newDomainHasErrorClass != '' || newDomain == ''"
-                                >
-                                    {f:translate(key:'new', extensionName:'QcBeDomainColor')}
-                                </button>
-                            </div>
-                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group t3js-formengine-validation-marker
+                    t3js-formengine-palette-field checkbox-column  col-sm-6 col-md-4">
+            <div :class="'formengine-field-item t3js-formengine-field-item ' + newDomainHasErrorClass">
+                <div class="form-control-wrap">
+                        <div class="btn-group">
+                            <button @click.prevent.stop="add"
+                                    class="btn btn-default"
+                                    :disabled="newDomainHasErrorClass != '' || newDomain == ''"
+                            >
+                                {f:translate(key:'new', extensionName:'QcBeDomainColor')}
+                            </button>
+                        </div>
                 </div>
             </div>
         </div>
@@ -56,7 +67,7 @@
 
         >
 
-            <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-6 checkbox-column col-sm-6 col-md-4 col-lg-2">
+            <div class="form-group t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-6">
                 <div :class="'formengine-field-item t3js-formengine-field-item ' + domainColor.errorClass ">
                     <div class="form-control-wrap">
                         <div class="form-wizards-wrap">
@@ -76,11 +87,10 @@
                 </div>
             </div>
 
-            <div class="form-group t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-5 col-md-3 col-lg-2">
+            <div class="form-group t3js-formengine-validation-marker col-md-2 col-sm-3">
                 <div class="formengine-field-item t3js-formengine-field-item">
                     <div class="form-control-wrap" style="max-width: 156px">
                         <div class="form-wizards-wrap">
-
                             <div class="form-wizards-element">
                                 <input
                                         type="text"
@@ -97,7 +107,7 @@
                 </div>
             </div>
 
-            <div class="form-group  t3js-formengine-validation-marker t3js-formengine-palette-fieldcol-sm-1 checkbox-column col-sm-1 col-md-3 col-lg-2">
+            <div class="form-group  t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
                 <div class="formengine-field-item t3js-formengine-field-item">
 
                     <div class="form-control-wrap">

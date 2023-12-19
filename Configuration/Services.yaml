@@ -3,11 +3,13 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+
   Qc\QcBeDomainColor\:
     resource: '../Classes/*'
+
   Qc\QcBeDomainColor\Events\ItemsProcFunc:
     public: true
     tags:
       - name: event.listener
-        identifier: 'items-proc-func'
-        event: \TYPO3\CMS\Backend\Controller\Event\AfterBackendPageRenderEvent
+        identifier: 'qc-be-domain-color/backend/after-backend-page-render'
+
