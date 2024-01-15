@@ -65,7 +65,7 @@ class ItemsProcFunc
         foreach ($domainColors ?? [] as $domainColor) {
             $pattern = "/$domainColor[domain]/";
             if (@preg_match($pattern, (string) $_SERVER['HTTP_HOST'])) {
-                $content = "<style>#modulemenu {background: #$domainColor[color];}</style>" . $event->getContent();
+                $content = "<style>#modulemenu {background: $domainColor[color];}</style>" . $event->getContent();
                 $event->setContent($content);
             }
         }
