@@ -1,0 +1,39 @@
+{
+  "name": "pgu_affaires_municipales",
+  "version": "1.0.0",
+  "description": "Création de composants web pour certains écrans de recherche de documents concernant les affaires municipales",
+  "main": "index.js",
+  "scripts": {
+    "dev": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rollup/plugin-commonjs": "*",
+    "@rollup/plugin-node-resolve": "*",
+    "js-beautify": "^1.15.1",
+    "jsonformatter": "^0.7.0",
+    "lodash": "^4.17.21",
+    "lodash.merge": "^4.6.2",
+    "md5": "^2.3.0",
+    "papaparse": "^5.4.1",
+    "qc-trousse-sdg": "^1.2.1",
+    "rollup": "*",
+    "rollup-plugin-includepaths": "^0.2.4",
+    "rollup-plugin-svelte": "*",
+    "svelte": "*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
+    "glob": "^10.3.10",
+    "rollup-plugin-glob-import": "^0.5.0",
+    "rollup-plugin-scss": "^4.0.0",
+    "sass": "^1.71.1",
+    "svelte-preprocess": "^5.1.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
+  }
+}
