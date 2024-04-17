@@ -17,14 +17,19 @@
     $: isEmptyDomainName = domainName.trim() === "";
 
     $: colors = {};
-
-    function addNewDomain() {
+    let domainColorsJson = '{}';
+    function addNewDomain(e) {
+        e.preventDefault();
         colors[domainName] = new Color("#CCC")
+        domainColors[domainName] = "#CCC";
+        domainColorsJson = JSON.stringify(domainColors)
+
         colors = colors;
     }
 
     function deleteDomainColor(key) {
         delete colors[key];
+        domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
 
@@ -35,6 +40,20 @@
     });
 </script>
 <div class="container">
+    <style>
+        .svelte-s8w54d {
+            height : 85%;
+        }
+        .svelte-s8w54d .show {
+            padding-top: 5px;
+        }
+    </style>
+    <input
+        type="hidden"
+        name="data[tx_qc_be_domain_color]"
+        bind:value={domainColorsJson}
+        id="field_tx_qc_be_domain_color"
+    />
     <div class="row">
         <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
@@ -47,11 +66,10 @@
                                    autocomplete="off"
                                    placeholder="Valid regexp, e.g. prod, dev.*, etc"
                                    class="new-domain form-control"
-                                   pattern="[A-Za-z]{3}"
                             />
-                            <span class="error-message" style="color: red;">
+                  <!--          <span class="error-message" style="color: red;">
                               {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
-                            </span>
+                            </span>-->
                         </div>
                     </div>
                 </div>
@@ -79,11 +97,11 @@
                     </div>
                 </div>
             </div>
-            <div class="t3js-formengine-validation-marker  mr-2">
+            <div class="t3js-formengine-validation-marker">
                 <div class="formengine-field-item t3js-formengine-field-item">
                     <div class="form-control-wrap" style="max-width: 156px">
                         <div class="form-wizards-wrap">
-                            <div class="form-wizards-element">
+                            <div class="form-wizards-element" >
                                 <ColorInput bind:color={colors[key]} showAlphaSlider/>
                             </div>
                         </div>

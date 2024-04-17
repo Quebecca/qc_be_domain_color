@@ -2458,7 +2458,7 @@
 		let { clientHeight = 0 } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let hue = color.h;
@@ -2699,7 +2699,7 @@
 		let { style } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let parent;
@@ -2930,7 +2930,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3042,7 +3042,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3368,7 +3368,7 @@
 		let pickerEl;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let showAbove = false;
@@ -3525,7 +3525,7 @@
 	const get_default_slot_changes = dirty => ({ isOpen: dirty & /*isOpen*/ 2 });
 	const get_default_slot_context = ctx => ({ isOpen: /*isOpen*/ ctx[1] });
 
-	// (111:17)      
+	// (111:17)
 	function fallback_block(ctx) {
 		let colorpicker;
 		let updating_color;
@@ -3759,11 +3759,11 @@
 		let { disabled = false } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let { onClose = () => {
-			
+
 		} } = $$props;
 
 		let skipCloseEvent = !isOpen;
@@ -4053,14 +4053,14 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[9] = list[i][0];
-		child_ctx[10] = list[i][1];
-		child_ctx[11] = list;
-		child_ctx[12] = i;
+		child_ctx[11] = list[i][0];
+		child_ctx[12] = list[i][1];
+		child_ctx[13] = list;
+		child_ctx[14] = i;
 		return child_ctx;
 	}
 
-	// (73:4) {#each Object.entries(colors) as [key, colorC]}
+	// (91:4) {#each Object.entries(colors) as [key, colorC]}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4089,20 +4089,20 @@
 		let dispose;
 
 		function colorinput_color_binding(value) {
-			/*colorinput_color_binding*/ ctx[7](value, /*key*/ ctx[9]);
+			/*colorinput_color_binding*/ ctx[9](value, /*key*/ ctx[11]);
 		}
 
 		let colorinput_props = { showAlphaSlider: true };
 
-		if (/*colors*/ ctx[1][/*key*/ ctx[9]] !== void 0) {
-			colorinput_props.color = /*colors*/ ctx[1][/*key*/ ctx[9]];
+		if (/*colors*/ ctx[2][/*key*/ ctx[11]] !== void 0) {
+			colorinput_props.color = /*colors*/ ctx[2][/*key*/ ctx[11]];
 		}
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
 
 		function click_handler() {
-			return /*click_handler*/ ctx[8](/*key*/ ctx[9]);
+			return /*click_handler*/ ctx[10](/*key*/ ctx[11]);
 		}
 
 		return {
@@ -4129,7 +4129,7 @@
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="./actions.svg#actions-delete"></use></svg></span></span>`;
 				t2 = space();
 				attr(input, "type", "text");
-				input.value = input_value_value = /*key*/ ctx[9];
+				input.value = input_value_value = /*key*/ ctx[11];
 				attr(input, "class", "edit form-control");
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
@@ -4139,7 +4139,7 @@
 				attr(div5, "class", "form-control-wrap");
 				set_style(div5, "max-width", "156px");
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
-				attr(div7, "class", "t3js-formengine-validation-marker mr-2");
+				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
 				attr(div8, "class", "form-wizards-element");
 				attr(div9, "class", "form-wizards-wrap");
@@ -4179,15 +4179,15 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (!current || dirty & /*colors*/ 2 && input_value_value !== (input_value_value = /*key*/ ctx[9]) && input.value !== input_value_value) {
+				if (!current || dirty & /*colors*/ 4 && input_value_value !== (input_value_value = /*key*/ ctx[11]) && input.value !== input_value_value) {
 					input.value = input_value_value;
 				}
 
 				const colorinput_changes = {};
 
-				if (!updating_color && dirty & /*colors, Object*/ 2) {
+				if (!updating_color && dirty & /*colors, Object*/ 4) {
 					updating_color = true;
-					colorinput_changes.color = /*colors*/ ctx[1][/*key*/ ctx[9]];
+					colorinput_changes.color = /*colors*/ ctx[2][/*key*/ ctx[11]];
 					add_flush_callback(() => updating_color = false);
 				}
 
@@ -4216,33 +4216,29 @@
 
 	function create_fragment(ctx) {
 		let div10;
+		let style;
+		let t1;
+		let input0;
+		let t2;
 		let div9;
 		let div4;
 		let div3;
 		let div2;
 		let div1;
 		let div0;
-		let input;
-		let t0;
-		let span;
-
-		let t1_value = (/*domainName*/ ctx[0] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[0])
-		? "Invalid regexp"
-		: "") + "";
-
-		let t1;
-		let t2;
+		let input1;
+		let t3;
 		let div8;
 		let div7;
 		let div6;
 		let div5;
 		let button;
-		let t3;
 		let t4;
+		let t5;
 		let current;
 		let mounted;
 		let dispose;
-		let each_value = ensure_array_like(Object.entries(/*colors*/ ctx[1]));
+		let each_value = ensure_array_like(Object.entries(/*colors*/ ctx[2]));
 		let each_blocks = [];
 
 		for (let i = 0; i < each_value.length; i += 1) {
@@ -4256,42 +4252,44 @@
 		return {
 			c() {
 				div10 = element("div");
+				style = element("style");
+				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }";
+				t1 = space();
+				input0 = element("input");
+				t2 = space();
 				div9 = element("div");
 				div4 = element("div");
 				div3 = element("div");
 				div2 = element("div");
 				div1 = element("div");
 				div0 = element("div");
-				input = element("input");
-				t0 = space();
-				span = element("span");
-				t1 = text(t1_value);
-				t2 = space();
+				input1 = element("input");
+				t3 = space();
 				div8 = element("div");
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				button = element("button");
-				t3 = text("New domain");
-				t4 = space();
+				t4 = text("New domain");
+				t5 = space();
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
 				}
 
-				attr(input, "id", "new-domain");
-				attr(input, "autocomplete", "off");
-				attr(input, "placeholder", "Valid regexp, e.g. prod, dev.*, etc");
-				attr(input, "class", "new-domain form-control");
-				attr(input, "pattern", "[A-Za-z]" + 3);
-				attr(span, "class", "error-message");
-				set_style(span, "color", "red");
+				attr(input0, "type", "hidden");
+				attr(input0, "name", "data[tx_qc_be_domain_color]");
+				attr(input0, "id", "field_tx_qc_be_domain_color");
+				attr(input1, "id", "new-domain");
+				attr(input1, "autocomplete", "off");
+				attr(input1, "placeholder", "Valid regexp, e.g. prod, dev.*, etc");
+				attr(input1, "class", "new-domain form-control");
 				attr(div0, "class", "form-wizards-element");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap");
 				attr(div3, "class", "formengine-field-item t3js-formengine-field-item ");
 				attr(div4, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				button.disabled = /*isEmptyDomainName*/ ctx[2];
+				button.disabled = /*isEmptyDomainName*/ ctx[3];
 				attr(button, "class", "btn btn-default");
 				attr(div5, "class", "btn-group");
 				attr(div6, "class", "form-control-wrap");
@@ -4302,25 +4300,27 @@
 			},
 			m(target, anchor) {
 				insert(target, div10, anchor);
+				append(div10, style);
+				append(div10, t1);
+				append(div10, input0);
+				set_input_value(input0, /*domainColorsJson*/ ctx[1]);
+				append(div10, t2);
 				append(div10, div9);
 				append(div9, div4);
 				append(div4, div3);
 				append(div3, div2);
 				append(div2, div1);
 				append(div1, div0);
-				append(div0, input);
-				set_input_value(input, /*domainName*/ ctx[0]);
-				append(div0, t0);
-				append(div0, span);
-				append(span, t1);
-				append(div9, t2);
+				append(div0, input1);
+				set_input_value(input1, /*domainName*/ ctx[0]);
+				append(div9, t3);
 				append(div9, div8);
 				append(div8, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, button);
-				append(button, t3);
-				append(div10, t4);
+				append(button, t4);
+				append(div10, t5);
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					if (each_blocks[i]) {
@@ -4332,28 +4332,29 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(input, "input", /*input_input_handler*/ ctx[6]),
-						listen(button, "click", /*addNewDomain*/ ctx[3])
+						listen(input0, "input", /*input0_input_handler*/ ctx[7]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[8]),
+						listen(button, "click", /*addNewDomain*/ ctx[4])
 					];
 
 					mounted = true;
 				}
 			},
 			p(ctx, [dirty]) {
-				if (dirty & /*domainName*/ 1 && input.value !== /*domainName*/ ctx[0]) {
-					set_input_value(input, /*domainName*/ ctx[0]);
+				if (dirty & /*domainColorsJson*/ 2) {
+					set_input_value(input0, /*domainColorsJson*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*domainName*/ 1) && t1_value !== (t1_value = (/*domainName*/ ctx[0] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[0])
-				? "Invalid regexp"
-				: "") + "")) set_data(t1, t1_value);
-
-				if (!current || dirty & /*isEmptyDomainName*/ 4) {
-					button.disabled = /*isEmptyDomainName*/ ctx[2];
+				if (dirty & /*domainName*/ 1 && input1.value !== /*domainName*/ ctx[0]) {
+					set_input_value(input1, /*domainName*/ ctx[0]);
 				}
 
-				if (dirty & /*deleteDomainColor, Object, colors*/ 18) {
-					each_value = ensure_array_like(Object.entries(/*colors*/ ctx[1]));
+				if (!current || dirty & /*isEmptyDomainName*/ 8) {
+					button.disabled = /*isEmptyDomainName*/ ctx[3];
+				}
+
+				if (dirty & /*deleteDomainColor, Object, colors*/ 36) {
+					each_value = ensure_array_like(Object.entries(/*colors*/ ctx[2]));
 					let i;
 
 					for (i = 0; i < each_value.length; i += 1) {
@@ -4414,24 +4415,34 @@
 		let colors;
 		let { domainColors = {} } = $$props;
 		let domainName = '';
+		let domainColorsJson = '{}';
 
-		function addNewDomain() {
-			$$invalidate(1, colors[domainName] = new Color("#CCC"), colors);
-			$$invalidate(1, colors);
+		function addNewDomain(e) {
+			e.preventDefault();
+			$$invalidate(2, colors[domainName] = new Color("#CCC"), colors);
+			$$invalidate(6, domainColors[domainName] = "#CCC", domainColors);
+			$$invalidate(1, domainColorsJson = JSON.stringify(domainColors));
+			$$invalidate(2, colors);
 		}
 
 		function deleteDomainColor(key) {
 			delete colors[key];
-			$$invalidate(1, colors);
+			$$invalidate(1, domainColorsJson = JSON.stringify(domainColors));
+			$$invalidate(2, colors);
 		}
 
 		onMount(() => {
 			Object.entries(domainColors).forEach(([key, value]) => {
-				$$invalidate(1, colors[key] = new Color(value), colors);
+				$$invalidate(2, colors[key] = new Color(value), colors);
 			});
 		});
 
-		function input_input_handler() {
+		function input0_input_handler() {
+			domainColorsJson = this.value;
+			$$invalidate(1, domainColorsJson);
+		}
+
+		function input1_input_handler() {
 			domainName = this.value;
 			$$invalidate(0, domainName);
 		}
@@ -4439,32 +4450,34 @@
 		function colorinput_color_binding(value, key) {
 			if ($$self.$$.not_equal(colors[key], value)) {
 				colors[key] = value;
-				$$invalidate(1, colors);
+				$$invalidate(2, colors);
 			}
 		}
 
 		const click_handler = key => deleteDomainColor(key);
 
 		$$self.$$set = $$props => {
-			if ('domainColors' in $$props) $$invalidate(5, domainColors = $$props.domainColors);
+			if ('domainColors' in $$props) $$invalidate(6, domainColors = $$props.domainColors);
 		};
 
 		$$self.$$.update = () => {
 			if ($$self.$$.dirty & /*domainName*/ 1) {
-				$$invalidate(2, isEmptyDomainName = domainName.trim() === "");
+				$$invalidate(3, isEmptyDomainName = domainName.trim() === "");
 			}
 		};
 
-		$$invalidate(1, colors = {});
+		$$invalidate(2, colors = {});
 
 		return [
 			domainName,
+			domainColorsJson,
 			colors,
 			isEmptyDomainName,
 			addNewDomain,
 			deleteDomainColor,
 			domainColors,
-			input_input_handler,
+			input0_input_handler,
+			input1_input_handler,
 			colorinput_color_binding,
 			click_handler
 		];
@@ -4473,11 +4486,11 @@
 	class DomainColorPickers extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 5 });
+			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 6 });
 		}
 
 		get domainColors() {
-			return this.$$.ctx[5];
+			return this.$$.ctx[6];
 		}
 
 		set domainColors(domainColors) {
