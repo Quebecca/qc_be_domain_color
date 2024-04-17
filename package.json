@@ -13,6 +13,7 @@
   "dependencies": {
     "@rollup/plugin-commonjs": "*",
     "@rollup/plugin-node-resolve": "*",
+    "color-picker-svelte": "^1.4.1",
     "js-beautify": "^1.15.1",
     "jsonformatter": "^0.7.0",
     "lodash": "^4.17.21",
