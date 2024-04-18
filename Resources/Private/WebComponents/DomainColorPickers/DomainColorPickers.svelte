@@ -43,7 +43,7 @@
         if (targetIndex !== -1) {
             colors.splice(targetIndex, 1);
         }
-        domainColors = domainColors.filter(item => item.domain !== domainColor );
+        domainColors = domainColors.filter(item => item.domain !== domainColor);
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
@@ -68,7 +68,8 @@
         }
         .svelte-s8w54d .show {
             padding-top: 5px;
-        }
+         }
+
     </style>
     <input
         type="hidden"
@@ -98,7 +99,7 @@
             </div>
         </div>
         <div class="form-group t3js-formengine-validation-marker
-                    t3js-formengine-palette-field checkbox-column  col-sm-6 col-md-4">
+                    t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
             <div class="formengine-field-item t3js-formengine-field-item ">
                 <div class="form-control-wrap">
                     <div class="btn-group">

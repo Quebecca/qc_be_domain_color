@@ -4091,7 +4091,7 @@
 		return child_ctx;
 	}
 
-	// (113:4) {#each Array.from(colors) as color, index}
+	// (114:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4291,7 +4291,7 @@
 			c() {
 				div10 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }";
+				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();

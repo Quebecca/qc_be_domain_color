@@ -2458,7 +2458,7 @@
 		let { clientHeight = 0 } = $$props;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		let hue = color.h;
@@ -2699,7 +2699,7 @@
 		let { style } = $$props;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		let parent;
@@ -2930,7 +2930,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3042,7 +3042,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3368,7 +3368,7 @@
 		let pickerEl;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		let showAbove = false;
@@ -3525,7 +3525,7 @@
 	const get_default_slot_changes = dirty => ({ isOpen: dirty & /*isOpen*/ 2 });
 	const get_default_slot_context = ctx => ({ isOpen: /*isOpen*/ ctx[1] });
 
-	// (111:17)
+	// (111:17)      
 	function fallback_block(ctx) {
 		let colorpicker;
 		let updating_color;
@@ -3759,11 +3759,11 @@
 		let { disabled = false } = $$props;
 
 		let { onInput = () => {
-
+			
 		} } = $$props;
 
 		let { onClose = () => {
-
+			
 		} } = $$props;
 
 		let skipCloseEvent = !isOpen;
@@ -4059,7 +4059,7 @@
 		return child_ctx;
 	}
 
-	// (113:4) {#each Array.from(colors) as color, index}
+	// (114:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4259,7 +4259,7 @@
 			c() {
 				div10 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }";
+				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
