@@ -2458,7 +2458,7 @@
 		let { clientHeight = 0 } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let hue = color.h;
@@ -2699,7 +2699,7 @@
 		let { style } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let parent;
@@ -2930,7 +2930,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3042,7 +3042,7 @@
 		let { color } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		function slider_value_binding(value) {
@@ -3368,7 +3368,7 @@
 		let pickerEl;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let showAbove = false;
@@ -3525,7 +3525,7 @@
 	const get_default_slot_changes = dirty => ({ isOpen: dirty & /*isOpen*/ 2 });
 	const get_default_slot_context = ctx => ({ isOpen: /*isOpen*/ ctx[1] });
 
-	// (111:17)      
+	// (111:17)
 	function fallback_block(ctx) {
 		let colorpicker;
 		let updating_color;
@@ -3759,11 +3759,11 @@
 		let { disabled = false } = $$props;
 
 		let { onInput = () => {
-			
+
 		} } = $$props;
 
 		let { onClose = () => {
-			
+
 		} } = $$props;
 
 		let skipCloseEvent = !isOpen;
@@ -4059,7 +4059,7 @@
 		return child_ctx;
 	}
 
-	// (114:4) {#each Array.from(colors) as color, index}
+	// (117:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4134,17 +4134,17 @@
 				attr(input, "class", "edit form-control");
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
-				attr(div2, "class", "form-control-wrap");
+				attr(div2, "class", "form-control-wrap input-element");
 				attr(div3, "class", "form-wizards-element");
 				attr(div4, "class", "form-wizards-wrap");
-				attr(div5, "class", "form-control-wrap");
+				attr(div5, "class", "form-control-wrap input-element");
 				set_style(div5, "max-width", "156px");
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
 				attr(div8, "class", "form-wizards-element");
 				attr(div9, "class", "form-wizards-wrap");
-				attr(div10, "class", "form-control-wrap");
+				attr(div10, "class", "form-control-wrap input-element");
 				attr(div11, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div12, "class", "t3js-formengine-validation-marker checkbox-column col-md-2 col-sm-3");
 				attr(div13, "class", "d-flex mb-3");
@@ -4227,20 +4227,22 @@
 		let input0;
 		let t2;
 		let div9;
+		let span;
+		let t4;
 		let div4;
 		let div3;
 		let div2;
 		let div1;
 		let div0;
 		let input1;
-		let t3;
+		let t5;
 		let div8;
 		let div7;
 		let div6;
 		let div5;
 		let button;
-		let t4;
-		let t5;
+		let t6;
+		let t7;
 		let current;
 		let mounted;
 		let dispose;
@@ -4259,25 +4261,28 @@
 			c() {
 				div10 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }";
+				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }\r\n        .input-element {\r\n            margin-right : 5px;\r\n        }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
 				div9 = element("div");
+				span = element("span");
+				span.textContent = "Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.";
+				t4 = space();
 				div4 = element("div");
 				div3 = element("div");
 				div2 = element("div");
 				div1 = element("div");
 				div0 = element("div");
 				input1 = element("input");
-				t3 = space();
+				t5 = space();
 				div8 = element("div");
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				button = element("button");
-				t4 = text("New domain");
-				t5 = space();
+				t6 = text("New domain");
+				t7 = space();
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
@@ -4286,6 +4291,7 @@
 				attr(input0, "type", "hidden");
 				attr(input0, "name", "data[tx_qc_be_domain_color]");
 				attr(input0, "id", "field_tx_qc_be_domain_color");
+				attr(span, "class", "text-muted");
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
 				attr(input1, "placeholder", "Valid regexp, e.g. prod, dev.*, etc");
@@ -4302,7 +4308,6 @@
 				attr(div7, "class", "formengine-field-item t3js-formengine-field-item ");
 				attr(div8, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
 				attr(div9, "class", "row");
-				attr(div10, "class", "container");
 			},
 			m(target, anchor) {
 				insert(target, div10, anchor);
@@ -4312,6 +4317,8 @@
 				set_input_value(input0, /*domainColorsJson*/ ctx[2]);
 				append(div10, t2);
 				append(div10, div9);
+				append(div9, span);
+				append(div9, t4);
 				append(div9, div4);
 				append(div4, div3);
 				append(div3, div2);
@@ -4319,14 +4326,14 @@
 				append(div1, div0);
 				append(div0, input1);
 				set_input_value(input1, /*domainName*/ ctx[0]);
-				append(div9, t3);
+				append(div9, t5);
 				append(div9, div8);
 				append(div8, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, button);
-				append(button, t4);
-				append(div10, t5);
+				append(button, t6);
+				append(div10, t7);
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					if (each_blocks[i]) {

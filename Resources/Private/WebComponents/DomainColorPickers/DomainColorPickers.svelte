@@ -61,7 +61,7 @@
         });
     });
 </script>
-<div class="container">
+<div >
     <style>
         .svelte-s8w54d {
             height : 85%;
@@ -69,7 +69,9 @@
         .svelte-s8w54d .show {
             padding-top: 5px;
          }
-
+        .input-element {
+            margin-right : 5px;
+        }
     </style>
     <input
         type="hidden"
@@ -78,6 +80,7 @@
         id="field_tx_qc_be_domain_color"
     />
     <div class="row">
+        <span class="text-muted">Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.</span>
         <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
             <div class="formengine-field-item t3js-formengine-field-item ">
@@ -113,7 +116,7 @@
     </div>
     {#each Array.from(colors) as color, index}
         <div class="d-flex mb-3">
-            <div class="form-control-wrap">
+            <div class="form-control-wrap input-element">
                 <div class="form-wizards-wrap">
                     <div class="form-wizards-element pr-2">
                         <input type="text" bind:value={color.domain} class="edit form-control">
@@ -122,7 +125,7 @@
             </div>
             <div class="t3js-formengine-validation-marker">
                 <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap" style="max-width: 156px">
+                    <div class="form-control-wrap input-element" style="max-width: 156px">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element" >
                                 <ColorInput bind:color={colors[index].color} showAlphaSlider/>
@@ -133,7 +136,7 @@
             </div>
             <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
                 <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap">
+                    <div class="form-control-wrap input-element">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element">
                                 <button
