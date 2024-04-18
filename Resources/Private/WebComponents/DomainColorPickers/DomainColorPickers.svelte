@@ -21,9 +21,8 @@
     function addNewDomain(e) {
         e.preventDefault();
         colors[domainName] = new Color("#CCC")
-        domainColors[domainName] = "#CCC";
+        domainColors.push({'domain':domainName, color : '#CCC', errorClass :''})
         domainColorsJson = JSON.stringify(domainColors)
-
         colors = colors;
     }
 
@@ -34,8 +33,10 @@
     }
 
     onMount(() => {
-        Object.entries(domainColors).forEach(([key, value]) => {
-            colors[key] = new Color(value)
+        domainColors.forEach((obj, index) => {
+            if(obj.color !== undefined){
+                colors[obj.domain] = new Color(obj.color)
+            }
         });
     });
 </script>

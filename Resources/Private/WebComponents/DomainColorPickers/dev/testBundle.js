@@ -4083,7 +4083,7 @@
 		return child_ctx;
 	}
 
-	// (91:4) {#each Object.entries(colors) as [key, colorC]}
+	// (92:4) {#each Object.entries(colors) as [key, colorC]}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4443,7 +4443,13 @@
 		function addNewDomain(e) {
 			e.preventDefault();
 			$$invalidate(2, colors[domainName] = new Color("#CCC"), colors);
-			$$invalidate(6, domainColors[domainName] = "#CCC", domainColors);
+
+			domainColors.push({
+				'domain': domainName,
+				color: '#CCC',
+				errorClass: ''
+			});
+
 			$$invalidate(1, domainColorsJson = JSON.stringify(domainColors));
 			$$invalidate(2, colors);
 		}
@@ -4455,8 +4461,10 @@
 		}
 
 		onMount(() => {
-			Object.entries(domainColors).forEach(([key, value]) => {
-				$$invalidate(2, colors[key] = new Color(value), colors);
+			domainColors.forEach((obj, index) => {
+				if (obj.color !== undefined) {
+					$$invalidate(2, colors[obj.domain] = new Color(obj.color), colors);
+				}
 			});
 		});
 

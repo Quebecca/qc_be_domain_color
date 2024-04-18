@@ -29,8 +29,6 @@ class ItemsProcFunc
      */
     public function domainColorsFields()
     {
-        debug($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color']);
-        $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] = '[{"dev":"#CCC"}]';
 
         $view = $this->getStandaloneView();
         $view->assign(
@@ -57,24 +55,20 @@ class ItemsProcFunc
      */
     public function __invoke(AfterBackendPageRenderEvent $event): void
     {
-  /*      $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] =
-            $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] == 'undefined' ? $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] : null;*/
-
-        $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] = '[{dev : "#CCC"}]';
         $domainColors =
             json_decode(
-                html_entity_decode( $colors ?? '[]'),
+                html_entity_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]'),
                 true,
                 512,
                 JSON_THROW_ON_ERROR
         );
-        foreach ($domainColors ?? [] as $domainColor) {
-            $pattern = "/$domainColor[domain]/";
+/*        foreach ($domainColors ?? [] as $domainColor) {
+            $pattern = "/$domainColor/";
             if (@preg_match($pattern, (string) $_SERVER['HTTP_HOST'])) {
                 $content = "<style>#modulemenu {background: $domainColor[color];}</style>" . $event->getContent();
                 $event->setContent($content);
             }
-        }
+        }*/
     }
 
 }
