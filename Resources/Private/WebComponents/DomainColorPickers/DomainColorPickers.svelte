@@ -10,24 +10,40 @@
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
 
-    export let
-        domainColors = {}
+    export let domainColors = [];
 
     let domainName = '';
     $: isEmptyDomainName = domainName.trim() === "";
-
-    $: colors = {};
+    $: colors = [];
+    $: {
+        for(let i = 0; i <  colors.length; i++){
+            domainColors[i].color = colors[i].color.toHexString();
+            domainColors[i].domain = colors[i].domain;
+        }
+        domainColorsJson = JSON.stringify(domainColors)
+        colors = colors;
+    }
     let domainColorsJson = '{}';
     function addNewDomain(e) {
         e.preventDefault();
-        colors[domainName] = new Color("#CCC")
+        colors.push({
+            'domain' : domainName,
+            'color' : new Color("#CCC")
+        })
+        colors=[...colors];
         domainColors.push({'domain':domainName, color : '#CCC', errorClass :''})
+        domainName = ''
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
 
-    function deleteDomainColor(key) {
-        delete colors[key];
+    function deleteDomainColor(event, domainColor) {
+        event.preventDefault();
+        const targetIndex = colors.findIndex(item => item.domain === domainColor);
+        if (targetIndex !== -1) {
+            colors.splice(targetIndex, 1);
+        }
+        domainColors = domainColors.filter(item => item.domain !== domainColor );
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
@@ -35,7 +51,12 @@
     onMount(() => {
         domainColors.forEach((obj, index) => {
             if(obj.color !== undefined){
-                colors[obj.domain] = new Color(obj.color)
+                let color = {
+                    'domain' : obj.domain,
+                    'color' : new Color(obj.color)
+                };
+                colors.push(color);
+                colors = [...colors];
             }
         });
     });
@@ -89,12 +110,12 @@
             </div>
         </div>
     </div>
-    {#each Object.entries(colors) as [key, colorC]}
+    {#each Array.from(colors) as color, index}
         <div class="d-flex mb-3">
             <div class="form-control-wrap">
                 <div class="form-wizards-wrap">
                     <div class="form-wizards-element pr-2">
-                        <input type="text" value="{key}" class="edit form-control">
+                        <input type="text" bind:value={color.domain} class="edit form-control">
                     </div>
                 </div>
             </div>
@@ -103,7 +124,7 @@
                     <div class="form-control-wrap" style="max-width: 156px">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element" >
-                                <ColorInput bind:color={colors[key]} showAlphaSlider/>
+                                <ColorInput bind:color={colors[index].color} showAlphaSlider/>
                             </div>
                         </div>
                     </div>
@@ -111,13 +132,12 @@
             </div>
             <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
                 <div class="formengine-field-item t3js-formengine-field-item">
-
                     <div class="form-control-wrap">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element">
                                 <button
                                     class="btn btn-default  t3js-editform-delete-record"
-                                    on:click={() => deleteDomainColor(key)}
+                                    on:click={() => deleteDomainColor(event,color.domain)}
                                     >
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
                                         <span class="icon-markup">
