@@ -10,7 +10,9 @@
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
 
-    export let domainColors = [];
+    export let
+        domainColors = [],
+        conf = {}
 
     let domainName = '';
     $: isEmptyDomainName = domainName.trim() === "";
@@ -49,6 +51,7 @@
     }
 
     onMount(() => {
+        console.log(conf)
         domainColors.forEach((obj, index) => {
             if(obj.color !== undefined){
                 let color = {
@@ -80,7 +83,7 @@
         id="field_tx_qc_be_domain_color"
     />
     <div class="row">
-        <span class="text-muted">Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.</span>
+        <span class="text-muted">{conf.label}</span>
         <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
             <div class="formengine-field-item t3js-formengine-field-item ">
@@ -90,12 +93,12 @@
                             <input id="new-domain"
                                    bind:value={domainName}
                                    autocomplete="off"
-                                   placeholder="Valid regexp, e.g. prod, dev.*, etc"
+                                   placeholder={conf.domainNameInputPlaceholder}
                                    class="new-domain form-control"
                             />
-                  <!--          <span class="error-message" style="color: red;">
+                            <span class="error-message" style="color: red;">
                               {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
-                            </span>-->
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -107,7 +110,7 @@
                 <div class="form-control-wrap">
                     <div class="btn-group">
                         <button on:click={addNewDomain} disabled={isEmptyDomainName} class="btn btn-default">
-                            New domain
+                            {conf.buttonLabel}
                         </button>
                     </div>
                 </div>
@@ -145,7 +148,7 @@
                                     >
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
                                         <span class="icon-markup">
-                                            <svg class="icon-color" role="img"><use xlink:href="./actions.svg#actions-delete"></use></svg>
+                                            <svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
                                         </span>
 	                                </span>
                                 </button>

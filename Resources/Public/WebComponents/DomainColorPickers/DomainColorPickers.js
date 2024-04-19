@@ -4053,13 +4053,13 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[12] = list[i];
-		child_ctx[13] = list;
-		child_ctx[14] = i;
+		child_ctx[13] = list[i];
+		child_ctx[14] = list;
+		child_ctx[15] = i;
 		return child_ctx;
 	}
 
-	// (117:4) {#each Array.from(colors) as color, index}
+	// (120:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4087,24 +4087,24 @@
 		let dispose;
 
 		function input_input_handler() {
-			/*input_input_handler*/ ctx[9].call(input, /*each_value*/ ctx[13], /*index*/ ctx[14]);
+			/*input_input_handler*/ ctx[10].call(input, /*each_value*/ ctx[14], /*index*/ ctx[15]);
 		}
 
 		function colorinput_color_binding(value) {
-			/*colorinput_color_binding*/ ctx[10](value, /*index*/ ctx[14]);
+			/*colorinput_color_binding*/ ctx[11](value, /*index*/ ctx[15]);
 		}
 
 		let colorinput_props = { showAlphaSlider: true };
 
-		if (/*colors*/ ctx[1][/*index*/ ctx[14]].color !== void 0) {
-			colorinput_props.color = /*colors*/ ctx[1][/*index*/ ctx[14]].color;
+		if (/*colors*/ ctx[2][/*index*/ ctx[15]].color !== void 0) {
+			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[15]].color;
 		}
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
 
 		function click_handler() {
-			return /*click_handler*/ ctx[11](/*color*/ ctx[12]);
+			return /*click_handler*/ ctx[12](/*color*/ ctx[13]);
 		}
 
 		return {
@@ -4128,7 +4128,7 @@
 				div9 = element("div");
 				div8 = element("div");
 				button = element("button");
-				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="./actions.svg#actions-delete"></use></svg></span></span>`;
+				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span></span>`;
 				t2 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control");
@@ -4155,7 +4155,7 @@
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input);
-				set_input_value(input, /*color*/ ctx[12].domain);
+				set_input_value(input, /*color*/ ctx[13].domain);
 				append(div13, t0);
 				append(div13, div7);
 				append(div7, div6);
@@ -4185,15 +4185,15 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (dirty & /*Array, colors*/ 2 && input.value !== /*color*/ ctx[12].domain) {
-					set_input_value(input, /*color*/ ctx[12].domain);
+				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[13].domain) {
+					set_input_value(input, /*color*/ ctx[13].domain);
 				}
 
 				const colorinput_changes = {};
 
-				if (!updating_color && dirty & /*colors*/ 2) {
+				if (!updating_color && dirty & /*colors*/ 4) {
 					updating_color = true;
-					colorinput_changes.color = /*colors*/ ctx[1][/*index*/ ctx[14]].color;
+					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[15]].color;
 					add_flush_callback(() => updating_color = false);
 				}
 
@@ -4227,7 +4227,9 @@
 		let input0;
 		let t2;
 		let div9;
-		let span;
+		let span0;
+		let t3_value = /*conf*/ ctx[0].label + "";
+		let t3;
 		let t4;
 		let div4;
 		let div3;
@@ -4235,18 +4237,28 @@
 		let div1;
 		let div0;
 		let input1;
+		let input1_placeholder_value;
 		let t5;
+		let span1;
+
+		let t6_value = (/*domainName*/ ctx[1] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[1])
+		? "Invalid regexp"
+		: "") + "";
+
+		let t6;
+		let t7;
 		let div8;
 		let div7;
 		let div6;
 		let div5;
 		let button;
-		let t6;
-		let t7;
+		let t8_value = /*conf*/ ctx[0].buttonLabel + "";
+		let t8;
+		let t9;
 		let current;
 		let mounted;
 		let dispose;
-		let each_value = ensure_array_like(Array.from(/*colors*/ ctx[1]));
+		let each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 		let each_blocks = [];
 
 		for (let i = 0; i < each_value.length; i += 1) {
@@ -4266,8 +4278,8 @@
 				input0 = element("input");
 				t2 = space();
 				div9 = element("div");
-				span = element("span");
-				span.textContent = "Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.";
+				span0 = element("span");
+				t3 = text(t3_value);
 				t4 = space();
 				div4 = element("div");
 				div3 = element("div");
@@ -4276,13 +4288,16 @@
 				div0 = element("div");
 				input1 = element("input");
 				t5 = space();
+				span1 = element("span");
+				t6 = text(t6_value);
+				t7 = space();
 				div8 = element("div");
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				button = element("button");
-				t6 = text("New domain");
-				t7 = space();
+				t8 = text(t8_value);
+				t9 = space();
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
@@ -4291,17 +4306,19 @@
 				attr(input0, "type", "hidden");
 				attr(input0, "name", "data[tx_qc_be_domain_color]");
 				attr(input0, "id", "field_tx_qc_be_domain_color");
-				attr(span, "class", "text-muted");
+				attr(span0, "class", "text-muted");
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
-				attr(input1, "placeholder", "Valid regexp, e.g. prod, dev.*, etc");
+				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].domainNameInputPlaceholder);
 				attr(input1, "class", "new-domain form-control");
+				attr(span1, "class", "error-message");
+				set_style(span1, "color", "red");
 				attr(div0, "class", "form-wizards-element");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap");
 				attr(div3, "class", "formengine-field-item t3js-formengine-field-item ");
 				attr(div4, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				button.disabled = /*isEmptyDomainName*/ ctx[3];
+				button.disabled = /*isEmptyDomainName*/ ctx[4];
 				attr(button, "class", "btn btn-default");
 				attr(div5, "class", "btn-group");
 				attr(div6, "class", "form-control-wrap");
@@ -4314,10 +4331,11 @@
 				append(div10, style);
 				append(div10, t1);
 				append(div10, input0);
-				set_input_value(input0, /*domainColorsJson*/ ctx[2]);
+				set_input_value(input0, /*domainColorsJson*/ ctx[3]);
 				append(div10, t2);
 				append(div10, div9);
-				append(div9, span);
+				append(div9, span0);
+				append(span0, t3);
 				append(div9, t4);
 				append(div9, div4);
 				append(div4, div3);
@@ -4325,15 +4343,18 @@
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input1);
-				set_input_value(input1, /*domainName*/ ctx[0]);
-				append(div9, t5);
+				set_input_value(input1, /*domainName*/ ctx[1]);
+				append(div0, t5);
+				append(div0, span1);
+				append(span1, t6);
+				append(div9, t7);
 				append(div9, div8);
 				append(div8, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, button);
-				append(button, t6);
-				append(div10, t7);
+				append(button, t8);
+				append(div10, t9);
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					if (each_blocks[i]) {
@@ -4345,29 +4366,41 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[7]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[8]),
-						listen(button, "click", /*addNewDomain*/ ctx[4])
+						listen(input0, "input", /*input0_input_handler*/ ctx[8]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[9]),
+						listen(button, "click", /*addNewDomain*/ ctx[5])
 					];
 
 					mounted = true;
 				}
 			},
 			p(ctx, [dirty]) {
-				if (dirty & /*domainColorsJson*/ 4) {
-					set_input_value(input0, /*domainColorsJson*/ ctx[2]);
+				if (dirty & /*domainColorsJson*/ 8) {
+					set_input_value(input0, /*domainColorsJson*/ ctx[3]);
 				}
 
-				if (dirty & /*domainName*/ 1 && input1.value !== /*domainName*/ ctx[0]) {
-					set_input_value(input1, /*domainName*/ ctx[0]);
+				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].label + "")) set_data(t3, t3_value);
+
+				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].domainNameInputPlaceholder)) {
+					attr(input1, "placeholder", input1_placeholder_value);
 				}
 
-				if (!current || dirty & /*isEmptyDomainName*/ 8) {
-					button.disabled = /*isEmptyDomainName*/ ctx[3];
+				if (dirty & /*domainName*/ 2 && input1.value !== /*domainName*/ ctx[1]) {
+					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if (dirty & /*deleteDomainColor, event, Array, colors*/ 34) {
-					each_value = ensure_array_like(Array.from(/*colors*/ ctx[1]));
+				if ((!current || dirty & /*domainName*/ 2) && t6_value !== (t6_value = (/*domainName*/ ctx[1] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[1])
+				? "Invalid regexp"
+				: "") + "")) set_data(t6, t6_value);
+
+				if ((!current || dirty & /*conf*/ 1) && t8_value !== (t8_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t8, t8_value);
+
+				if (!current || dirty & /*isEmptyDomainName*/ 16) {
+					button.disabled = /*isEmptyDomainName*/ ctx[4];
+				}
+
+				if (dirty & /*deleteDomainColor, event, Array, colors*/ 68) {
+					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
 					for (i = 0; i < each_value.length; i += 1) {
@@ -4426,7 +4459,7 @@
 	function instance($$self, $$props, $$invalidate) {
 		let isEmptyDomainName;
 		let colors;
-		let { domainColors = [] } = $$props;
+		let { domainColors = [], conf = {} } = $$props;
 		let domainName = '';
 		let domainColorsJson = '{}';
 
@@ -4438,7 +4471,7 @@
 				'color': new Color("#CCC")
 			});
 
-			$$invalidate(1, colors = [...colors]);
+			$$invalidate(2, colors = [...colors]);
 
 			domainColors.push({
 				'domain': domainName,
@@ -4446,9 +4479,9 @@
 				errorClass: ''
 			});
 
-			$$invalidate(0, domainName = '');
-			$$invalidate(2, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(1, colors), $$invalidate(6, domainColors));
+			$$invalidate(1, domainName = '');
+			$$invalidate(3, domainColorsJson = JSON.stringify(domainColors));
+			($$invalidate(2, colors), $$invalidate(7, domainColors));
 		}
 
 		function deleteDomainColor(event, domainColor) {
@@ -4459,12 +4492,14 @@
 				colors.splice(targetIndex, 1);
 			}
 
-			$$invalidate(6, domainColors = domainColors.filter(item => item.domain !== domainColor));
-			$$invalidate(2, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(1, colors), $$invalidate(6, domainColors));
+			$$invalidate(7, domainColors = domainColors.filter(item => item.domain !== domainColor));
+			$$invalidate(3, domainColorsJson = JSON.stringify(domainColors));
+			($$invalidate(2, colors), $$invalidate(7, domainColors));
 		}
 
 		onMount(() => {
+			console.log(conf);
+
 			domainColors.forEach((obj, index) => {
 				if (obj.color !== undefined) {
 					let color = {
@@ -4473,60 +4508,62 @@
 					};
 
 					colors.push(color);
-					$$invalidate(1, colors = [...colors]);
+					$$invalidate(2, colors = [...colors]);
 				}
 			});
 		});
 
 		function input0_input_handler() {
 			domainColorsJson = this.value;
-			(($$invalidate(2, domainColorsJson), $$invalidate(1, colors)), $$invalidate(6, domainColors));
+			(($$invalidate(3, domainColorsJson), $$invalidate(2, colors)), $$invalidate(7, domainColors));
 		}
 
 		function input1_input_handler() {
 			domainName = this.value;
-			$$invalidate(0, domainName);
+			$$invalidate(1, domainName);
 		}
 
 		function input_input_handler(each_value, index) {
 			each_value[index].domain = this.value;
-			($$invalidate(1, colors), $$invalidate(6, domainColors));
+			($$invalidate(2, colors), $$invalidate(7, domainColors));
 		}
 
 		function colorinput_color_binding(value, index) {
 			if ($$self.$$.not_equal(colors[index].color, value)) {
 				colors[index].color = value;
-				($$invalidate(1, colors), $$invalidate(6, domainColors));
+				($$invalidate(2, colors), $$invalidate(7, domainColors));
 			}
 		}
 
 		const click_handler = color => deleteDomainColor(event, color.domain);
 
 		$$self.$$set = $$props => {
-			if ('domainColors' in $$props) $$invalidate(6, domainColors = $$props.domainColors);
+			if ('domainColors' in $$props) $$invalidate(7, domainColors = $$props.domainColors);
+			if ('conf' in $$props) $$invalidate(0, conf = $$props.conf);
 		};
 
 		$$self.$$.update = () => {
-			if ($$self.$$.dirty & /*domainName*/ 1) {
-				$$invalidate(3, isEmptyDomainName = domainName.trim() === "");
+			if ($$self.$$.dirty & /*domainName*/ 2) {
+				$$invalidate(4, isEmptyDomainName = domainName.trim() === "");
 			}
 
-			if ($$self.$$.dirty & /*colors, domainColors*/ 66) {
+			if ($$self.$$.dirty & /*colors, domainColors*/ 132) {
 				{
 					for (let i = 0; i < colors.length; i++) {
-						$$invalidate(6, domainColors[i].color = colors[i].color.toHexString(), domainColors);
-						$$invalidate(6, domainColors[i].domain = colors[i].domain, domainColors);
+						$$invalidate(7, domainColors[i].color = colors[i].color.toHexString(), domainColors);
+						$$invalidate(7, domainColors[i].domain = colors[i].domain, domainColors);
 					}
 
-					$$invalidate(2, domainColorsJson = JSON.stringify(domainColors));
-					($$invalidate(1, colors), $$invalidate(6, domainColors));
+					$$invalidate(3, domainColorsJson = JSON.stringify(domainColors));
+					($$invalidate(2, colors), $$invalidate(7, domainColors));
 				}
 			}
 		};
 
-		$$invalidate(1, colors = []);
+		$$invalidate(2, colors = []);
 
 		return [
+			conf,
 			domainName,
 			colors,
 			domainColorsJson,
@@ -4545,19 +4582,28 @@
 	class DomainColorPickers extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 6 });
+			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 7, conf: 0 });
 		}
 
 		get domainColors() {
-			return this.$$.ctx[6];
+			return this.$$.ctx[7];
 		}
 
 		set domainColors(domainColors) {
 			this.$$set({ domainColors });
 			flush();
 		}
+
+		get conf() {
+			return this.$$.ctx[0];
+		}
+
+		set conf(conf) {
+			this.$$set({ conf });
+			flush();
+		}
 	}
 
-	customElements.define("qc-domain-color-pickers", create_custom_element(DomainColorPickers, {"domainColors":{"attribute":"domain-colors","type":"Object"}}, [], [], false));
+	customElements.define("qc-domain-color-pickers", create_custom_element(DomainColorPickers, {"domainColors":{"attribute":"domain-colors","type":"Object"},"conf":{"attribute":"data-conf","type":"Object"}}, [], [], false));
 
 })();

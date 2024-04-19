@@ -7,13 +7,18 @@
       }"
 />
 <f:variable name="l">{</f:variable>
-<f:variable name="r">}</f:variable>
+
 <section class="domainColorapp">
     <script>
         const qcDomainColors = {qcDomainColors -> f:format.raw()}
     </script>
     <qc-domain-color-pickers
         domain-colors={qcDomainColors}
+        data-conf='{
+         "label" : "Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.",
+         "buttonLabel" : "New domain",
+         "domainNameInputPlaceholder" : "Valid regexp, e.g. prod, dev.*, etc"
+        }'
     />
 </section>
 
