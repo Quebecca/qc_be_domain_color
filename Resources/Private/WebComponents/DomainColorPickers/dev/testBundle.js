@@ -4091,7 +4091,7 @@
 		return child_ctx;
 	}
 
-	// (120:4) {#each Array.from(colors) as color, index}
+	// (140:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4170,7 +4170,7 @@
 				attr(div3, "class", "form-wizards-element");
 				attr(div4, "class", "form-wizards-wrap");
 				attr(div5, "class", "form-control-wrap input-element");
-				set_style(div5, "max-width", "156px");
+				set_style(div5, "max-width", "126px");
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
@@ -4297,7 +4297,7 @@
 			c() {
 				div10 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height : 85%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }\r\n        .input-element {\r\n            margin-right : 5px;\r\n        }";
+				style.textContent = ".svelte-s8w54d {\r\n            height : 84%;\r\n        }\r\n        .input.svelte-s8w54d.svelte-s8w54d  {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .input-group .btn {\r\n            height: 105%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }\r\n        .svelte-s8w54d:focus-within{\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n        .input-element {\r\n            margin-right : 7px;\r\n        }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();

@@ -64,16 +64,36 @@
         });
     });
 </script>
-<div >
+<div>
     <style>
         .svelte-s8w54d {
-            height : 85%;
+            height : 84%;
+        }
+        .input.svelte-s8w54d.svelte-s8w54d  {
+
+            background-color: #fefefe;
+            background-clip: padding-box;
+            border: var(--bs-border-width) solid #bbb;
+            border-radius: var(--bs-border-radius);
+            box-shadow: var(--bs-box-shadow-inset);
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .input-group .btn {
+            height: 105%;
         }
         .svelte-s8w54d .show {
             padding-top: 5px;
          }
+        .svelte-s8w54d:focus-within{
+            color: #333;
+            background-color: #fefefe;
+            border-color: #80bcf3;
+            outline: 0;
+            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
+        }
         .input-element {
-            margin-right : 5px;
+            margin-right : 7px;
         }
     </style>
     <input
@@ -128,7 +148,7 @@
             </div>
             <div class="t3js-formengine-validation-marker">
                 <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap input-element" style="max-width: 156px">
+                    <div class="form-control-wrap input-element"  style="max-width: 126px">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element" >
                                 <ColorInput bind:color={colors[index].color} showAlphaSlider/>
