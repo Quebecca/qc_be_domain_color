@@ -96,9 +96,9 @@
                                    placeholder={conf.domainNameInputPlaceholder}
                                    class="new-domain form-control"
                             />
-                            <span class="error-message" style="color: red;">
+                      <!--      <span class="error-message" style="color: red;">
                               {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
-                            </span>
+                            </span>-->
                         </div>
                     </div>
                 </div>

@@ -4259,7 +4259,7 @@
 		let input0;
 		let t2;
 		let div9;
-		let span0;
+		let span;
 		let t3_value = /*conf*/ ctx[0].label + "";
 		let t3;
 		let t4;
@@ -4271,22 +4271,14 @@
 		let input1;
 		let input1_placeholder_value;
 		let t5;
-		let span1;
-
-		let t6_value = (/*domainName*/ ctx[1] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[1])
-		? "Invalid regexp"
-		: "") + "";
-
-		let t6;
-		let t7;
 		let div8;
 		let div7;
 		let div6;
 		let div5;
 		let button;
-		let t8_value = /*conf*/ ctx[0].buttonLabel + "";
-		let t8;
-		let t9;
+		let t6_value = /*conf*/ ctx[0].buttonLabel + "";
+		let t6;
+		let t7;
 		let current;
 		let mounted;
 		let dispose;
@@ -4310,7 +4302,7 @@
 				input0 = element("input");
 				t2 = space();
 				div9 = element("div");
-				span0 = element("span");
+				span = element("span");
 				t3 = text(t3_value);
 				t4 = space();
 				div4 = element("div");
@@ -4320,16 +4312,13 @@
 				div0 = element("div");
 				input1 = element("input");
 				t5 = space();
-				span1 = element("span");
-				t6 = text(t6_value);
-				t7 = space();
 				div8 = element("div");
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				button = element("button");
-				t8 = text(t8_value);
-				t9 = space();
+				t6 = text(t6_value);
+				t7 = space();
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
@@ -4338,13 +4327,11 @@
 				attr(input0, "type", "hidden");
 				attr(input0, "name", "data[tx_qc_be_domain_color]");
 				attr(input0, "id", "field_tx_qc_be_domain_color");
-				attr(span0, "class", "text-muted");
+				attr(span, "class", "text-muted");
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
 				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].domainNameInputPlaceholder);
 				attr(input1, "class", "new-domain form-control");
-				attr(span1, "class", "error-message");
-				set_style(span1, "color", "red");
 				attr(div0, "class", "form-wizards-element");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap");
@@ -4366,8 +4353,8 @@
 				set_input_value(input0, /*domainColorsJson*/ ctx[3]);
 				append(div10, t2);
 				append(div10, div9);
-				append(div9, span0);
-				append(span0, t3);
+				append(div9, span);
+				append(span, t3);
 				append(div9, t4);
 				append(div9, div4);
 				append(div4, div3);
@@ -4376,17 +4363,14 @@
 				append(div1, div0);
 				append(div0, input1);
 				set_input_value(input1, /*domainName*/ ctx[1]);
-				append(div0, t5);
-				append(div0, span1);
-				append(span1, t6);
-				append(div9, t7);
+				append(div9, t5);
 				append(div9, div8);
 				append(div8, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, button);
-				append(button, t8);
-				append(div10, t9);
+				append(button, t6);
+				append(div10, t7);
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					if (each_blocks[i]) {
@@ -4421,11 +4405,7 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*domainName*/ 2) && t6_value !== (t6_value = (/*domainName*/ ctx[1] && !(/^([A-Za-z]{3})$/).test(/*domainName*/ ctx[1])
-				? "Invalid regexp"
-				: "") + "")) set_data(t6, t6_value);
-
-				if ((!current || dirty & /*conf*/ 1) && t8_value !== (t8_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t8, t8_value);
+				if ((!current || dirty & /*conf*/ 1) && t6_value !== (t6_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t6, t6_value);
 
 				if (!current || dirty & /*isEmptyDomainName*/ 16) {
 					button.disabled = /*isEmptyDomainName*/ ctx[4];
