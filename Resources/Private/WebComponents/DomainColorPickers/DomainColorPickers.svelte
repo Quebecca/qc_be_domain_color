@@ -51,7 +51,6 @@
     }
 
     onMount(() => {
-        console.log(conf)
         domainColors.forEach((obj, index) => {
             if(obj.color !== undefined){
                 let color = {
@@ -103,7 +102,7 @@
         id="field_tx_qc_be_domain_color"
     />
     <div class="row">
-        <span class="text-muted">{conf.label}</span>
+        <span class="text-muted">{conf.description}</span>
         <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
             <div class="formengine-field-item t3js-formengine-field-item ">
@@ -113,7 +112,7 @@
                             <input id="new-domain"
                                    bind:value={domainName}
                                    autocomplete="off"
-                                   placeholder={conf.domainNameInputPlaceholder}
+                                   placeholder={conf.placeholder}
                                    class="new-domain form-control"
                             />
                       <!--      <span class="error-message" style="color: red;">

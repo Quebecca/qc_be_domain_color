@@ -4091,7 +4091,7 @@
 		return child_ctx;
 	}
 
-	// (140:4) {#each Array.from(colors) as color, index}
+	// (139:4) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4260,7 +4260,7 @@
 		let t2;
 		let div9;
 		let span;
-		let t3_value = /*conf*/ ctx[0].label + "";
+		let t3_value = /*conf*/ ctx[0].description + "";
 		let t3;
 		let t4;
 		let div4;
@@ -4330,7 +4330,7 @@
 				attr(span, "class", "text-muted");
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
-				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].domainNameInputPlaceholder);
+				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
 				attr(input1, "class", "new-domain form-control");
 				attr(div0, "class", "form-wizards-element");
 				attr(div1, "class", "form-wizards-wrap");
@@ -4395,9 +4395,9 @@
 					set_input_value(input0, /*domainColorsJson*/ ctx[3]);
 				}
 
-				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].label + "")) set_data(t3, t3_value);
+				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].description + "")) set_data(t3, t3_value);
 
-				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].domainNameInputPlaceholder)) {
+				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].placeholder)) {
 					attr(input1, "placeholder", input1_placeholder_value);
 				}
 
@@ -4510,8 +4510,6 @@
 		}
 
 		onMount(() => {
-			console.log(conf);
-
 			domainColors.forEach((obj, index) => {
 				if (obj.color !== undefined) {
 					let color = {

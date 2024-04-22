@@ -9,10 +9,9 @@ namespace Qc\QcBeDomainColor\Events;
  * LICENSE.txt file that was distributed with this source code.
  */
 use TYPO3\CMS\Backend\Controller\Event\AfterBackendPageRenderEvent;
-use TYPO3\CMS\Core\Exception;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility as LocalizationUtilityExtbase;
 
 /**
  * Userfunc to render a js component
@@ -29,11 +28,17 @@ class ItemsProcFunc
      */
     public function domainColorsFields()
     {
-
         $view = $this->getStandaloneView();
-        $view->assign(
-                'qcDomainColors',
-                html_entity_decode((string) (($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]') ?: '[]')));
+        $labels = [
+            "buttonLabel" => $this->translate("new"),
+            "description" => $this->translate("description"),
+            "placeholder" => $this->translate("new.placeholder"),
+        ];
+        $view->assignMultiple([
+            'qcDomainColors' =>
+                html_entity_decode((string) (($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]') ?: '[]')),
+            "labels" => html_entity_decode(json_encode($labels))
+        ]);
         return  $view->render();
     }
 
@@ -71,6 +76,12 @@ class ItemsProcFunc
                 $event->setContent($content);
             }
         }
+    }
+
+    protected function translate($key):string
+    {
+        return LocalizationUtilityExtbase::translate(
+            $key, "qc_be_domain_color");
     }
 
 }
