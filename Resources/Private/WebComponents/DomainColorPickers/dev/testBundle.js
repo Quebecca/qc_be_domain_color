@@ -4091,7 +4091,7 @@
 		return child_ctx;
 	}
 
-	// (71:0) {#if conf.placeholder !== undefined}
+	// (72:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let div10;
 		let style;
@@ -4113,7 +4113,7 @@
 		let t5;
 		let span1;
 
-		let t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length > 0
+		let t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
 		? ""
 		: "Invalid regexp") + "";
 
@@ -4263,7 +4263,7 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*validInput, domainName*/ 10) && t6_value !== (t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length > 0
+				if ((!current || dirty & /*validInput, domainName*/ 10) && t6_value !== (t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
 				? ""
 				: "Invalid regexp") + "")) set_data(t6, t6_value);
 
@@ -4330,7 +4330,7 @@
 		};
 	}
 
-	// (146:8) {#each Array.from(colors) as color, index}
+	// (147:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4403,6 +4403,7 @@
 				t2 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control");
+				input.disabled = "disabled";
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4593,6 +4594,8 @@
 		}
 
 		onMount(() => {
+			console.log(domainName.length);
+
 			domainColors.forEach((obj, index) => {
 				if (obj.color !== undefined) {
 					let color = {

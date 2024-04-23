@@ -56,6 +56,7 @@
     }
 
     onMount(() => {
+        console.log(domainName.length)
         domainColors.forEach((obj, index) => {
             if(obj.color !== undefined){
                 let color = {
@@ -123,7 +124,7 @@
                                        class="new-domain form-control"
                                 />
                                 <span class="error-message" style="color: red;">
-                                    {validInput == true || domainName.length > 0 ? "" : "Invalid regexp"  }
+                                    {(validInput == true || domainName.length == 0) ? "" : "Invalid regexp"  }
                                 </span>
                             </div>
                         </div>
@@ -148,7 +149,7 @@
                 <div class="form-control-wrap input-element">
                     <div class="form-wizards-wrap">
                         <div class="form-wizards-element pr-2">
-                            <input type="text" bind:value={color.domain} class="edit form-control">
+                            <input type="text" bind:value={color.domain} class="edit form-control" disabled="disabled">
                         </div>
                     </div>
                 </div>
