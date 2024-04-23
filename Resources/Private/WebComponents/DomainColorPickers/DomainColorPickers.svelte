@@ -13,8 +13,13 @@
     export let
         domainColors = [],
         conf = {}
-
+    let domainNameRegex = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+    $: validInput = false;
     let domainName = '';
+    $: {
+        validInput = domainName.length > 0 && domainNameRegex.test(domainName);
+        validInput = validInput;
+    }
     $: isEmptyDomainName = domainName.trim() === "";
     $: colors = [];
     $: {
@@ -117,9 +122,9 @@
                                        placeholder={conf.placeholder}
                                        class="new-domain form-control"
                                 />
-                                <!--      <span class="error-message" style="color: red;">
-                                        {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
-                                      </span>-->
+                                <span class="error-message" style="color: red;">
+                                    {validInput == true || domainName.length > 0 ? "" : "Invalid regexp"  }
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -130,7 +135,7 @@
                 <div class="formengine-field-item t3js-formengine-field-item ">
                     <div class="form-control-wrap">
                         <div class="btn-group">
-                            <button on:click={addNewDomain} disabled={isEmptyDomainName} class="btn btn-default">
+                            <button on:click={addNewDomain} disabled={validInput == false} class="btn btn-default">
                                 {conf.buttonLabel}
                             </button>
                         </div>
