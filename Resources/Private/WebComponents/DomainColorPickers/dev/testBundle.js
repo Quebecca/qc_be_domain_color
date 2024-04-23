@@ -4091,7 +4091,7 @@
 		return child_ctx;
 	}
 
-	// (72:0) {#if conf.placeholder !== undefined}
+	// (71:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let div10;
 		let style;
@@ -4115,7 +4115,7 @@
 
 		let t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
 		? ""
-		: "Invalid regexp") + "";
+		: /*conf*/ ctx[0].regexpError) + "";
 
 		let t6;
 		let t7;
@@ -4184,7 +4184,7 @@
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
 				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
-				attr(input1, "class", "new-domain form-control");
+				attr(input1, "class", "new-domain form-control mb-2");
 				attr(span1, "class", "error-message");
 				set_style(span1, "color", "red");
 				attr(div0, "class", "form-wizards-element");
@@ -4263,9 +4263,9 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*validInput, domainName*/ 10) && t6_value !== (t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
+				if ((!current || dirty & /*validInput, domainName, conf*/ 11) && t6_value !== (t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
 				? ""
-				: "Invalid regexp") + "")) set_data(t6, t6_value);
+				: /*conf*/ ctx[0].regexpError) + "")) set_data(t6, t6_value);
 
 				if ((!current || dirty & /*conf*/ 1) && t8_value !== (t8_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t8, t8_value);
 
@@ -4330,7 +4330,7 @@
 		};
 	}
 
-	// (147:8) {#each Array.from(colors) as color, index}
+	// (146:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4594,8 +4594,6 @@
 		}
 
 		onMount(() => {
-			console.log(domainName.length);
-
 			domainColors.forEach((obj, index) => {
 				if (obj.color !== undefined) {
 					let color = {

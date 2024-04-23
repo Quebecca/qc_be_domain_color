@@ -33,6 +33,7 @@ class ItemsProcFunc
             "buttonLabel" => $this->translate("new"),
             "description" => $this->translate("description"),
             "placeholder" => $this->translate("new.placeholder"),
+            "regexpError" => $this->translate("regexp-error")
         ];
         $view->assignMultiple([
             'qcDomainColors' =>

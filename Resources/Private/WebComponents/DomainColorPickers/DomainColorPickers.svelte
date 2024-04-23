@@ -56,7 +56,6 @@
     }
 
     onMount(() => {
-        console.log(domainName.length)
         domainColors.forEach((obj, index) => {
             if(obj.color !== undefined){
                 let color = {
@@ -121,10 +120,10 @@
                                        bind:value={domainName}
                                        autocomplete="off"
                                        placeholder={conf.placeholder}
-                                       class="new-domain form-control"
+                                       class="new-domain form-control mb-2"
                                 />
                                 <span class="error-message" style="color: red;">
-                                    {(validInput == true || domainName.length == 0) ? "" : "Invalid regexp"  }
+                                    {(validInput == true || domainName.length == 0) ? "" : conf.regexpError  }
                                 </span>
                             </div>
                         </div>
