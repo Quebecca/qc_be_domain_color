@@ -46,11 +46,11 @@
 
     function deleteDomainColor(event, domainColor) {
         event.preventDefault();
-        const targetIndex = colors.findIndex(item => item.domain === domainColor);
+        const targetIndex = colors.findIndex(item => item.color !== domainColor.color.toHexString());
         if (targetIndex !== -1) {
             colors.splice(targetIndex, 1);
         }
-        domainColors = domainColors.filter(item => item.domain !== domainColor);
+        domainColors = [...domainColors.filter(item => (item.color !== domainColor.color.toHexString()))];
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
@@ -170,7 +170,7 @@
                                 <div class="form-wizards-element">
                                     <button
                                         class="btn btn-default  t3js-editform-delete-record"
-                                        on:click={() => deleteDomainColor(event,color.domain)}
+                                        on:click={() => deleteDomainColor(event,color)}
                                     >
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
                                         <span class="icon-markup">

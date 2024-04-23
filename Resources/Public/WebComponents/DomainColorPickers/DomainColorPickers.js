@@ -4550,13 +4550,16 @@
 
 		function deleteDomainColor(event, domainColor) {
 			event.preventDefault();
-			const targetIndex = colors.findIndex(item => item.domain === domainColor);
+			const targetIndex = colors.findIndex(item => item.color !== domainColor.color.toHexString());
 
 			if (targetIndex !== -1) {
 				colors.splice(targetIndex, 1);
 			}
 
-			$$invalidate(7, domainColors = domainColors.filter(item => item.domain !== domainColor));
+			$$invalidate(7, domainColors = [
+				...domainColors.filter(item => item.color !== domainColor.color.toHexString())
+			]);
+
 			$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
 			($$invalidate(2, colors), $$invalidate(7, domainColors));
 		}
@@ -4597,7 +4600,7 @@
 			}
 		}
 
-		const click_handler = color => deleteDomainColor(event, color.domain);
+		const click_handler = color => deleteDomainColor(event, color);
 
 		$$self.$$set = $$props => {
 			if ('domainColors' in $$props) $$invalidate(7, domainColors = $$props.domainColors);
