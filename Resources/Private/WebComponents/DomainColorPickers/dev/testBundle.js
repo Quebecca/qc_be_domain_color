@@ -3126,7 +3126,7 @@
 	}
 
 	// (22:0) {#if isOpen}
-	function create_if_block(ctx) {
+	function create_if_block$1(ctx) {
 		let div;
 		let colorarea;
 		let updating_color;
@@ -3336,7 +3336,7 @@
 	function create_fragment$3(ctx) {
 		let if_block_anchor;
 		let current;
-		let if_block = /*isOpen*/ ctx[1] && create_if_block(ctx);
+		let if_block = /*isOpen*/ ctx[1] && create_if_block$1(ctx);
 
 		return {
 			c() {
@@ -3357,7 +3357,7 @@
 							transition_in(if_block, 1);
 						}
 					} else {
-						if_block = create_if_block(ctx);
+						if_block = create_if_block$1(ctx);
 						if_block.c();
 						transition_in(if_block, 1);
 						if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -4091,7 +4091,225 @@
 		return child_ctx;
 	}
 
-	// (139:4) {#each Array.from(colors) as color, index}
+	// (66:0) {#if conf.placeholder !== undefined}
+	function create_if_block(ctx) {
+		let div10;
+		let style;
+		let t1;
+		let input0;
+		let t2;
+		let div9;
+		let span;
+		let t3_value = /*conf*/ ctx[0].description + "";
+		let t3;
+		let t4;
+		let div4;
+		let div3;
+		let div2;
+		let div1;
+		let div0;
+		let input1;
+		let input1_placeholder_value;
+		let t5;
+		let div8;
+		let div7;
+		let div6;
+		let div5;
+		let button;
+		let t6_value = /*conf*/ ctx[0].buttonLabel + "";
+		let t6;
+		let t7;
+		let current;
+		let mounted;
+		let dispose;
+		let each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
+		let each_blocks = [];
+
+		for (let i = 0; i < each_value.length; i += 1) {
+			each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+		}
+
+		const out = i => transition_out(each_blocks[i], 1, 1, () => {
+			each_blocks[i] = null;
+		});
+
+		return {
+			c() {
+				div10 = element("div");
+				style = element("style");
+				style.textContent = ".svelte-s8w54d {\r\n                height : 84%;\r\n            }\r\n            .input.svelte-s8w54d.svelte-s8w54d  {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .input-group .btn {\r\n                height: 105%;\r\n            }\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n            .svelte-s8w54d:focus-within{\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n            .input-element {\r\n                margin-right : 7px;\r\n            }";
+				t1 = space();
+				input0 = element("input");
+				t2 = space();
+				div9 = element("div");
+				span = element("span");
+				t3 = text(t3_value);
+				t4 = space();
+				div4 = element("div");
+				div3 = element("div");
+				div2 = element("div");
+				div1 = element("div");
+				div0 = element("div");
+				input1 = element("input");
+				t5 = space();
+				div8 = element("div");
+				div7 = element("div");
+				div6 = element("div");
+				div5 = element("div");
+				button = element("button");
+				t6 = text(t6_value);
+				t7 = space();
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
+
+				attr(input0, "type", "hidden");
+				attr(input0, "name", "data[tx_qc_be_domain_color]");
+				attr(input0, "id", "field_tx_qc_be_domain_color");
+				attr(input0, "class", "d-none");
+				attr(span, "class", "text-muted");
+				attr(input1, "id", "new-domain");
+				attr(input1, "autocomplete", "off");
+				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
+				attr(input1, "class", "new-domain form-control");
+				attr(div0, "class", "form-wizards-element");
+				attr(div1, "class", "form-wizards-wrap");
+				attr(div2, "class", "form-control-wrap");
+				attr(div3, "class", "formengine-field-item t3js-formengine-field-item ");
+				attr(div4, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
+				button.disabled = /*isEmptyDomainName*/ ctx[4];
+				attr(button, "class", "btn btn-default");
+				attr(div5, "class", "btn-group");
+				attr(div6, "class", "form-control-wrap");
+				attr(div7, "class", "formengine-field-item t3js-formengine-field-item ");
+				attr(div8, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
+				attr(div9, "class", "row");
+			},
+			m(target, anchor) {
+				insert(target, div10, anchor);
+				append(div10, style);
+				append(div10, t1);
+				append(div10, input0);
+				set_input_value(input0, /*domainColorsJson*/ ctx[3]);
+				append(div10, t2);
+				append(div10, div9);
+				append(div9, span);
+				append(span, t3);
+				append(div9, t4);
+				append(div9, div4);
+				append(div4, div3);
+				append(div3, div2);
+				append(div2, div1);
+				append(div1, div0);
+				append(div0, input1);
+				set_input_value(input1, /*domainName*/ ctx[1]);
+				append(div9, t5);
+				append(div9, div8);
+				append(div8, div7);
+				append(div7, div6);
+				append(div6, div5);
+				append(div5, button);
+				append(button, t6);
+				append(div10, t7);
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].m(div10, null);
+					}
+				}
+
+				current = true;
+
+				if (!mounted) {
+					dispose = [
+						listen(input0, "input", /*input0_input_handler*/ ctx[8]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[9]),
+						listen(button, "click", /*addNewDomain*/ ctx[5])
+					];
+
+					mounted = true;
+				}
+			},
+			p(ctx, dirty) {
+				if (dirty & /*domainColorsJson*/ 8) {
+					set_input_value(input0, /*domainColorsJson*/ ctx[3]);
+				}
+
+				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].description + "")) set_data(t3, t3_value);
+
+				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].placeholder)) {
+					attr(input1, "placeholder", input1_placeholder_value);
+				}
+
+				if (dirty & /*domainName*/ 2 && input1.value !== /*domainName*/ ctx[1]) {
+					set_input_value(input1, /*domainName*/ ctx[1]);
+				}
+
+				if ((!current || dirty & /*conf*/ 1) && t6_value !== (t6_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t6, t6_value);
+
+				if (!current || dirty & /*isEmptyDomainName*/ 16) {
+					button.disabled = /*isEmptyDomainName*/ ctx[4];
+				}
+
+				if (dirty & /*deleteDomainColor, event, Array, colors*/ 68) {
+					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
+					let i;
+
+					for (i = 0; i < each_value.length; i += 1) {
+						const child_ctx = get_each_context(ctx, each_value, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(child_ctx, dirty);
+							transition_in(each_blocks[i], 1);
+						} else {
+							each_blocks[i] = create_each_block(child_ctx);
+							each_blocks[i].c();
+							transition_in(each_blocks[i], 1);
+							each_blocks[i].m(div10, null);
+						}
+					}
+
+					group_outros();
+
+					for (i = each_value.length; i < each_blocks.length; i += 1) {
+						out(i);
+					}
+
+					check_outros();
+				}
+			},
+			i(local) {
+				if (current) return;
+
+				for (let i = 0; i < each_value.length; i += 1) {
+					transition_in(each_blocks[i]);
+				}
+
+				current = true;
+			},
+			o(local) {
+				each_blocks = each_blocks.filter(Boolean);
+
+				for (let i = 0; i < each_blocks.length; i += 1) {
+					transition_out(each_blocks[i]);
+				}
+
+				current = false;
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(div10);
+				}
+
+				destroy_each(each_blocks, detaching);
+				mounted = false;
+				run_all(dispose);
+			}
+		};
+	}
+
+	// (141:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4253,217 +4471,59 @@
 	}
 
 	function create_fragment$1(ctx) {
-		let div10;
-		let style;
-		let t1;
-		let input0;
-		let t2;
-		let div9;
-		let span;
-		let t3_value = /*conf*/ ctx[0].description + "";
-		let t3;
-		let t4;
-		let div4;
-		let div3;
-		let div2;
-		let div1;
-		let div0;
-		let input1;
-		let input1_placeholder_value;
-		let t5;
-		let div8;
-		let div7;
-		let div6;
-		let div5;
-		let button;
-		let t6_value = /*conf*/ ctx[0].buttonLabel + "";
-		let t6;
-		let t7;
+		let if_block_anchor;
 		let current;
-		let mounted;
-		let dispose;
-		let each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
-		let each_blocks = [];
-
-		for (let i = 0; i < each_value.length; i += 1) {
-			each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
-		}
-
-		const out = i => transition_out(each_blocks[i], 1, 1, () => {
-			each_blocks[i] = null;
-		});
+		let if_block = /*conf*/ ctx[0].placeholder !== undefined && create_if_block(ctx);
 
 		return {
 			c() {
-				div10 = element("div");
-				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height : 84%;\r\n        }\r\n        .input.svelte-s8w54d.svelte-s8w54d  {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .input-group .btn {\r\n            height: 105%;\r\n        }\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n         }\r\n        .svelte-s8w54d:focus-within{\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n        .input-element {\r\n            margin-right : 7px;\r\n        }";
-				t1 = space();
-				input0 = element("input");
-				t2 = space();
-				div9 = element("div");
-				span = element("span");
-				t3 = text(t3_value);
-				t4 = space();
-				div4 = element("div");
-				div3 = element("div");
-				div2 = element("div");
-				div1 = element("div");
-				div0 = element("div");
-				input1 = element("input");
-				t5 = space();
-				div8 = element("div");
-				div7 = element("div");
-				div6 = element("div");
-				div5 = element("div");
-				button = element("button");
-				t6 = text(t6_value);
-				t7 = space();
-
-				for (let i = 0; i < each_blocks.length; i += 1) {
-					each_blocks[i].c();
-				}
-
-				attr(input0, "type", "hidden");
-				attr(input0, "name", "data[tx_qc_be_domain_color]");
-				attr(input0, "id", "field_tx_qc_be_domain_color");
-				attr(span, "class", "text-muted");
-				attr(input1, "id", "new-domain");
-				attr(input1, "autocomplete", "off");
-				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
-				attr(input1, "class", "new-domain form-control");
-				attr(div0, "class", "form-wizards-element");
-				attr(div1, "class", "form-wizards-wrap");
-				attr(div2, "class", "form-control-wrap");
-				attr(div3, "class", "formengine-field-item t3js-formengine-field-item ");
-				attr(div4, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				button.disabled = /*isEmptyDomainName*/ ctx[4];
-				attr(button, "class", "btn btn-default");
-				attr(div5, "class", "btn-group");
-				attr(div6, "class", "form-control-wrap");
-				attr(div7, "class", "formengine-field-item t3js-formengine-field-item ");
-				attr(div8, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				attr(div9, "class", "row");
+				if (if_block) if_block.c();
+				if_block_anchor = empty();
 			},
 			m(target, anchor) {
-				insert(target, div10, anchor);
-				append(div10, style);
-				append(div10, t1);
-				append(div10, input0);
-				set_input_value(input0, /*domainColorsJson*/ ctx[3]);
-				append(div10, t2);
-				append(div10, div9);
-				append(div9, span);
-				append(span, t3);
-				append(div9, t4);
-				append(div9, div4);
-				append(div4, div3);
-				append(div3, div2);
-				append(div2, div1);
-				append(div1, div0);
-				append(div0, input1);
-				set_input_value(input1, /*domainName*/ ctx[1]);
-				append(div9, t5);
-				append(div9, div8);
-				append(div8, div7);
-				append(div7, div6);
-				append(div6, div5);
-				append(div5, button);
-				append(button, t6);
-				append(div10, t7);
-
-				for (let i = 0; i < each_blocks.length; i += 1) {
-					if (each_blocks[i]) {
-						each_blocks[i].m(div10, null);
-					}
-				}
-
+				if (if_block) if_block.m(target, anchor);
+				insert(target, if_block_anchor, anchor);
 				current = true;
-
-				if (!mounted) {
-					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[8]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[9]),
-						listen(button, "click", /*addNewDomain*/ ctx[5])
-					];
-
-					mounted = true;
-				}
 			},
 			p(ctx, [dirty]) {
-				if (dirty & /*domainColorsJson*/ 8) {
-					set_input_value(input0, /*domainColorsJson*/ ctx[3]);
-				}
+				if (/*conf*/ ctx[0].placeholder !== undefined) {
+					if (if_block) {
+						if_block.p(ctx, dirty);
 
-				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].description + "")) set_data(t3, t3_value);
-
-				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].placeholder)) {
-					attr(input1, "placeholder", input1_placeholder_value);
-				}
-
-				if (dirty & /*domainName*/ 2 && input1.value !== /*domainName*/ ctx[1]) {
-					set_input_value(input1, /*domainName*/ ctx[1]);
-				}
-
-				if ((!current || dirty & /*conf*/ 1) && t6_value !== (t6_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t6, t6_value);
-
-				if (!current || dirty & /*isEmptyDomainName*/ 16) {
-					button.disabled = /*isEmptyDomainName*/ ctx[4];
-				}
-
-				if (dirty & /*deleteDomainColor, event, Array, colors*/ 68) {
-					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
-					let i;
-
-					for (i = 0; i < each_value.length; i += 1) {
-						const child_ctx = get_each_context(ctx, each_value, i);
-
-						if (each_blocks[i]) {
-							each_blocks[i].p(child_ctx, dirty);
-							transition_in(each_blocks[i], 1);
-						} else {
-							each_blocks[i] = create_each_block(child_ctx);
-							each_blocks[i].c();
-							transition_in(each_blocks[i], 1);
-							each_blocks[i].m(div10, null);
+						if (dirty & /*conf*/ 1) {
+							transition_in(if_block, 1);
 						}
+					} else {
+						if_block = create_if_block(ctx);
+						if_block.c();
+						transition_in(if_block, 1);
+						if_block.m(if_block_anchor.parentNode, if_block_anchor);
 					}
-
+				} else if (if_block) {
 					group_outros();
 
-					for (i = each_value.length; i < each_blocks.length; i += 1) {
-						out(i);
-					}
+					transition_out(if_block, 1, 1, () => {
+						if_block = null;
+					});
 
 					check_outros();
 				}
 			},
 			i(local) {
 				if (current) return;
-
-				for (let i = 0; i < each_value.length; i += 1) {
-					transition_in(each_blocks[i]);
-				}
-
+				transition_in(if_block);
 				current = true;
 			},
 			o(local) {
-				each_blocks = each_blocks.filter(Boolean);
-
-				for (let i = 0; i < each_blocks.length; i += 1) {
-					transition_out(each_blocks[i]);
-				}
-
+				transition_out(if_block);
 				current = false;
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(div10);
+					detach(if_block_anchor);
 				}
 
-				destroy_each(each_blocks, detaching);
-				mounted = false;
-				run_all(dispose);
+				if (if_block) if_block.d(detaching);
 			}
 		};
 	}

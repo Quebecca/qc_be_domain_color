@@ -63,119 +63,122 @@
         });
     });
 </script>
-<div>
-    <style>
-        .svelte-s8w54d {
-            height : 84%;
-        }
-        .input.svelte-s8w54d.svelte-s8w54d  {
+{#if conf.placeholder !== undefined}
+    <div>
+        <style>
+            .svelte-s8w54d {
+                height : 84%;
+            }
+            .input.svelte-s8w54d.svelte-s8w54d  {
 
-            background-color: #fefefe;
-            background-clip: padding-box;
-            border: var(--bs-border-width) solid #bbb;
-            border-radius: var(--bs-border-radius);
-            box-shadow: var(--bs-box-shadow-inset);
-            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-        }
+                background-color: #fefefe;
+                background-clip: padding-box;
+                border: var(--bs-border-width) solid #bbb;
+                border-radius: var(--bs-border-radius);
+                box-shadow: var(--bs-box-shadow-inset);
+                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            }
 
-        .input-group .btn {
-            height: 105%;
-        }
-        .svelte-s8w54d .show {
-            padding-top: 5px;
-         }
-        .svelte-s8w54d:focus-within{
-            color: #333;
-            background-color: #fefefe;
-            border-color: #80bcf3;
-            outline: 0;
-            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
-        }
-        .input-element {
-            margin-right : 7px;
-        }
-    </style>
-    <input
-        type="hidden"
-        name="data[tx_qc_be_domain_color]"
-        bind:value={domainColorsJson}
-        id="field_tx_qc_be_domain_color"
-    />
-    <div class="row">
-        <span class="text-muted">{conf.description}</span>
-        <div class="form-group t3js-formengine-validation-marker
+            .input-group .btn {
+                height: 105%;
+            }
+            .svelte-s8w54d .show {
+                padding-top: 5px;
+            }
+            .svelte-s8w54d:focus-within{
+                color: #333;
+                background-color: #fefefe;
+                border-color: #80bcf3;
+                outline: 0;
+                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
+            }
+            .input-element {
+                margin-right : 7px;
+            }
+        </style>
+        <input
+            type="hidden"
+            name="data[tx_qc_be_domain_color]"
+            bind:value={domainColorsJson}
+            id="field_tx_qc_be_domain_color"
+            class="d-none"
+        />
+        <div class="row">
+            <span class="text-muted">{conf.description}</span>
+            <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
-            <div class="formengine-field-item t3js-formengine-field-item ">
-                <div class="form-control-wrap">
-                    <div class="form-wizards-wrap">
-                        <div class="form-wizards-element">
-                            <input id="new-domain"
-                                   bind:value={domainName}
-                                   autocomplete="off"
-                                   placeholder={conf.placeholder}
-                                   class="new-domain form-control"
-                            />
-                      <!--      <span class="error-message" style="color: red;">
-                              {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
-                            </span>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group t3js-formengine-validation-marker
-                    t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
-            <div class="formengine-field-item t3js-formengine-field-item ">
-                <div class="form-control-wrap">
-                    <div class="btn-group">
-                        <button on:click={addNewDomain} disabled={isEmptyDomainName} class="btn btn-default">
-                            {conf.buttonLabel}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {#each Array.from(colors) as color, index}
-        <div class="d-flex mb-3">
-            <div class="form-control-wrap input-element">
-                <div class="form-wizards-wrap">
-                    <div class="form-wizards-element pr-2">
-                        <input type="text" bind:value={color.domain} class="edit form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="t3js-formengine-validation-marker">
-                <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap input-element"  style="max-width: 126px">
+                <div class="formengine-field-item t3js-formengine-field-item ">
+                    <div class="form-control-wrap">
                         <div class="form-wizards-wrap">
-                            <div class="form-wizards-element" >
-                                <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                            <div class="form-wizards-element">
+                                <input id="new-domain"
+                                       bind:value={domainName}
+                                       autocomplete="off"
+                                       placeholder={conf.placeholder}
+                                       class="new-domain form-control"
+                                />
+                                <!--      <span class="error-message" style="color: red;">
+                                        {domainName && !/^([A-Za-z]{3})$/.test(domainName) ? "Invalid regexp" : ""}
+                                      </span>-->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
-                <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap input-element">
-                        <div class="form-wizards-wrap">
-                            <div class="form-wizards-element">
-                                <button
-                                    class="btn btn-default  t3js-editform-delete-record"
-                                    on:click={() => deleteDomainColor(event,color.domain)}
+            <div class="form-group t3js-formengine-validation-marker
+                    t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
+                <div class="formengine-field-item t3js-formengine-field-item ">
+                    <div class="form-control-wrap">
+                        <div class="btn-group">
+                            <button on:click={addNewDomain} disabled={isEmptyDomainName} class="btn btn-default">
+                                {conf.buttonLabel}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#each Array.from(colors) as color, index}
+            <div class="d-flex mb-3">
+                <div class="form-control-wrap input-element">
+                    <div class="form-wizards-wrap">
+                        <div class="form-wizards-element pr-2">
+                            <input type="text" bind:value={color.domain} class="edit form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="t3js-formengine-validation-marker">
+                    <div class="formengine-field-item t3js-formengine-field-item">
+                        <div class="form-control-wrap input-element"  style="max-width: 126px">
+                            <div class="form-wizards-wrap">
+                                <div class="form-wizards-element" >
+                                    <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
+                    <div class="formengine-field-item t3js-formengine-field-item">
+                        <div class="form-control-wrap input-element">
+                            <div class="form-wizards-wrap">
+                                <div class="form-wizards-element">
+                                    <button
+                                        class="btn btn-default  t3js-editform-delete-record"
+                                        on:click={() => deleteDomainColor(event,color.domain)}
                                     >
                                     <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
                                         <span class="icon-markup">
                                             <svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
                                         </span>
 	                                </span>
-                                </button>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {/each}
-</div>
+        {/each}
+    </div>
+{/if}

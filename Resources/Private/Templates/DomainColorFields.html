@@ -12,7 +12,7 @@
         id="qc-domain-color"
         domain-colors={qcDomainColors}
     />
-    <script>
+    <script defer>
         const qcDomainColors = {qcDomainColors -> f:format.raw()}
         const labels = {labels -> f:format.raw()}
         document.getElementById("qc-domain-color").setAttribute("conf", JSON.stringify(labels))
