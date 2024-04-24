@@ -13,14 +13,12 @@
     export let
         domainColors = [],
         conf = {}
-    let domainNameRegex = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
     $: validInput = false;
     let domainName = '';
     $: {
         validInput = isValidDomainName(domainName);
         validInput = validInput;
     }
-    $: isEmptyDomainName = domainName.trim() === "";
     $: colors = [];
     $: {
         for (let i = 0; i < colors.length; i++) {
@@ -57,7 +55,7 @@
     function deleteDomainColor(event, index) {
         event.preventDefault();
         colors.splice(index, 1);
-        domainColors.splice(index,1)
+        domainColors.splice(index, 1)
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
@@ -102,9 +100,8 @@
                 transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
             }
 
-
             .moveDomainColor {
-                width : 50%;
+                width: 50%;
             }
 
             .svelte-s8w54d .show {
@@ -118,22 +115,25 @@
                 outline: 0;
                 box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
             }
+
             .invalidInput {
                 border: 2px solid red;
             }
+
             .invalidInput:focus {
                 border: 2px solid red;
             }
+
             .input-element {
                 margin-right: 7px;
             }
         </style>
         <input
-            type="hidden"
-            name="data[tx_qc_be_domain_color]"
-            bind:value={domainColorsJson}
-            id="field_tx_qc_be_domain_color"
-            class="d-none"
+                type="hidden"
+                name="data[tx_qc_be_domain_color]"
+                bind:value={domainColorsJson}
+                id="field_tx_qc_be_domain_color"
+                class="d-none"
         />
         <div class="row">
             <div>
@@ -179,37 +179,37 @@
             <div class="d-flex align-items-start flex-column mb-3">
                 <div class="mb-0">
                     <div class="d-flex">
-                    <div class="form-control-wrap input-element">
-                        <div class="form-wizards-wrap">
-                            <div class="form-wizards-element pr-2">
-                                <input
-                                        type="text"
-                                        bind:value={color.domain}
-                                        class="edit form-control mb-2"
-                                        class:invalidInput={!isValidDomainName(color.domain)}
-                                >
+                        <div class="form-control-wrap input-element">
+                            <div class="form-wizards-wrap">
+                                <div class="form-wizards-element pr-2">
+                                    <input
+                                            type="text"
+                                            bind:value={color.domain}
+                                            class="edit form-control mb-2"
+                                            class:invalidInput={!isValidDomainName(color.domain)}
+                                    >
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="t3js-formengine-validation-marker">
-                        <div class="formengine-field-item t3js-formengine-field-item">
-                            <div class="form-control-wrap input-element" style="max-width: 126px">
-                                <div class="form-wizards-wrap">
-                                    <div class="form-wizards-element">
-                                        <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                        <div class="t3js-formengine-validation-marker">
+                            <div class="formengine-field-item t3js-formengine-field-item">
+                                <div class="form-control-wrap input-element" style="max-width: 126px">
+                                    <div class="form-wizards-wrap">
+                                        <div class="form-wizards-element">
+                                            <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {#if index > 0}
-                        <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important" >
-                            <button
-                                    class="btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                    on:click={() => moveDomainColor(event,'toTop',index)}
-                                    style="width : 55%"
-                            >
+                        {#if index > 0}
+                            <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important">
+                                <button
+                                        class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                        on:click={() => moveDomainColor(event,'toTop',index)}
+                                        style="width : 55%"
+                                >
                           <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                 data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -217,15 +217,15 @@
                                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg>
                                     </span>
                                 </span>
-                            </button>
-                        </div>
-                    {/if}
-                    {#if colors.length > index + 1}
-                        <div class="p-2"  style="padding-left : 0 !important">
-                            <button
-                                    class="btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                    on:click={() => moveDomainColor(event,'toDown',index)}
-                            >
+                                </button>
+                            </div>
+                        {/if}
+                        {#if colors.length > index + 1}
+                            <div class="p-2" style="padding-left : 0 !important">
+                                <button
+                                        class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                        on:click={() => moveDomainColor(event,'toDown',index)}
+                                >
                             <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                   data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -233,29 +233,29 @@
                                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg>
                                     </span>
                                 </span>
+                                </button>
+                            </div>
+                        {/if}
+
+                        <div class="p-2">
+                            <button
+                                    class="btn btn-default  t3js-editform-delete-record"
+                                    on:click={() => deleteDomainColor(event,index)}
+                            >
+                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
+                                      data-identifier="actions-edit-delete">
+                                    <span class="icon-markup">
+                                        <svg class="icon-color" role="img"><use
+                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
+                                    </span>
+                                </span>
                             </button>
                         </div>
-                    {/if}
-
-                    <div class="p-2">
-                        <button
-                                class="btn btn-default  t3js-editform-delete-record"
-                                on:click={() => deleteDomainColor(event,index)}
-                        >
-                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                              data-identifier="actions-edit-delete">
-                            <span class="icon-markup">
-                                <svg class="icon-color" role="img"><use
-                                        xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
-                            </span>
-                        </span>
-                        </button>
                     </div>
                 </div>
-                </div>
-                <div  style="margin-top : -20px;">
+                <div style="margin-top : -20px;">
                     <span class="error-message" style="color: red;">
-                                { isValidDomainName(color.domain) === true ? "" : conf.regexpError  }
+                                { isValidDomainName(color.domain) === true ? "" : conf.regexpError + conf.ignoredItem  }
                         </span>
                 </div>
             </div>

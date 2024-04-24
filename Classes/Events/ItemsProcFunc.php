@@ -34,7 +34,8 @@ class ItemsProcFunc
             "description" => $this->translate("description"),
             "description_2" => $this->translate("description_2"),
             "placeholder" => $this->translate("new.placeholder"),
-            "regexpError" => $this->translate("regexp-error")
+            "regexpError" => $this->translate("regexp-error"),
+            "ignoredItem" => $this->translate("ignoredItem"),
         ];
         $view->assignMultiple([
             'qcDomainColors' =>

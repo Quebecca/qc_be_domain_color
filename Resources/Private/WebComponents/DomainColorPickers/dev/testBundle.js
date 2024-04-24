@@ -4085,13 +4085,13 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[17] = list[i];
-		child_ctx[18] = list;
-		child_ctx[19] = i;
+		child_ctx[16] = list[i];
+		child_ctx[17] = list;
+		child_ctx[18] = i;
 		return child_ctx;
 	}
 
-	// (88:0) {#if conf.placeholder !== undefined}
+	// (86:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let div11;
 		let style;
@@ -4151,7 +4151,7 @@
 			c() {
 				div11 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n            .invalidInput {\r\n                border: 2px solid red;\r\n            }\r\n            .invalidInput:focus {\r\n                border: 2px solid red;\r\n            }\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
+				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .moveDomainColor {\r\n                width: 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .invalidInput {\r\n                border: 2px solid red;\r\n            }\r\n\r\n            .invalidInput:focus {\r\n                border: 2px solid red;\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
@@ -4350,7 +4350,7 @@
 		};
 	}
 
-	// (206:20) {#if index > 0}
+	// (206:24) {#if index > 0}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4358,7 +4358,7 @@
 		let dispose;
 
 		function click_handler() {
-			return /*click_handler*/ ctx[13](/*index*/ ctx[19]);
+			return /*click_handler*/ ctx[13](/*index*/ ctx[18]);
 		}
 
 		return {
@@ -4394,7 +4394,7 @@
 		};
 	}
 
-	// (223:20) {#if colors.length > index + 1}
+	// (223:24) {#if colors.length > index + 1}
 	function create_if_block_1(ctx) {
 		let div;
 		let button;
@@ -4402,7 +4402,7 @@
 		let dispose;
 
 		function click_handler_1() {
-			return /*click_handler_1*/ ctx[14](/*index*/ ctx[19]);
+			return /*click_handler_1*/ ctx[14](/*index*/ ctx[18]);
 		}
 
 		return {
@@ -4463,9 +4463,9 @@
 		let div11;
 		let span2;
 
-		let t5_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
+		let t5_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
 		? ""
-		: /*conf*/ ctx[0].regexpError) + "";
+		: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "";
 
 		let t5;
 		let t6;
@@ -4474,26 +4474,26 @@
 		let dispose;
 
 		function input_input_handler() {
-			/*input_input_handler*/ ctx[11].call(input, /*each_value*/ ctx[18], /*index*/ ctx[19]);
+			/*input_input_handler*/ ctx[11].call(input, /*each_value*/ ctx[17], /*index*/ ctx[18]);
 		}
 
 		function colorinput_color_binding(value) {
-			/*colorinput_color_binding*/ ctx[12](value, /*index*/ ctx[19]);
+			/*colorinput_color_binding*/ ctx[12](value, /*index*/ ctx[18]);
 		}
 
 		let colorinput_props = { showAlphaSlider: true };
 
-		if (/*colors*/ ctx[2][/*index*/ ctx[19]].color !== void 0) {
-			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
+		if (/*colors*/ ctx[2][/*index*/ ctx[18]].color !== void 0) {
+			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[18]].color;
 		}
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
-		let if_block0 = /*index*/ ctx[19] > 0 && create_if_block_2(ctx);
-		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[19] + 1 && create_if_block_1(ctx);
+		let if_block0 = /*index*/ ctx[18] > 0 && create_if_block_2(ctx);
+		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[18] + 1 && create_if_block_1(ctx);
 
 		function click_handler_2() {
-			return /*click_handler_2*/ ctx[15](/*index*/ ctx[19]);
+			return /*click_handler_2*/ ctx[15](/*index*/ ctx[18]);
 		}
 
 		return {
@@ -4527,7 +4527,7 @@
 				t6 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control mb-2");
-				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
+				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[16].domain));
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4554,7 +4554,7 @@
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input);
-				set_input_value(input, /*color*/ ctx[17].domain);
+				set_input_value(input, /*color*/ ctx[16].domain);
 				append(div9, t0);
 				append(div9, div7);
 				append(div7, div6);
@@ -4588,26 +4588,26 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[17].domain) {
-					set_input_value(input, /*color*/ ctx[17].domain);
+				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[16].domain) {
+					set_input_value(input, /*color*/ ctx[16].domain);
 				}
 
 				if (!current || dirty & /*isValidDomainName, Array, colors*/ 4) {
-					toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
+					toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[16].domain));
 				}
 
 				const colorinput_changes = {};
 
 				if (!updating_color && dirty & /*colors*/ 4) {
 					updating_color = true;
-					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
+					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[18]].color;
 					add_flush_callback(() => updating_color = false);
 				}
 
 				colorinput.$set(colorinput_changes);
-				if (/*index*/ ctx[19] > 0) if_block0.p(ctx, dirty);
+				if (/*index*/ ctx[18] > 0) if_block0.p(ctx, dirty);
 
-				if (/*colors*/ ctx[2].length > /*index*/ ctx[19] + 1) {
+				if (/*colors*/ ctx[2].length > /*index*/ ctx[18] + 1) {
 					if (if_block1) {
 						if_block1.p(ctx, dirty);
 					} else {
@@ -4620,9 +4620,9 @@
 					if_block1 = null;
 				}
 
-				if ((!current || dirty & /*colors, conf*/ 5) && t5_value !== (t5_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
+				if ((!current || dirty & /*colors, conf*/ 5) && t5_value !== (t5_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
 				? ""
-				: /*conf*/ ctx[0].regexpError) + "")) set_data(t5, t5_value);
+				: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "")) set_data(t5, t5_value);
 			},
 			i(local) {
 				if (current) return;
@@ -4812,10 +4812,6 @@
 					$$invalidate(3, validInput = isValidDomainName(domainName));
 					($$invalidate(3, validInput), $$invalidate(1, domainName));
 				}
-			}
-
-			if ($$self.$$.dirty & /*domainName*/ 2) {
-				domainName.trim() === "";
 			}
 
 			if ($$self.$$.dirty & /*colors, domainColors*/ 260) {

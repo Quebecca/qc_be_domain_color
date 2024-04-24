@@ -18,13 +18,16 @@
 				<source>Delete this domain</source>
 			</trans-unit>
 			<trans-unit id="regexp-error" >
-				<source>Invalid regexp (This item will be ignored)</source>
+				<source>Invalid regexp </source>
 			</trans-unit>
+			<trans-unit id="ignoredItem" >
+                <source>(This item will be ignored)</source>
+            </trans-unit>
 			<trans-unit id="description" >
 				<source>Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.</source>
 			</trans-unit>
 			<trans-unit id="description_2" >
-                <target>The first element in the domain color list will be applied.</target>
+                <source>The first element in the domain color list will be applied.</source>
             </trans-unit>
 		</body>
 	</file>
