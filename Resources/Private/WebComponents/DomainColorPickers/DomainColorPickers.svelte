@@ -23,7 +23,7 @@
     $: isEmptyDomainName = domainName.trim() === "";
     $: colors = [];
     $: {
-        for(let i = 0; i <  colors.length; i++){
+        for (let i = 0; i < colors.length; i++) {
             domainColors[i].color = colors[i].color.toHexString();
             domainColors[i].domain = colors[i].domain;
         }
@@ -32,10 +32,10 @@
     }
     let domainColorsJson = '{}';
 
-    function isValidDomainName (domain) {
+    function isValidDomainName(domain) {
         try {
             new RegExp('/' + domain + '/');
-        } catch(e) {
+        } catch (e) {
             return false;
         }
         return true;
@@ -44,47 +44,55 @@
     function addNewDomain(e) {
         e.preventDefault();
         colors.push({
-            'domain' : domainName,
-            'color' : new Color("#CCC")
+            'domain': domainName,
+            'color': new Color("#CCC")
         })
-        colors=[...colors];
-        domainColors.push({'domain':domainName, color : '#CCC', errorClass :''})
+        colors = [...colors];
+        domainColors.push({'domain': domainName, color: '#CCC', errorClass: ''})
         domainName = ''
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
 
-    function deleteDomainColor(event, domainColor) {
+    function deleteDomainColor(event, index) {
         event.preventDefault();
-        const targetIndex = colors.findIndex(item => item.color !== domainColor.color.toHexString());
-        if (targetIndex !== -1) {
-            colors.splice(targetIndex, 1);
-        }
-        domainColors = [...domainColors.filter(item => (item.color !== domainColor.color.toHexString()))];
+        colors.splice(index, 1);
+        domainColors.splice(index,1)
         domainColorsJson = JSON.stringify(domainColors)
         colors = colors;
     }
 
     onMount(() => {
         domainColors.forEach((obj, index) => {
-            if(obj.color !== undefined){
+            if (obj.color !== undefined) {
                 let color = {
-                    'domain' : obj.domain,
-                    'color' : new Color(obj.color)
+                    'domain': obj.domain,
+                    'color': new Color(obj.color)
                 };
                 colors.push(color);
                 colors = [...colors];
             }
         });
     });
+
+    function moveDomainColor(event, action, index) {
+        event.preventDefault();
+        let targetIndex = action === 'toDown' ? index + 1 : index - 1;
+        let currentColor = colors[index]
+        let targetColor = colors[targetIndex]
+        colors[targetIndex] = currentColor;
+        colors[index] = targetColor;
+        colors = [...colors]
+    }
 </script>
 {#if conf.placeholder !== undefined}
     <div>
         <style>
             .svelte-s8w54d {
-                height : 84%;
+                height: 84%;
             }
-            .input.svelte-s8w54d.svelte-s8w54d  {
+
+            .input.svelte-s8w54d.svelte-s8w54d {
 
                 background-color: #fefefe;
                 background-clip: padding-box;
@@ -95,28 +103,34 @@
             }
 
             .input-group .btn {
-                height: 105%;
+                height: 80%;
             }
+            .moveDomainColor {
+                width : 50%;
+            }
+
             .svelte-s8w54d .show {
                 padding-top: 5px;
             }
-            .svelte-s8w54d:focus-within{
+
+            .svelte-s8w54d:focus-within {
                 color: #333;
                 background-color: #fefefe;
                 border-color: #80bcf3;
                 outline: 0;
                 box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
             }
+
             .input-element {
-                margin-right : 7px;
+                margin-right: 7px;
             }
         </style>
         <input
-            type="hidden"
-            name="data[tx_qc_be_domain_color]"
-            bind:value={domainColorsJson}
-            id="field_tx_qc_be_domain_color"
-            class="d-none"
+                type="hidden"
+                name="data[tx_qc_be_domain_color]"
+                bind:value={domainColorsJson}
+                id="field_tx_qc_be_domain_color"
+                class="d-none"
         />
         <div class="row">
             <span class="text-muted">{conf.description}</span>
@@ -167,35 +181,64 @@
                 </div>
                 <div class="t3js-formengine-validation-marker">
                     <div class="formengine-field-item t3js-formengine-field-item">
-                        <div class="form-control-wrap input-element"  style="max-width: 126px">
+                        <div class="form-control-wrap input-element" style="max-width: 126px">
                             <div class="form-wizards-wrap">
-                                <div class="form-wizards-element" >
+                                <div class="form-wizards-element">
                                     <ColorInput bind:color={colors[index].color} showAlphaSlider/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
-                    <div class="formengine-field-item t3js-formengine-field-item">
-                        <div class="form-control-wrap input-element">
-                            <div class="form-wizards-wrap">
-                                <div class="form-wizards-element">
-                                    <button
-                                        class="btn btn-default  t3js-editform-delete-record"
-                                        on:click={() => deleteDomainColor(event,color)}
-                                    >
-                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
-                                        <span class="icon-markup">
-                                            <svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
-                                        </span>
-	                                </span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                {#if index > 0}
+                    <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important" >
+                        <button
+                                class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                on:click={() => moveDomainColor(event,'toTop',index)}
+                                style="width : 55%"
+                        >
+                          <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
+                                data-identifier="actions-edit-delete">
+                                    <span class="icon-markup">
+                                        <svg class="icon-color" role="img"><use
+                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg>
+                                    </span>
+                                </span>
+                        </button>
                     </div>
+                {/if}
+                {#if colors.length > index + 1}
+                    <div class="p-2"  style="padding-left : 0 !important">
+                        <button
+                                class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                on:click={() => moveDomainColor(event,'toDown',index)}
+                        >
+                            <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
+                                  data-identifier="actions-edit-delete">
+                                    <span class="icon-markup">
+                                        <svg class="icon-color" role="img"><use
+                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg>
+                                    </span>
+                                </span>
+                        </button>
+                    </div>
+                {/if}
+
+                <div class="p-2">
+                    <button
+                            class="btn btn-default  t3js-editform-delete-record"
+                            on:click={() => deleteDomainColor(event,index)}
+                    >
+                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
+                                      data-identifier="actions-edit-delete">
+                                    <span class="icon-markup">
+                                        <svg class="icon-color" role="img"><use
+                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
+                                    </span>
+                                </span>
+                    </button>
                 </div>
+
             </div>
         {/each}
     </div>

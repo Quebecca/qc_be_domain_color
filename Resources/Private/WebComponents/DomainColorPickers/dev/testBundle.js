@@ -3163,7 +3163,7 @@
 
 		hueslider = new HueSlider({ props: hueslider_props });
 		binding_callbacks.push(() => bind(hueslider, 'color', hueslider_color_binding));
-		let if_block = /*showAlphaSlider*/ ctx[2] && create_if_block_1(ctx);
+		let if_block = /*showAlphaSlider*/ ctx[2] && create_if_block_1$1(ctx);
 
 		return {
 			c() {
@@ -3226,7 +3226,7 @@
 							transition_in(if_block, 1);
 						}
 					} else {
-						if_block = create_if_block_1(ctx);
+						if_block = create_if_block_1$1(ctx);
 						if_block.c();
 						transition_in(if_block, 1);
 						if_block.m(div, null);
@@ -3280,7 +3280,7 @@
 	}
 
 	// (32:4) {#if showAlphaSlider}
-	function create_if_block_1(ctx) {
+	function create_if_block_1$1(ctx) {
 		let alphaslider;
 		let updating_color;
 		let current;
@@ -4085,13 +4085,13 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[14] = list[i];
-		child_ctx[15] = list;
-		child_ctx[16] = i;
+		child_ctx[17] = list[i];
+		child_ctx[18] = list;
+		child_ctx[19] = i;
 		return child_ctx;
 	}
 
-	// (81:0) {#if conf.placeholder !== undefined}
+	// (88:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let div10;
 		let style;
@@ -4146,7 +4146,7 @@
 			c() {
 				div10 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n                height : 84%;\r\n            }\r\n            .input.svelte-s8w54d.svelte-s8w54d  {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .input-group .btn {\r\n                height: 105%;\r\n            }\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n            .svelte-s8w54d:focus-within{\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n            .input-element {\r\n                margin-right : 7px;\r\n            }";
+				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .input-group .btn {\r\n                height: 80%;\r\n            }\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
@@ -4240,8 +4240,8 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[8]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[9]),
+						listen(input0, "input", /*input0_input_handler*/ ctx[9]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[10]),
 						listen(button, "click", /*addNewDomain*/ ctx[5])
 					];
 
@@ -4273,7 +4273,7 @@
 					button.disabled = button_disabled_value;
 				}
 
-				if (dirty & /*deleteDomainColor, event, Array, colors, isValidDomainName, conf*/ 69) {
+				if (dirty & /*deleteDomainColor, event, moveDomainColor, colors, isValidDomainName, Array, conf*/ 197) {
 					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
@@ -4330,9 +4330,96 @@
 		};
 	}
 
-	// (156:8) {#each Array.from(colors) as color, index}
+	// (193:16) {#if index > 0}
+	function create_if_block_2(ctx) {
+		let div;
+		let button;
+		let mounted;
+		let dispose;
+
+		function click_handler() {
+			return /*click_handler*/ ctx[13](/*index*/ ctx[19]);
+		}
+
+		return {
+			c() {
+				div = element("div");
+				button = element("button");
+				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg></span></span>`;
+				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
+				attr(button, "style", "width : 55%");
+				attr(div, "class", "p-2");
+				attr(div, "style", "padding-left : 0 !important; padding-right : 0 !important");
+			},
+			m(target, anchor) {
+				insert(target, div, anchor);
+				append(div, button);
+
+				if (!mounted) {
+					dispose = listen(button, "click", click_handler);
+					mounted = true;
+				}
+			},
+			p(new_ctx, dirty) {
+				ctx = new_ctx;
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+
+				mounted = false;
+				dispose();
+			}
+		};
+	}
+
+	// (210:16) {#if colors.length > index + 1}
+	function create_if_block_1(ctx) {
+		let div;
+		let button;
+		let mounted;
+		let dispose;
+
+		function click_handler_1() {
+			return /*click_handler_1*/ ctx[14](/*index*/ ctx[19]);
+		}
+
+		return {
+			c() {
+				div = element("div");
+				button = element("button");
+				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg></span></span>`;
+				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
+				attr(div, "class", "p-2");
+				attr(div, "style", "padding-left : 0 !important");
+			},
+			m(target, anchor) {
+				insert(target, div, anchor);
+				append(div, button);
+
+				if (!mounted) {
+					dispose = listen(button, "click", click_handler_1);
+					mounted = true;
+				}
+			},
+			p(new_ctx, dirty) {
+				ctx = new_ctx;
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+
+				mounted = false;
+				dispose();
+			}
+		};
+	}
+
+	// (170:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
-		let div13;
+		let div9;
 		let div2;
 		let div1;
 		let div0;
@@ -4340,7 +4427,7 @@
 		let t0;
 		let span0;
 
-		let t1_value = (isValidDomainName(/*color*/ ctx[14].domain) === true
+		let t1_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
 		? ""
 		: /*conf*/ ctx[0].regexpError) + "";
 
@@ -4354,41 +4441,41 @@
 		let colorinput;
 		let updating_color;
 		let t3;
-		let div12;
-		let div11;
-		let div10;
-		let div9;
+		let t4;
+		let t5;
 		let div8;
 		let button;
-		let t4;
+		let t6;
 		let current;
 		let mounted;
 		let dispose;
 
 		function input_input_handler() {
-			/*input_input_handler*/ ctx[10].call(input, /*each_value*/ ctx[15], /*index*/ ctx[16]);
+			/*input_input_handler*/ ctx[11].call(input, /*each_value*/ ctx[18], /*index*/ ctx[19]);
 		}
 
 		function colorinput_color_binding(value) {
-			/*colorinput_color_binding*/ ctx[11](value, /*index*/ ctx[16]);
+			/*colorinput_color_binding*/ ctx[12](value, /*index*/ ctx[19]);
 		}
 
 		let colorinput_props = { showAlphaSlider: true };
 
-		if (/*colors*/ ctx[2][/*index*/ ctx[16]].color !== void 0) {
-			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[16]].color;
+		if (/*colors*/ ctx[2][/*index*/ ctx[19]].color !== void 0) {
+			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
 		}
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
+		let if_block0 = /*index*/ ctx[19] > 0 && create_if_block_2(ctx);
+		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[19] + 1 && create_if_block_1(ctx);
 
-		function click_handler() {
-			return /*click_handler*/ ctx[12](/*color*/ ctx[14]);
+		function click_handler_2() {
+			return /*click_handler_2*/ ctx[15](/*index*/ ctx[19]);
 		}
 
 		return {
 			c() {
-				div13 = element("div");
+				div9 = element("div");
 				div2 = element("div");
 				div1 = element("div");
 				div0 = element("div");
@@ -4404,14 +4491,14 @@
 				div3 = element("div");
 				create_component(colorinput.$$.fragment);
 				t3 = space();
-				div12 = element("div");
-				div11 = element("div");
-				div10 = element("div");
-				div9 = element("div");
+				if (if_block0) if_block0.c();
+				t4 = space();
+				if (if_block1) if_block1.c();
+				t5 = space();
 				div8 = element("div");
 				button = element("button");
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span></span>`;
-				t4 = space();
+				t6 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control");
 				attr(span0, "class", "error-message");
@@ -4426,44 +4513,40 @@
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
-				attr(div8, "class", "form-wizards-element");
-				attr(div9, "class", "form-wizards-wrap");
-				attr(div10, "class", "form-control-wrap input-element");
-				attr(div11, "class", "formengine-field-item t3js-formengine-field-item");
-				attr(div12, "class", "t3js-formengine-validation-marker checkbox-column col-md-2 col-sm-3");
-				attr(div13, "class", "d-flex mb-3");
+				attr(div8, "class", "p-2");
+				attr(div9, "class", "d-flex mb-3");
 			},
 			m(target, anchor) {
-				insert(target, div13, anchor);
-				append(div13, div2);
+				insert(target, div9, anchor);
+				append(div9, div2);
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input);
-				set_input_value(input, /*color*/ ctx[14].domain);
+				set_input_value(input, /*color*/ ctx[17].domain);
 				append(div0, t0);
 				append(div0, span0);
 				append(span0, t1);
-				append(div13, t2);
-				append(div13, div7);
+				append(div9, t2);
+				append(div9, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, div4);
 				append(div4, div3);
 				mount_component(colorinput, div3, null);
-				append(div13, t3);
-				append(div13, div12);
-				append(div12, div11);
-				append(div11, div10);
-				append(div10, div9);
+				append(div9, t3);
+				if (if_block0) if_block0.m(div9, null);
+				append(div9, t4);
+				if (if_block1) if_block1.m(div9, null);
+				append(div9, t5);
 				append(div9, div8);
 				append(div8, button);
-				append(div13, t4);
+				append(div9, t6);
 				current = true;
 
 				if (!mounted) {
 					dispose = [
 						listen(input, "input", input_input_handler),
-						listen(button, "click", click_handler)
+						listen(button, "click", click_handler_2)
 					];
 
 					mounted = true;
@@ -4472,11 +4555,11 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[14].domain) {
-					set_input_value(input, /*color*/ ctx[14].domain);
+				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[17].domain) {
+					set_input_value(input, /*color*/ ctx[17].domain);
 				}
 
-				if ((!current || dirty & /*colors, conf*/ 5) && t1_value !== (t1_value = (isValidDomainName(/*color*/ ctx[14].domain) === true
+				if ((!current || dirty & /*colors, conf*/ 5) && t1_value !== (t1_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
 				? ""
 				: /*conf*/ ctx[0].regexpError) + "")) set_data(t1, t1_value);
 
@@ -4484,11 +4567,25 @@
 
 				if (!updating_color && dirty & /*colors*/ 4) {
 					updating_color = true;
-					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[16]].color;
+					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
 					add_flush_callback(() => updating_color = false);
 				}
 
 				colorinput.$set(colorinput_changes);
+				if (/*index*/ ctx[19] > 0) if_block0.p(ctx, dirty);
+
+				if (/*colors*/ ctx[2].length > /*index*/ ctx[19] + 1) {
+					if (if_block1) {
+						if_block1.p(ctx, dirty);
+					} else {
+						if_block1 = create_if_block_1(ctx);
+						if_block1.c();
+						if_block1.m(div9, t5);
+					}
+				} else if (if_block1) {
+					if_block1.d(1);
+					if_block1 = null;
+				}
 			},
 			i(local) {
 				if (current) return;
@@ -4501,10 +4598,12 @@
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(div13);
+					detach(div9);
 				}
 
 				destroy_component(colorinput);
+				if (if_block0) if_block0.d();
+				if (if_block1) if_block1.d();
 				mounted = false;
 				run_all(dispose);
 			}
@@ -4604,23 +4703,15 @@
 
 			$$invalidate(1, domainName = '');
 			$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(2, colors), $$invalidate(7, domainColors));
+			($$invalidate(2, colors), $$invalidate(8, domainColors));
 		}
 
-		function deleteDomainColor(event, domainColor) {
+		function deleteDomainColor(event, index) {
 			event.preventDefault();
-			const targetIndex = colors.findIndex(item => item.color !== domainColor.color.toHexString());
-
-			if (targetIndex !== -1) {
-				colors.splice(targetIndex, 1);
-			}
-
-			$$invalidate(7, domainColors = [
-				...domainColors.filter(item => item.color !== domainColor.color.toHexString())
-			]);
-
+			colors.splice(index, 1);
+			domainColors.splice(index, 1);
 			$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(2, colors), $$invalidate(7, domainColors));
+			($$invalidate(2, colors), $$invalidate(8, domainColors));
 		}
 
 		onMount(() => {
@@ -4637,9 +4728,19 @@
 			});
 		});
 
+		function moveDomainColor(event, action, index) {
+			event.preventDefault();
+			let targetIndex = action === 'toDown' ? index + 1 : index - 1;
+			let currentColor = colors[index];
+			let targetColor = colors[targetIndex];
+			$$invalidate(2, colors[targetIndex] = currentColor, colors);
+			$$invalidate(2, colors[index] = targetColor, colors);
+			$$invalidate(2, colors = [...colors]);
+		}
+
 		function input0_input_handler() {
 			domainColorsJson = this.value;
-			(($$invalidate(4, domainColorsJson), $$invalidate(2, colors)), $$invalidate(7, domainColors));
+			(($$invalidate(4, domainColorsJson), $$invalidate(2, colors)), $$invalidate(8, domainColors));
 		}
 
 		function input1_input_handler() {
@@ -4649,20 +4750,22 @@
 
 		function input_input_handler(each_value, index) {
 			each_value[index].domain = this.value;
-			($$invalidate(2, colors), $$invalidate(7, domainColors));
+			($$invalidate(2, colors), $$invalidate(8, domainColors));
 		}
 
 		function colorinput_color_binding(value, index) {
 			if ($$self.$$.not_equal(colors[index].color, value)) {
 				colors[index].color = value;
-				($$invalidate(2, colors), $$invalidate(7, domainColors));
+				($$invalidate(2, colors), $$invalidate(8, domainColors));
 			}
 		}
 
-		const click_handler = color => deleteDomainColor(event, color);
+		const click_handler = index => moveDomainColor(event, 'toTop', index);
+		const click_handler_1 = index => moveDomainColor(event, 'toDown', index);
+		const click_handler_2 = index => deleteDomainColor(event, index);
 
 		$$self.$$set = $$props => {
-			if ('domainColors' in $$props) $$invalidate(7, domainColors = $$props.domainColors);
+			if ('domainColors' in $$props) $$invalidate(8, domainColors = $$props.domainColors);
 			if ('conf' in $$props) $$invalidate(0, conf = $$props.conf);
 		};
 
@@ -4678,15 +4781,15 @@
 				domainName.trim() === "";
 			}
 
-			if ($$self.$$.dirty & /*colors, domainColors*/ 132) {
+			if ($$self.$$.dirty & /*colors, domainColors*/ 260) {
 				{
 					for (let i = 0; i < colors.length; i++) {
-						$$invalidate(7, domainColors[i].color = colors[i].color.toHexString(), domainColors);
-						$$invalidate(7, domainColors[i].domain = colors[i].domain, domainColors);
+						$$invalidate(8, domainColors[i].color = colors[i].color.toHexString(), domainColors);
+						$$invalidate(8, domainColors[i].domain = colors[i].domain, domainColors);
 					}
 
 					$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-					($$invalidate(2, colors), $$invalidate(7, domainColors));
+					($$invalidate(2, colors), $$invalidate(8, domainColors));
 				}
 			}
 		};
@@ -4702,23 +4805,26 @@
 			domainColorsJson,
 			addNewDomain,
 			deleteDomainColor,
+			moveDomainColor,
 			domainColors,
 			input0_input_handler,
 			input1_input_handler,
 			input_input_handler,
 			colorinput_color_binding,
-			click_handler
+			click_handler,
+			click_handler_1,
+			click_handler_2
 		];
 	}
 
 	class DomainColorPickers extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance, create_fragment$1, safe_not_equal, { domainColors: 7, conf: 0 });
+			init(this, options, instance, create_fragment$1, safe_not_equal, { domainColors: 8, conf: 0 });
 		}
 
 		get domainColors() {
-			return this.$$.ctx[7];
+			return this.$$.ctx[8];
 		}
 
 		set domainColors(domainColors) {
