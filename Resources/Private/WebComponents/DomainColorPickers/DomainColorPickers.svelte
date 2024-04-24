@@ -102,9 +102,7 @@
                 transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
             }
 
-            .input-group .btn {
-                height: 80%;
-            }
+
             .moveDomainColor {
                 width : 50%;
             }
@@ -133,7 +131,11 @@
                 class="d-none"
         />
         <div class="row">
-            <span class="text-muted">{conf.description}</span>
+            <div>
+                <span class="text-muted">{conf.description}</span>
+                <span class="text-muted">{conf.description_2}</span>
+            </div>
+
             <div class="form-group t3js-formengine-validation-marker
                     t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
                 <div class="formengine-field-item t3js-formengine-field-item ">
@@ -168,35 +170,35 @@
             </div>
         </div>
         {#each Array.from(colors) as color, index}
-            <div class="d-flex mb-3">
-                <div class="form-control-wrap input-element">
-                    <div class="form-wizards-wrap">
-                        <div class="form-wizards-element pr-2">
-                            <input type="text" bind:value={color.domain} class="edit form-control">
-                            <span class="error-message" style="color: red;">
-                                    { isValidDomainName(color.domain) === true ? "" : conf.regexpError  }
-                                </span>
+            <div class="d-flex align-items-start flex-column mb-3">
+                <div class="mb-0">
+                    <div class="d-flex">
+                    <div class="form-control-wrap input-element">
+                        <div class="form-wizards-wrap">
+                            <div class="form-wizards-element pr-2">
+                                <input type="text" bind:value={color.domain} class="edit form-control mb-2">
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="t3js-formengine-validation-marker">
-                    <div class="formengine-field-item t3js-formengine-field-item">
-                        <div class="form-control-wrap input-element" style="max-width: 126px">
-                            <div class="form-wizards-wrap">
-                                <div class="form-wizards-element">
-                                    <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                    <div class="t3js-formengine-validation-marker">
+                        <div class="formengine-field-item t3js-formengine-field-item">
+                            <div class="form-control-wrap input-element" style="max-width: 126px">
+                                <div class="form-wizards-wrap">
+                                    <div class="form-wizards-element">
+                                        <ColorInput bind:color={colors[index].color} showAlphaSlider/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {#if index > 0}
-                    <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important" >
-                        <button
-                                class="btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                on:click={() => moveDomainColor(event,'toTop',index)}
-                                style="width : 55%"
-                        >
+                    {#if index > 0}
+                        <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important" >
+                            <button
+                                    class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                    on:click={() => moveDomainColor(event,'toTop',index)}
+                                    style="width : 55%"
+                            >
                           <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                 data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -204,15 +206,15 @@
                                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg>
                                     </span>
                                 </span>
-                        </button>
-                    </div>
-                {/if}
-                {#if colors.length > index + 1}
-                    <div class="p-2"  style="padding-left : 0 !important">
-                        <button
-                                class="btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                on:click={() => moveDomainColor(event,'toDown',index)}
-                        >
+                            </button>
+                        </div>
+                    {/if}
+                    {#if colors.length > index + 1}
+                        <div class="p-2"  style="padding-left : 0 !important">
+                            <button
+                                    class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                    on:click={() => moveDomainColor(event,'toDown',index)}
+                            >
                             <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                   data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -220,26 +222,34 @@
                                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg>
                                     </span>
                                 </span>
+                            </button>
+                        </div>
+                    {/if}
+
+                    <div class="p-2">
+                        <button
+                                class="btn btn-default  t3js-editform-delete-record"
+                                on:click={() => deleteDomainColor(event,index)}
+                        >
+                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
+                              data-identifier="actions-edit-delete">
+                            <span class="icon-markup">
+                                <svg class="icon-color" role="img"><use
+                                        xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
+                            </span>
+                        </span>
                         </button>
                     </div>
-                {/if}
-
-                <div class="p-2">
-                    <button
-                            class="btn btn-default  t3js-editform-delete-record"
-                            on:click={() => deleteDomainColor(event,index)}
-                    >
-                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                                      data-identifier="actions-edit-delete">
-                                    <span class="icon-markup">
-                                        <svg class="icon-color" role="img"><use
-                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
-                                    </span>
-                                </span>
-                    </button>
                 </div>
-
+                </div>
+                <div  style="margin-top : -20px;">
+                    <span class="error-message" style="color: red;">
+                                { isValidDomainName(color.domain) === true ? "" : conf.regexpError  }
+                        </span>
+                </div>
             </div>
+
+
         {/each}
     </div>
 {/if}

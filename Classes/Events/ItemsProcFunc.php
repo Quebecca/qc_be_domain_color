@@ -32,6 +32,7 @@ class ItemsProcFunc
         $labels = [
             "buttonLabel" => $this->translate("new"),
             "description" => $this->translate("description"),
+            "description_2" => $this->translate("description_2"),
             "placeholder" => $this->translate("new.placeholder"),
             "regexpError" => $this->translate("regexp-error")
         ];

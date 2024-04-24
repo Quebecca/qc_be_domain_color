@@ -18,11 +18,14 @@
 				<target>Supprimer ce domaine</target>
 			</trans-unit>
 			<trans-unit id="regexp-error" >
-				<target>Expression régulière invalide</target>
+				<target>Expression régulière invalide (Cet élément sera ignoré)</target>
 			</trans-unit>
 			<trans-unit id="description" >
 				<target>Identifiez votre environnement en un coup d'œil, en définissant des expressions régulières pour vos domaines web, associées à la couleur de fond du menu de gauche.</target>
 			</trans-unit>
+			<trans-unit id="description_2" >
+                <target>Le premier élément affiché dans la liste des couleurs de domaine sera appliqué.</target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

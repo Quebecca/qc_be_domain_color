@@ -4093,41 +4093,46 @@
 
 	// (88:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
-		let div10;
+		let div11;
 		let style;
 		let t1;
 		let input0;
 		let t2;
-		let div9;
+		let div10;
+		let div0;
 		let span0;
 		let t3_value = /*conf*/ ctx[0].description + "";
 		let t3;
 		let t4;
+		let span1;
+		let t5_value = /*conf*/ ctx[0].description_2 + "";
+		let t5;
+		let t6;
+		let div5;
 		let div4;
 		let div3;
 		let div2;
 		let div1;
-		let div0;
 		let input1;
 		let input1_placeholder_value;
-		let t5;
-		let span1;
+		let t7;
+		let span2;
 
-		let t6_value = (/*validInput*/ ctx[3] === true
+		let t8_value = (/*validInput*/ ctx[3] === true
 		? ""
 		: /*conf*/ ctx[0].regexpError) + "";
 
-		let t6;
-		let t7;
+		let t8;
+		let t9;
+		let div9;
 		let div8;
 		let div7;
 		let div6;
-		let div5;
 		let button;
-		let t8_value = /*conf*/ ctx[0].buttonLabel + "";
-		let t8;
+		let t10_value = /*conf*/ ctx[0].buttonLabel + "";
+		let t10;
 		let button_disabled_value;
-		let t9;
+		let t11;
 		let current;
 		let mounted;
 		let dispose;
@@ -4144,33 +4149,37 @@
 
 		return {
 			c() {
-				div10 = element("div");
+				div11 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .input-group .btn {\r\n                height: 80%;\r\n            }\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
+				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
-				div9 = element("div");
+				div10 = element("div");
+				div0 = element("div");
 				span0 = element("span");
 				t3 = text(t3_value);
 				t4 = space();
+				span1 = element("span");
+				t5 = text(t5_value);
+				t6 = space();
+				div5 = element("div");
 				div4 = element("div");
 				div3 = element("div");
 				div2 = element("div");
 				div1 = element("div");
-				div0 = element("div");
 				input1 = element("input");
-				t5 = space();
-				span1 = element("span");
-				t6 = text(t6_value);
 				t7 = space();
+				span2 = element("span");
+				t8 = text(t8_value);
+				t9 = space();
+				div9 = element("div");
 				div8 = element("div");
 				div7 = element("div");
 				div6 = element("div");
-				div5 = element("div");
 				button = element("button");
-				t8 = text(t8_value);
-				t9 = space();
+				t10 = text(t10_value);
+				t11 = space();
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].c();
@@ -4181,58 +4190,63 @@
 				attr(input0, "id", "field_tx_qc_be_domain_color");
 				attr(input0, "class", "d-none");
 				attr(span0, "class", "text-muted");
+				attr(span1, "class", "text-muted");
 				attr(input1, "id", "new-domain");
 				attr(input1, "autocomplete", "off");
 				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
 				attr(input1, "class", "new-domain form-control mb-2");
-				attr(span1, "class", "error-message");
-				set_style(span1, "color", "red");
-				attr(div0, "class", "form-wizards-element");
-				attr(div1, "class", "form-wizards-wrap");
-				attr(div2, "class", "form-control-wrap");
-				attr(div3, "class", "formengine-field-item t3js-formengine-field-item ");
-				attr(div4, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
+				attr(span2, "class", "error-message");
+				set_style(span2, "color", "red");
+				attr(div1, "class", "form-wizards-element");
+				attr(div2, "class", "form-wizards-wrap");
+				attr(div3, "class", "form-control-wrap");
+				attr(div4, "class", "formengine-field-item t3js-formengine-field-item ");
+				attr(div5, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
 				button.disabled = button_disabled_value = /*validInput*/ ctx[3] == false;
 				attr(button, "class", "btn btn-default");
-				attr(div5, "class", "btn-group");
-				attr(div6, "class", "form-control-wrap");
-				attr(div7, "class", "formengine-field-item t3js-formengine-field-item ");
-				attr(div8, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				attr(div9, "class", "row");
+				attr(div6, "class", "btn-group");
+				attr(div7, "class", "form-control-wrap");
+				attr(div8, "class", "formengine-field-item t3js-formengine-field-item ");
+				attr(div9, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
+				attr(div10, "class", "row");
 			},
 			m(target, anchor) {
-				insert(target, div10, anchor);
-				append(div10, style);
-				append(div10, t1);
-				append(div10, input0);
+				insert(target, div11, anchor);
+				append(div11, style);
+				append(div11, t1);
+				append(div11, input0);
 				set_input_value(input0, /*domainColorsJson*/ ctx[4]);
-				append(div10, t2);
-				append(div10, div9);
-				append(div9, span0);
+				append(div11, t2);
+				append(div11, div10);
+				append(div10, div0);
+				append(div0, span0);
 				append(span0, t3);
-				append(div9, t4);
-				append(div9, div4);
+				append(div0, t4);
+				append(div0, span1);
+				append(span1, t5);
+				append(div10, t6);
+				append(div10, div5);
+				append(div5, div4);
 				append(div4, div3);
 				append(div3, div2);
 				append(div2, div1);
-				append(div1, div0);
-				append(div0, input1);
+				append(div1, input1);
 				set_input_value(input1, /*domainName*/ ctx[1]);
-				append(div0, t5);
-				append(div0, span1);
-				append(span1, t6);
-				append(div9, t7);
+				append(div1, t7);
+				append(div1, span2);
+				append(span2, t8);
+				append(div10, t9);
+				append(div10, div9);
 				append(div9, div8);
 				append(div8, div7);
 				append(div7, div6);
-				append(div6, div5);
-				append(div5, button);
-				append(button, t8);
-				append(div10, t9);
+				append(div6, button);
+				append(button, t10);
+				append(div11, t11);
 
 				for (let i = 0; i < each_blocks.length; i += 1) {
 					if (each_blocks[i]) {
-						each_blocks[i].m(div10, null);
+						each_blocks[i].m(div11, null);
 					}
 				}
 
@@ -4254,6 +4268,7 @@
 				}
 
 				if ((!current || dirty & /*conf*/ 1) && t3_value !== (t3_value = /*conf*/ ctx[0].description + "")) set_data(t3, t3_value);
+				if ((!current || dirty & /*conf*/ 1) && t5_value !== (t5_value = /*conf*/ ctx[0].description_2 + "")) set_data(t5, t5_value);
 
 				if (!current || dirty & /*conf*/ 1 && input1_placeholder_value !== (input1_placeholder_value = /*conf*/ ctx[0].placeholder)) {
 					attr(input1, "placeholder", input1_placeholder_value);
@@ -4263,17 +4278,17 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*validInput, conf*/ 9) && t6_value !== (t6_value = (/*validInput*/ ctx[3] === true
+				if ((!current || dirty & /*validInput, conf*/ 9) && t8_value !== (t8_value = (/*validInput*/ ctx[3] === true
 				? ""
-				: /*conf*/ ctx[0].regexpError) + "")) set_data(t6, t6_value);
+				: /*conf*/ ctx[0].regexpError) + "")) set_data(t8, t8_value);
 
-				if ((!current || dirty & /*conf*/ 1) && t8_value !== (t8_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t8, t8_value);
+				if ((!current || dirty & /*conf*/ 1) && t10_value !== (t10_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t10, t10_value);
 
 				if (!current || dirty & /*validInput*/ 8 && button_disabled_value !== (button_disabled_value = /*validInput*/ ctx[3] == false)) {
 					button.disabled = button_disabled_value;
 				}
 
-				if (dirty & /*deleteDomainColor, event, moveDomainColor, colors, isValidDomainName, Array, conf*/ 197) {
+				if (dirty & /*isValidDomainName, Array, colors, conf, deleteDomainColor, event, moveDomainColor*/ 197) {
 					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
@@ -4287,7 +4302,7 @@
 							each_blocks[i] = create_each_block(child_ctx);
 							each_blocks[i].c();
 							transition_in(each_blocks[i], 1);
-							each_blocks[i].m(div10, null);
+							each_blocks[i].m(div11, null);
 						}
 					}
 
@@ -4320,7 +4335,7 @@
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(div10);
+					detach(div11);
 				}
 
 				destroy_each(each_blocks, detaching);
@@ -4330,7 +4345,7 @@
 		};
 	}
 
-	// (193:16) {#if index > 0}
+	// (195:20) {#if index > 0}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4374,7 +4389,7 @@
 		};
 	}
 
-	// (210:16) {#if colors.length > index + 1}
+	// (212:20) {#if colors.length > index + 1}
 	function create_if_block_1(ctx) {
 		let div;
 		let button;
@@ -4417,22 +4432,16 @@
 		};
 	}
 
-	// (170:8) {#each Array.from(colors) as color, index}
+	// (172:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
+		let div12;
+		let div10;
 		let div9;
 		let div2;
 		let div1;
 		let div0;
 		let input;
 		let t0;
-		let span0;
-
-		let t1_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
-		? ""
-		: /*conf*/ ctx[0].regexpError) + "";
-
-		let t1;
-		let t2;
 		let div7;
 		let div6;
 		let div5;
@@ -4440,11 +4449,20 @@
 		let div3;
 		let colorinput;
 		let updating_color;
+		let t1;
+		let t2;
 		let t3;
-		let t4;
-		let t5;
 		let div8;
 		let button;
+		let t4;
+		let div11;
+		let span2;
+
+		let t5_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
+		? ""
+		: /*conf*/ ctx[0].regexpError) + "";
+
+		let t5;
 		let t6;
 		let current;
 		let mounted;
@@ -4475,34 +4493,35 @@
 
 		return {
 			c() {
+				div12 = element("div");
+				div10 = element("div");
 				div9 = element("div");
 				div2 = element("div");
 				div1 = element("div");
 				div0 = element("div");
 				input = element("input");
 				t0 = space();
-				span0 = element("span");
-				t1 = text(t1_value);
-				t2 = space();
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				div4 = element("div");
 				div3 = element("div");
 				create_component(colorinput.$$.fragment);
-				t3 = space();
+				t1 = space();
 				if (if_block0) if_block0.c();
-				t4 = space();
+				t2 = space();
 				if (if_block1) if_block1.c();
-				t5 = space();
+				t3 = space();
 				div8 = element("div");
 				button = element("button");
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span></span>`;
+				t4 = space();
+				div11 = element("div");
+				span2 = element("span");
+				t5 = text(t5_value);
 				t6 = space();
 				attr(input, "type", "text");
-				attr(input, "class", "edit form-control");
-				attr(span0, "class", "error-message");
-				set_style(span0, "color", "red");
+				attr(input, "class", "edit form-control mb-2");
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4514,33 +4533,41 @@
 				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
 				attr(div8, "class", "p-2");
-				attr(div9, "class", "d-flex mb-3");
+				attr(div9, "class", "d-flex");
+				attr(div10, "class", "mb-0");
+				attr(span2, "class", "error-message");
+				set_style(span2, "color", "red");
+				attr(div11, "style", "margin-top : -20px;");
+				attr(div12, "class", "d-flex align-items-start flex-column mb-3");
 			},
 			m(target, anchor) {
-				insert(target, div9, anchor);
+				insert(target, div12, anchor);
+				append(div12, div10);
+				append(div10, div9);
 				append(div9, div2);
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input);
 				set_input_value(input, /*color*/ ctx[17].domain);
-				append(div0, t0);
-				append(div0, span0);
-				append(span0, t1);
-				append(div9, t2);
+				append(div9, t0);
 				append(div9, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, div4);
 				append(div4, div3);
 				mount_component(colorinput, div3, null);
-				append(div9, t3);
+				append(div9, t1);
 				if (if_block0) if_block0.m(div9, null);
-				append(div9, t4);
+				append(div9, t2);
 				if (if_block1) if_block1.m(div9, null);
-				append(div9, t5);
+				append(div9, t3);
 				append(div9, div8);
 				append(div8, button);
-				append(div9, t6);
+				append(div12, t4);
+				append(div12, div11);
+				append(div11, span2);
+				append(span2, t5);
+				append(div12, t6);
 				current = true;
 
 				if (!mounted) {
@@ -4559,10 +4586,6 @@
 					set_input_value(input, /*color*/ ctx[17].domain);
 				}
 
-				if ((!current || dirty & /*colors, conf*/ 5) && t1_value !== (t1_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
-				? ""
-				: /*conf*/ ctx[0].regexpError) + "")) set_data(t1, t1_value);
-
 				const colorinput_changes = {};
 
 				if (!updating_color && dirty & /*colors*/ 4) {
@@ -4580,12 +4603,16 @@
 					} else {
 						if_block1 = create_if_block_1(ctx);
 						if_block1.c();
-						if_block1.m(div9, t5);
+						if_block1.m(div9, t3);
 					}
 				} else if (if_block1) {
 					if_block1.d(1);
 					if_block1 = null;
 				}
+
+				if ((!current || dirty & /*colors, conf*/ 5) && t5_value !== (t5_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
+				? ""
+				: /*conf*/ ctx[0].regexpError) + "")) set_data(t5, t5_value);
 			},
 			i(local) {
 				if (current) return;
@@ -4598,7 +4625,7 @@
 			},
 			d(detaching) {
 				if (detaching) {
-					detach(div9);
+					detach(div12);
 				}
 
 				destroy_component(colorinput);
