@@ -17,7 +17,7 @@
     $: validInput = false;
     let domainName = '';
     $: {
-        validInput = domainName.length > 0 && domainNameRegex.test(domainName);
+        validInput = isValidDomainName(domainName);
         validInput = validInput;
     }
     $: isEmptyDomainName = domainName.trim() === "";
@@ -31,6 +31,16 @@
         colors = colors;
     }
     let domainColorsJson = '{}';
+
+    function isValidDomainName (domain) {
+        try {
+            new RegExp('/' + domain + '/');
+        } catch(e) {
+            return false;
+        }
+        return true;
+    }
+
     function addNewDomain(e) {
         e.preventDefault();
         colors.push({
@@ -123,7 +133,7 @@
                                        class="new-domain form-control mb-2"
                                 />
                                 <span class="error-message" style="color: red;">
-                                    {(validInput == true || domainName.length == 0) ? "" : conf.regexpError  }
+                                    { validInput === true ? "" : conf.regexpError  }
                                 </span>
                             </div>
                         </div>
@@ -148,7 +158,10 @@
                 <div class="form-control-wrap input-element">
                     <div class="form-wizards-wrap">
                         <div class="form-wizards-element pr-2">
-                            <input type="text" bind:value={color.domain} class="edit form-control" disabled="disabled">
+                            <input type="text" bind:value={color.domain} class="edit form-control">
+                            <span class="error-message" style="color: red;">
+                                    { isValidDomainName(color.domain) === true ? "" : conf.regexpError  }
+                                </span>
                         </div>
                     </div>
                 </div>

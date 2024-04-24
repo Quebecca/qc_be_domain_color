@@ -4059,7 +4059,7 @@
 		return child_ctx;
 	}
 
-	// (71:0) {#if conf.placeholder !== undefined}
+	// (81:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let div10;
 		let style;
@@ -4081,7 +4081,7 @@
 		let t5;
 		let span1;
 
-		let t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
+		let t6_value = (/*validInput*/ ctx[3] === true
 		? ""
 		: /*conf*/ ctx[0].regexpError) + "";
 
@@ -4231,7 +4231,7 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
-				if ((!current || dirty & /*validInput, domainName, conf*/ 11) && t6_value !== (t6_value = (/*validInput*/ ctx[3] == true || /*domainName*/ ctx[1].length == 0
+				if ((!current || dirty & /*validInput, conf*/ 9) && t6_value !== (t6_value = (/*validInput*/ ctx[3] === true
 				? ""
 				: /*conf*/ ctx[0].regexpError) + "")) set_data(t6, t6_value);
 
@@ -4241,7 +4241,7 @@
 					button.disabled = button_disabled_value;
 				}
 
-				if (dirty & /*deleteDomainColor, event, Array, colors*/ 68) {
+				if (dirty & /*deleteDomainColor, event, Array, colors, isValidDomainName, conf*/ 69) {
 					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
@@ -4298,7 +4298,7 @@
 		};
 	}
 
-	// (146:8) {#each Array.from(colors) as color, index}
+	// (156:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div13;
 		let div2;
@@ -4306,6 +4306,14 @@
 		let div0;
 		let input;
 		let t0;
+		let span0;
+
+		let t1_value = (isValidDomainName(/*color*/ ctx[14].domain) === true
+		? ""
+		: /*conf*/ ctx[0].regexpError) + "";
+
+		let t1;
+		let t2;
 		let div7;
 		let div6;
 		let div5;
@@ -4313,14 +4321,14 @@
 		let div3;
 		let colorinput;
 		let updating_color;
-		let t1;
+		let t3;
 		let div12;
 		let div11;
 		let div10;
 		let div9;
 		let div8;
 		let button;
-		let t2;
+		let t4;
 		let current;
 		let mounted;
 		let dispose;
@@ -4354,13 +4362,16 @@
 				div0 = element("div");
 				input = element("input");
 				t0 = space();
+				span0 = element("span");
+				t1 = text(t1_value);
+				t2 = space();
 				div7 = element("div");
 				div6 = element("div");
 				div5 = element("div");
 				div4 = element("div");
 				div3 = element("div");
 				create_component(colorinput.$$.fragment);
-				t1 = space();
+				t3 = space();
 				div12 = element("div");
 				div11 = element("div");
 				div10 = element("div");
@@ -4368,10 +4379,11 @@
 				div8 = element("div");
 				button = element("button");
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span></span>`;
-				t2 = space();
+				t4 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control");
-				input.disabled = "disabled";
+				attr(span0, "class", "error-message");
+				set_style(span0, "color", "red");
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4396,21 +4408,24 @@
 				append(div1, div0);
 				append(div0, input);
 				set_input_value(input, /*color*/ ctx[14].domain);
-				append(div13, t0);
+				append(div0, t0);
+				append(div0, span0);
+				append(span0, t1);
+				append(div13, t2);
 				append(div13, div7);
 				append(div7, div6);
 				append(div6, div5);
 				append(div5, div4);
 				append(div4, div3);
 				mount_component(colorinput, div3, null);
-				append(div13, t1);
+				append(div13, t3);
 				append(div13, div12);
 				append(div12, div11);
 				append(div11, div10);
 				append(div10, div9);
 				append(div9, div8);
 				append(div8, button);
-				append(div13, t2);
+				append(div13, t4);
 				current = true;
 
 				if (!mounted) {
@@ -4428,6 +4443,10 @@
 				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[14].domain) {
 					set_input_value(input, /*color*/ ctx[14].domain);
 				}
+
+				if ((!current || dirty & /*colors, conf*/ 5) && t1_value !== (t1_value = (isValidDomainName(/*color*/ ctx[14].domain) === true
+				? ""
+				: /*conf*/ ctx[0].regexpError) + "")) set_data(t1, t1_value);
 
 				const colorinput_changes = {};
 
@@ -4518,7 +4537,15 @@
 		};
 	}
 
-	let domainNameRegex = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
+	function isValidDomainName(domain) {
+		try {
+			new RegExp('/' + domain + '/');
+		} catch(e) {
+			return false;
+		}
+
+		return true;
+	}
 
 	function instance($$self, $$props, $$invalidate) {
 		let validInput;
@@ -4610,7 +4637,7 @@
 		$$self.$$.update = () => {
 			if ($$self.$$.dirty & /*domainName, validInput*/ 10) {
 				{
-					$$invalidate(3, validInput = domainName.length > 0 && domainNameRegex.test(domainName));
+					$$invalidate(3, validInput = isValidDomainName(domainName));
 					($$invalidate(3, validInput), $$invalidate(1, domainName));
 				}
 			}
