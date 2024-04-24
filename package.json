@@ -1,7 +1,7 @@
 {
-  "name": "pgu_affaires_municipales",
+  "name": "qc_be_domain_color",
   "version": "1.0.0",
-  "description": "Création de composants web pour certains écrans de recherche de documents concernant les affaires municipales",
+  "description": "This extension inject CSS in the BE interface to modify the color of the left/Modules frame. The color is associated to one or many domains. It can be useful when you get many TYPO3 instances, local DDEV/Docker installations or development servers and you want to really make the production server stand out.",
   "main": "index.js",
   "scripts": {
     "dev": "rollup -c -w",
