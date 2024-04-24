@@ -118,17 +118,22 @@
                 outline: 0;
                 box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
             }
-
+            .invalidInput {
+                border: 2px solid red;
+            }
+            .invalidInput:focus {
+                border: 2px solid red;
+            }
             .input-element {
                 margin-right: 7px;
             }
         </style>
         <input
-                type="hidden"
-                name="data[tx_qc_be_domain_color]"
-                bind:value={domainColorsJson}
-                id="field_tx_qc_be_domain_color"
-                class="d-none"
+            type="hidden"
+            name="data[tx_qc_be_domain_color]"
+            bind:value={domainColorsJson}
+            id="field_tx_qc_be_domain_color"
+            class="d-none"
         />
         <div class="row">
             <div>
@@ -147,6 +152,7 @@
                                        autocomplete="off"
                                        placeholder={conf.placeholder}
                                        class="new-domain form-control mb-2"
+                                       class:invalidInput={!validInput}
                                 />
                                 <span class="error-message" style="color: red;">
                                     { validInput === true ? "" : conf.regexpError  }
@@ -176,7 +182,12 @@
                     <div class="form-control-wrap input-element">
                         <div class="form-wizards-wrap">
                             <div class="form-wizards-element pr-2">
-                                <input type="text" bind:value={color.domain} class="edit form-control mb-2">
+                                <input
+                                        type="text"
+                                        bind:value={color.domain}
+                                        class="edit form-control mb-2"
+                                        class:invalidInput={!isValidDomainName(color.domain)}
+                                >
 
                             </div>
                         </div>

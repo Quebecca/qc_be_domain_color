@@ -4119,7 +4119,7 @@
 			c() {
 				div11 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
+				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n\r\n            .moveDomainColor {\r\n                width : 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n            .invalidInput {\r\n                border: 2px solid red;\r\n            }\r\n            .invalidInput:focus {\r\n                border: 2px solid red;\r\n            }\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
 				t1 = space();
 				input0 = element("input");
 				t2 = space();
@@ -4163,6 +4163,7 @@
 				attr(input1, "autocomplete", "off");
 				attr(input1, "placeholder", input1_placeholder_value = /*conf*/ ctx[0].placeholder);
 				attr(input1, "class", "new-domain form-control mb-2");
+				toggle_class(input1, "invalidInput", !/*validInput*/ ctx[3]);
 				attr(span2, "class", "error-message");
 				set_style(span2, "color", "red");
 				attr(div1, "class", "form-wizards-element");
@@ -4246,6 +4247,10 @@
 					set_input_value(input1, /*domainName*/ ctx[1]);
 				}
 
+				if (!current || dirty & /*validInput*/ 8) {
+					toggle_class(input1, "invalidInput", !/*validInput*/ ctx[3]);
+				}
+
 				if ((!current || dirty & /*validInput, conf*/ 9) && t8_value !== (t8_value = (/*validInput*/ ctx[3] === true
 				? ""
 				: /*conf*/ ctx[0].regexpError) + "")) set_data(t8, t8_value);
@@ -4313,7 +4318,7 @@
 		};
 	}
 
-	// (195:20) {#if index > 0}
+	// (206:20) {#if index > 0}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4357,7 +4362,7 @@
 		};
 	}
 
-	// (212:20) {#if colors.length > index + 1}
+	// (223:20) {#if colors.length > index + 1}
 	function create_if_block_1(ctx) {
 		let div;
 		let button;
@@ -4400,7 +4405,7 @@
 		};
 	}
 
-	// (172:8) {#each Array.from(colors) as color, index}
+	// (178:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4490,6 +4495,7 @@
 				t6 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control mb-2");
+				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4552,6 +4558,10 @@
 
 				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[17].domain) {
 					set_input_value(input, /*color*/ ctx[17].domain);
+				}
+
+				if (!current || dirty & /*isValidDomainName, Array, colors*/ 4) {
+					toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
 				}
 
 				const colorinput_changes = {};
