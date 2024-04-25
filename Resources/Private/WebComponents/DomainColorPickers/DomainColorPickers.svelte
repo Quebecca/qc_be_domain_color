@@ -9,7 +9,6 @@
 <script>
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
-
     export let
         domainColors = [],
         conf = {}
@@ -84,50 +83,70 @@
     }
 </script>
 {#if conf.placeholder !== undefined}
+    <style>
+        .svelte-s8w54d {
+            height: 84%;
+        }
+
+        .input.svelte-s8w54d.svelte-s8w54d {
+
+            background-color: #fefefe;
+            background-clip: padding-box;
+            border: var(--bs-border-width) solid #bbb;
+            border-radius: var(--bs-border-radius);
+            box-shadow: var(--bs-box-shadow-inset);
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .moveDomainColor {
+            width: 50%;
+        }
+
+        .svelte-s8w54d .show {
+            padding-top: 5px;
+        }
+
+        .svelte-s8w54d:focus-within {
+            color: #333;
+            background-color: #fefefe;
+            border-color: #80bcf3;
+            outline: 0;
+            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
+        }
+
+        .to-top-section {
+            padding-left : 0 !important;
+            padding-right : 0 !important;
+            button {
+                width : 55%
+            }
+        }
+        .to-down-section {
+            padding-left : 0 !important;
+        }
+        .error-message-section {
+            margin-top : -20px;
+            color: red;
+        }
+        .error-message {
+            color: red;
+        }
+        .color-picker {
+            max-width: 126px
+        }
+        .invalidInput {
+            border: 2px solid red;
+        }
+
+        .invalidInput:focus {
+            border: 2px solid red;
+        }
+
+        .input-element {
+            margin-right: 7px;
+        }
+    </style>
     <div>
-        <style>
-            .svelte-s8w54d {
-                height: 84%;
-            }
-
-            .input.svelte-s8w54d.svelte-s8w54d {
-
-                background-color: #fefefe;
-                background-clip: padding-box;
-                border: var(--bs-border-width) solid #bbb;
-                border-radius: var(--bs-border-radius);
-                box-shadow: var(--bs-box-shadow-inset);
-                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-            }
-
-            .moveDomainColor {
-                width: 50%;
-            }
-
-            .svelte-s8w54d .show {
-                padding-top: 5px;
-            }
-
-            .svelte-s8w54d:focus-within {
-                color: #333;
-                background-color: #fefefe;
-                border-color: #80bcf3;
-                outline: 0;
-                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
-            }
-
-            .invalidInput {
-                border: 2px solid red;
-            }
-
-            .invalidInput:focus {
-                border: 2px solid red;
-            }
-
-            .input-element {
-                margin-right: 7px;
-            }
-        </style>
         <input
                 type="hidden"
                 name="data[tx_qc_be_domain_color]"
@@ -154,7 +173,7 @@
                                        class="new-domain form-control mb-2"
                                        class:invalidInput={!validInput}
                                 />
-                                <span class="error-message" style="color: red;">
+                                <span class="error-message">
                                     { validInput === true ? "" : conf.regexpError  }
                                 </span>
                             </div>
@@ -187,14 +206,14 @@
                                             bind:value={color.domain}
                                             class="edit form-control mb-2"
                                             class:invalidInput={!isValidDomainName(color.domain)}
-                                    >
+                                    />
 
                                 </div>
                             </div>
                         </div>
                         <div class="t3js-formengine-validation-marker">
                             <div class="formengine-field-item t3js-formengine-field-item">
-                                <div class="form-control-wrap input-element" style="max-width: 126px">
+                                <div class="form-control-wrap input-element color-picker">
                                     <div class="form-wizards-wrap">
                                         <div class="form-wizards-element">
                                             <ColorInput bind:color={colors[index].color} showAlphaSlider/>
@@ -204,11 +223,10 @@
                             </div>
                         </div>
                         {#if index > 0}
-                            <div class="p-2" style="padding-left : 0 !important; padding-right : 0 !important">
+                            <div class="p-2 to-top-section">
                                 <button
                                         class="btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toTop',index)}
-                                        style="width : 55%"
                                 >
                           <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                 data-identifier="actions-edit-delete">
@@ -221,7 +239,7 @@
                             </div>
                         {/if}
                         {#if colors.length > index + 1}
-                            <div class="p-2" style="padding-left : 0 !important">
+                            <div class="p-2 to-down-section">
                                 <button
                                         class="btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toDown',index)}
@@ -253,14 +271,12 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-top : -20px;">
-                    <span class="error-message" style="color: red;">
+                <div class="error-message-section">
+                    <span class="error-message">
                                 { isValidDomainName(color.domain) === true ? "" : conf.regexpError + conf.ignoredItem  }
                         </span>
                 </div>
             </div>
-
-
         {/each}
     </div>
 {/if}

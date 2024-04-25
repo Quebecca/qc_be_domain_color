@@ -4091,11 +4091,11 @@
 		return child_ctx;
 	}
 
-	// (86:0) {#if conf.placeholder !== undefined}
+	// (85:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
-		let div11;
 		let style;
 		let t1;
+		let div11;
 		let input0;
 		let t2;
 		let div10;
@@ -4149,10 +4149,10 @@
 
 		return {
 			c() {
-				div11 = element("div");
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n                height: 84%;\r\n            }\r\n\r\n            .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n                background-color: #fefefe;\r\n                background-clip: padding-box;\r\n                border: var(--bs-border-width) solid #bbb;\r\n                border-radius: var(--bs-border-radius);\r\n                box-shadow: var(--bs-box-shadow-inset);\r\n                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n            }\r\n\r\n            .moveDomainColor {\r\n                width: 50%;\r\n            }\r\n\r\n            .svelte-s8w54d .show {\r\n                padding-top: 5px;\r\n            }\r\n\r\n            .svelte-s8w54d:focus-within {\r\n                color: #333;\r\n                background-color: #fefefe;\r\n                border-color: #80bcf3;\r\n                outline: 0;\r\n                box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n            }\r\n\r\n            .invalidInput {\r\n                border: 2px solid red;\r\n            }\r\n\r\n            .invalidInput:focus {\r\n                border: 2px solid red;\r\n            }\r\n\r\n            .input-element {\r\n                margin-right: 7px;\r\n            }";
+				style.textContent = ".svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            padding-right : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }";
 				t1 = space();
+				div11 = element("div");
 				input0 = element("input");
 				t2 = space();
 				div10 = element("div");
@@ -4197,7 +4197,6 @@
 				attr(input1, "class", "new-domain form-control mb-2");
 				toggle_class(input1, "invalidInput", !/*validInput*/ ctx[3]);
 				attr(span2, "class", "error-message");
-				set_style(span2, "color", "red");
 				attr(div1, "class", "form-wizards-element");
 				attr(div2, "class", "form-wizards-wrap");
 				attr(div3, "class", "form-control-wrap");
@@ -4212,9 +4211,9 @@
 				attr(div10, "class", "row");
 			},
 			m(target, anchor) {
+				insert(target, style, anchor);
+				insert(target, t1, anchor);
 				insert(target, div11, anchor);
-				append(div11, style);
-				append(div11, t1);
 				append(div11, input0);
 				set_input_value(input0, /*domainColorsJson*/ ctx[4]);
 				append(div11, t2);
@@ -4340,6 +4339,8 @@
 			},
 			d(detaching) {
 				if (detaching) {
+					detach(style);
+					detach(t1);
 					detach(div11);
 				}
 
@@ -4350,7 +4351,7 @@
 		};
 	}
 
-	// (206:24) {#if index > 0}
+	// (225:24) {#if index > 0}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4367,9 +4368,7 @@
 				button = element("button");
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg></span></span>`;
 				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
-				attr(button, "style", "width : 55%");
-				attr(div, "class", "p-2");
-				attr(div, "style", "padding-left : 0 !important; padding-right : 0 !important");
+				attr(div, "class", "p-2 to-top-section");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
@@ -4394,7 +4393,7 @@
 		};
 	}
 
-	// (223:24) {#if colors.length > index + 1}
+	// (241:24) {#if colors.length > index + 1}
 	function create_if_block_1(ctx) {
 		let div;
 		let button;
@@ -4411,8 +4410,7 @@
 				button = element("button");
 				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg></span></span>`;
 				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
-				attr(div, "class", "p-2");
-				attr(div, "style", "padding-left : 0 !important");
+				attr(div, "class", "p-2 to-down-section");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
@@ -4437,7 +4435,7 @@
 		};
 	}
 
-	// (178:8) {#each Array.from(colors) as color, index}
+	// (197:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4533,8 +4531,7 @@
 				attr(div2, "class", "form-control-wrap input-element");
 				attr(div3, "class", "form-wizards-element");
 				attr(div4, "class", "form-wizards-wrap");
-				attr(div5, "class", "form-control-wrap input-element");
-				set_style(div5, "max-width", "126px");
+				attr(div5, "class", "form-control-wrap input-element color-picker");
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div7, "class", "t3js-formengine-validation-marker");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
@@ -4542,8 +4539,7 @@
 				attr(div9, "class", "d-flex");
 				attr(div10, "class", "mb-0");
 				attr(span2, "class", "error-message");
-				set_style(span2, "color", "red");
-				attr(div11, "style", "margin-top : -20px;");
+				attr(div11, "class", "error-message-section");
 				attr(div12, "class", "d-flex align-items-start flex-column mb-3");
 			},
 			m(target, anchor) {

@@ -6,16 +6,21 @@
          0: '@qc/qc-be-domain-color/DomainColorPickers.js'
       }"
 />
+<div id="qc-be-domain-color">
 
+</div>
 <section class="domainColorapp">
-    <qc-domain-color-pickers
-        id="qc-domain-color"
-        domain-colors={qcDomainColors}
-    />
-    <script defer>
-        const qcDomainColors = {qcDomainColors -> f:format.raw()}
+
+
+    <script >
         const labels = {labels -> f:format.raw()}
-        document.getElementById("qc-domain-color").setAttribute("conf", JSON.stringify(labels))
+        const qcDomainColors = {qcDomainColors -> f:format.raw()}
+
+        let qcElement = document.createElement('qc-domain-color-pickers')
+        qcElement.setAttribute('domain-colors',JSON.stringify(qcDomainColors))
+        qcElement.setAttribute('conf', JSON.stringify(labels))
+        console.log(document.getElementById('qc-be-domain-color'))
+        document.getElementById('qc-be-domain-color').appendChild(qcElement);
     </script>
 
 </section>
