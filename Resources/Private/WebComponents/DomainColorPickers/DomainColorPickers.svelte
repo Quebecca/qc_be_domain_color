@@ -186,7 +186,7 @@
                 <div class="formengine-field-item t3js-formengine-field-item ">
                     <div class="form-control-wrap">
                         <div class="btn-group">
-                            <button on:click={addNewDomain} disabled={validInput == false} class="btn btn-default">
+                            <button on:click={addNewDomain} disabled={validInput === false || domainName.length === 0} class="btn btn-default">
                                 {conf.buttonLabel}
                             </button>
                         </div>

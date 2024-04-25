@@ -4202,7 +4202,7 @@
 				attr(div3, "class", "form-control-wrap");
 				attr(div4, "class", "formengine-field-item t3js-formengine-field-item ");
 				attr(div5, "class", "form-group t3js-formengine-validation-marker t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4");
-				button.disabled = button_disabled_value = /*validInput*/ ctx[3] == false;
+				button.disabled = button_disabled_value = /*validInput*/ ctx[3] === false || /*domainName*/ ctx[1].length === 0;
 				attr(button, "class", "btn btn-default");
 				attr(div6, "class", "btn-group");
 				attr(div7, "class", "form-control-wrap");
@@ -4288,7 +4288,7 @@
 
 				if ((!current || dirty & /*conf*/ 1) && t10_value !== (t10_value = /*conf*/ ctx[0].buttonLabel + "")) set_data(t10, t10_value);
 
-				if (!current || dirty & /*validInput*/ 8 && button_disabled_value !== (button_disabled_value = /*validInput*/ ctx[3] == false)) {
+				if (!current || dirty & /*validInput, domainName*/ 10 && button_disabled_value !== (button_disabled_value = /*validInput*/ ctx[3] === false || /*domainName*/ ctx[1].length === 0)) {
 					button.disabled = button_disabled_value;
 				}
 
