@@ -1204,7 +1204,15 @@
 	];
 
 	let conf = {
-	    title : "Sélectionneur de couleurs"
+	    "buttonLabel": "New domain",
+	    "description": "Identify your environment at glance by providing regexps matching your web domains, to change the left menubar background color.",
+	    "description_2": "The first element in the domain color list will be applied.",
+	    "placeholder": "Valid regexp, e.g. prod, dev.*, etc",
+	    "regexpError": "Invalid regexp ",
+	    "ignoredItem": "(This item will be ignored)",
+	    "toTopBtnLabel" : "To top",
+	    "toDownBtnLabel" : "To down",
+	    "DeleteBtnLabel" : "Delete"
 	};
 
 	/**
@@ -4150,7 +4158,7 @@
 		return {
 			c() {
 				style = element("style");
-				style.textContent = ".svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            padding-right : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }";
+				style.textContent = "button {\r\n            width: 100% !important;\r\n        }\r\n        .svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }";
 				t1 = space();
 				div11 = element("div");
 				input0 = element("input");
@@ -4292,7 +4300,7 @@
 					button.disabled = button_disabled_value;
 				}
 
-				if (dirty & /*isValidDomainName, Array, colors, conf, deleteDomainColor, event, moveDomainColor*/ 197) {
+				if (dirty & /*isValidDomainName, Array, colors, conf, deleteDomainColor, event, undefined, moveDomainColor*/ 197) {
 					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
@@ -4351,12 +4359,15 @@
 		};
 	}
 
-	// (225:24) {#if index > 0}
-	function create_if_block_2(ctx) {
+	// (227:24) {#if index > 0}
+	function create_if_block_4(ctx) {
 		let div;
 		let button;
+		let t;
+		let span1;
 		let mounted;
 		let dispose;
+		let if_block = /*conf*/ ctx[0].toTopBtnLabel !== undefined && create_if_block_5(ctx);
 
 		function click_handler() {
 			return /*click_handler*/ ctx[13](/*index*/ ctx[18]);
@@ -4366,13 +4377,21 @@
 			c() {
 				div = element("div");
 				button = element("button");
-				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg></span></span>`;
+				if (if_block) if_block.c();
+				t = space();
+				span1 = element("span");
+				span1.innerHTML = `<span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg></span>`;
+				attr(span1, "class", "t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete");
+				attr(span1, "data-identifier", "actions-edit-delete");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
 				attr(div, "class", "p-2 to-top-section");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
 				append(div, button);
+				if (if_block) if_block.m(button, null);
+				append(button, t);
+				append(button, span1);
 
 				if (!mounted) {
 					dispose = listen(button, "click", click_handler);
@@ -4381,24 +4400,67 @@
 			},
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
+
+				if (/*conf*/ ctx[0].toTopBtnLabel !== undefined) {
+					if (if_block) {
+						if_block.p(ctx, dirty);
+					} else {
+						if_block = create_if_block_5(ctx);
+						if_block.c();
+						if_block.m(button, t);
+					}
+				} else if (if_block) {
+					if_block.d(1);
+					if_block = null;
+				}
 			},
 			d(detaching) {
 				if (detaching) {
 					detach(div);
 				}
 
+				if (if_block) if_block.d();
 				mounted = false;
 				dispose();
 			}
 		};
 	}
 
-	// (241:24) {#if colors.length > index + 1}
-	function create_if_block_1(ctx) {
+	// (233:36) {#if conf.toTopBtnLabel !== undefined}
+	function create_if_block_5(ctx) {
+		let span;
+		let t_value = /*conf*/ ctx[0].toTopBtnLabel + "";
+		let t;
+
+		return {
+			c() {
+				span = element("span");
+				t = text(t_value);
+			},
+			m(target, anchor) {
+				insert(target, span, anchor);
+				append(span, t);
+			},
+			p(ctx, dirty) {
+				if (dirty & /*conf*/ 1 && t_value !== (t_value = /*conf*/ ctx[0].toTopBtnLabel + "")) set_data(t, t_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(span);
+				}
+			}
+		};
+	}
+
+	// (246:24) {#if colors.length > index + 1}
+	function create_if_block_2(ctx) {
 		let div;
 		let button;
+		let t;
+		let span1;
 		let mounted;
 		let dispose;
+		let if_block = /*conf*/ ctx[0].toDownBtnLabel !== undefined && create_if_block_3(ctx);
 
 		function click_handler_1() {
 			return /*click_handler_1*/ ctx[14](/*index*/ ctx[18]);
@@ -4408,13 +4470,21 @@
 			c() {
 				div = element("div");
 				button = element("button");
-				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg></span></span>`;
+				if (if_block) if_block.c();
+				t = space();
+				span1 = element("span");
+				span1.innerHTML = `<span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg></span>`;
+				attr(span1, "class", "t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete");
+				attr(span1, "data-identifier", "actions-edit-delete");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record moveDomainColor");
 				attr(div, "class", "p-2 to-down-section");
 			},
 			m(target, anchor) {
 				insert(target, div, anchor);
 				append(div, button);
+				if (if_block) if_block.m(button, null);
+				append(button, t);
+				append(button, span1);
 
 				if (!mounted) {
 					dispose = listen(button, "click", click_handler_1);
@@ -4423,19 +4493,85 @@
 			},
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
+
+				if (/*conf*/ ctx[0].toDownBtnLabel !== undefined) {
+					if (if_block) {
+						if_block.p(ctx, dirty);
+					} else {
+						if_block = create_if_block_3(ctx);
+						if_block.c();
+						if_block.m(button, t);
+					}
+				} else if (if_block) {
+					if_block.d(1);
+					if_block = null;
+				}
 			},
 			d(detaching) {
 				if (detaching) {
 					detach(div);
 				}
 
+				if (if_block) if_block.d();
 				mounted = false;
 				dispose();
 			}
 		};
 	}
 
-	// (197:8) {#each Array.from(colors) as color, index}
+	// (252:36) {#if conf.toDownBtnLabel !== undefined}
+	function create_if_block_3(ctx) {
+		let span;
+		let t_value = /*conf*/ ctx[0].toDownBtnLabel + "";
+		let t;
+
+		return {
+			c() {
+				span = element("span");
+				t = text(t_value);
+			},
+			m(target, anchor) {
+				insert(target, span, anchor);
+				append(span, t);
+			},
+			p(ctx, dirty) {
+				if (dirty & /*conf*/ 1 && t_value !== (t_value = /*conf*/ ctx[0].toDownBtnLabel + "")) set_data(t, t_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(span);
+				}
+			}
+		};
+	}
+
+	// (271:32) {#if conf.DeleteBtnLabel !== undefined}
+	function create_if_block_1(ctx) {
+		let span;
+		let t_value = /*conf*/ ctx[0].DeleteBtnLabel + "";
+		let t;
+
+		return {
+			c() {
+				span = element("span");
+				t = text(t_value);
+			},
+			m(target, anchor) {
+				insert(target, span, anchor);
+				append(span, t);
+			},
+			p(ctx, dirty) {
+				if (dirty & /*conf*/ 1 && t_value !== (t_value = /*conf*/ ctx[0].DeleteBtnLabel + "")) set_data(t, t_value);
+			},
+			d(detaching) {
+				if (detaching) {
+					detach(span);
+				}
+			}
+		};
+	}
+
+	// (199:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4458,15 +4594,17 @@
 		let div8;
 		let button;
 		let t4;
+		let span1;
+		let t5;
 		let div11;
 		let span2;
 
-		let t5_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
+		let t6_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
 		? ""
 		: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "";
 
-		let t5;
 		let t6;
+		let t7;
 		let current;
 		let mounted;
 		let dispose;
@@ -4487,8 +4625,9 @@
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
-		let if_block0 = /*index*/ ctx[18] > 0 && create_if_block_2(ctx);
-		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[18] + 1 && create_if_block_1(ctx);
+		let if_block0 = /*index*/ ctx[18] > 0 && create_if_block_4(ctx);
+		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[18] + 1 && create_if_block_2(ctx);
+		let if_block2 = /*conf*/ ctx[0].DeleteBtnLabel !== undefined && create_if_block_1(ctx);
 
 		function click_handler_2() {
 			return /*click_handler_2*/ ctx[15](/*index*/ ctx[18]);
@@ -4517,12 +4656,15 @@
 				t3 = space();
 				div8 = element("div");
 				button = element("button");
-				button.innerHTML = `<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete"><span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span></span>`;
+				if (if_block2) if_block2.c();
 				t4 = space();
+				span1 = element("span");
+				span1.innerHTML = `<span class="icon-markup"><svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg></span>`;
+				t5 = space();
 				div11 = element("div");
 				span2 = element("span");
-				t5 = text(t5_value);
-				t6 = space();
+				t6 = text(t6_value);
+				t7 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control mb-2");
 				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[16].domain));
@@ -4534,6 +4676,8 @@
 				attr(div5, "class", "form-control-wrap input-element color-picker");
 				attr(div6, "class", "formengine-field-item t3js-formengine-field-item");
 				attr(div7, "class", "t3js-formengine-validation-marker");
+				attr(span1, "class", "t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete");
+				attr(span1, "data-identifier", "actions-edit-delete");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
 				attr(div8, "class", "p-2");
 				attr(div9, "class", "d-flex");
@@ -4565,11 +4709,14 @@
 				append(div9, t3);
 				append(div9, div8);
 				append(div8, button);
-				append(div12, t4);
+				if (if_block2) if_block2.m(button, null);
+				append(button, t4);
+				append(button, span1);
+				append(div12, t5);
 				append(div12, div11);
 				append(div11, span2);
-				append(span2, t5);
-				append(div12, t6);
+				append(span2, t6);
+				append(div12, t7);
 				current = true;
 
 				if (!mounted) {
@@ -4607,7 +4754,7 @@
 					if (if_block1) {
 						if_block1.p(ctx, dirty);
 					} else {
-						if_block1 = create_if_block_1(ctx);
+						if_block1 = create_if_block_2(ctx);
 						if_block1.c();
 						if_block1.m(div9, t3);
 					}
@@ -4616,9 +4763,22 @@
 					if_block1 = null;
 				}
 
-				if ((!current || dirty & /*colors, conf*/ 5) && t5_value !== (t5_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
+				if (/*conf*/ ctx[0].DeleteBtnLabel !== undefined) {
+					if (if_block2) {
+						if_block2.p(ctx, dirty);
+					} else {
+						if_block2 = create_if_block_1(ctx);
+						if_block2.c();
+						if_block2.m(button, t4);
+					}
+				} else if (if_block2) {
+					if_block2.d(1);
+					if_block2 = null;
+				}
+
+				if ((!current || dirty & /*colors, conf*/ 5) && t6_value !== (t6_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
 				? ""
-				: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "")) set_data(t5, t5_value);
+				: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "")) set_data(t6, t6_value);
 			},
 			i(local) {
 				if (current) return;
@@ -4637,6 +4797,7 @@
 				destroy_component(colorinput);
 				if (if_block0) if_block0.d();
 				if (if_block1) if_block1.d();
+				if (if_block2) if_block2.d();
 				mounted = false;
 				run_all(dispose);
 			}

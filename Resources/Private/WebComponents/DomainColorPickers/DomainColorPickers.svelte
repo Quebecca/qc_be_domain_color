@@ -84,6 +84,9 @@
 </script>
 {#if conf.placeholder !== undefined}
     <style>
+        button {
+            width: 100% !important;
+        }
         .svelte-s8w54d {
             height: 84%;
         }
@@ -116,7 +119,6 @@
 
         .to-top-section {
             padding-left : 0 !important;
-            padding-right : 0 !important;
             button {
                 width : 55%
             }
@@ -228,6 +230,9 @@
                                         class="btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toTop',index)}
                                 >
+                                    {#if conf.toTopBtnLabel !== undefined}
+                                        <span>{conf.toTopBtnLabel}</span>
+                                    {/if}
                           <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                 data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -244,6 +249,9 @@
                                         class="btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toDown',index)}
                                 >
+                                    {#if conf.toDownBtnLabel !== undefined}
+                                        <span>{conf.toDownBtnLabel}</span>
+                                    {/if}
                             <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                   data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -260,6 +268,9 @@
                                     class="btn btn-default  t3js-editform-delete-record"
                                     on:click={() => deleteDomainColor(event,index)}
                             >
+                                {#if conf.DeleteBtnLabel !== undefined}
+                                    <span>{conf.DeleteBtnLabel}</span>
+                                {/if}
                                 <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                       data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
@@ -273,8 +284,8 @@
                 </div>
                 <div class="error-message-section">
                     <span class="error-message">
-                                { isValidDomainName(color.domain) === true ? "" : conf.regexpError + conf.ignoredItem  }
-                        </span>
+                        { isValidDomainName(color.domain) === true ? "" : conf.regexpError + conf.ignoredItem  }
+                    </span>
                 </div>
             </div>
         {/each}
