@@ -147,6 +147,12 @@
         .input-element {
             margin-right: 7px;
         }
+        .delete-btn{
+            margin-left : 25px;
+        }
+        .last-delete-btn{
+            margin-left : 75px;
+        }
     </style>
     <div>
         <input
@@ -263,7 +269,7 @@
                             </div>
                         {/if}
 
-                        <div class="p-2">
+                        <div class="p-2 { (index === 0 || colors.length === index + 1 ) ? 'last-delete-btn' : 'delete-btn' }" >
                             <button
                                     class="btn btn-default  t3js-editform-delete-record"
                                     on:click={() => deleteDomainColor(event,index)}

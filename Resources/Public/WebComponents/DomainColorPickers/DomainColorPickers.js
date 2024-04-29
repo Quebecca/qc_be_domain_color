@@ -4118,7 +4118,7 @@
 		return {
 			c() {
 				style = element("style");
-				style.textContent = "button {\r\n            width: 100% !important;\r\n        }\r\n        .svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }";
+				style.textContent = "button {\r\n            width: 100% !important;\r\n        }\r\n        .svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }\r\n        .delete-btn{\r\n            margin-left : 25px;\r\n        }\r\n        .last-delete-btn{\r\n            margin-left : 75px;\r\n        }";
 				t1 = space();
 				div11 = element("div");
 				input0 = element("input");
@@ -4319,7 +4319,7 @@
 		};
 	}
 
-	// (227:24) {#if index > 0}
+	// (233:24) {#if index > 0}
 	function create_if_block_4(ctx) {
 		let div;
 		let button;
@@ -4386,7 +4386,7 @@
 		};
 	}
 
-	// (233:36) {#if conf.toTopBtnLabel !== undefined}
+	// (239:36) {#if conf.toTopBtnLabel !== undefined}
 	function create_if_block_5(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toTopBtnLabel + "";
@@ -4412,7 +4412,7 @@
 		};
 	}
 
-	// (246:24) {#if colors.length > index + 1}
+	// (252:24) {#if colors.length > index + 1}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4479,7 +4479,7 @@
 		};
 	}
 
-	// (252:36) {#if conf.toDownBtnLabel !== undefined}
+	// (258:36) {#if conf.toDownBtnLabel !== undefined}
 	function create_if_block_3(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toDownBtnLabel + "";
@@ -4505,7 +4505,7 @@
 		};
 	}
 
-	// (271:32) {#if conf.DeleteBtnLabel !== undefined}
+	// (277:32) {#if conf.DeleteBtnLabel !== undefined}
 	function create_if_block_1(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].DeleteBtnLabel + "";
@@ -4531,7 +4531,7 @@
 		};
 	}
 
-	// (199:8) {#each Array.from(colors) as color, index}
+	// (205:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4555,6 +4555,7 @@
 		let button;
 		let t4;
 		let span1;
+		let div8_class_value;
 		let t5;
 		let div11;
 		let span2;
@@ -4639,7 +4640,11 @@
 				attr(span1, "class", "t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete");
 				attr(span1, "data-identifier", "actions-edit-delete");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
-				attr(div8, "class", "p-2");
+
+				attr(div8, "class", div8_class_value = "p-2 " + (/*index*/ ctx[18] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[18] + 1
+				? 'last-delete-btn'
+				: 'delete-btn'));
+
 				attr(div9, "class", "d-flex");
 				attr(div10, "class", "mb-0");
 				attr(span2, "class", "error-message");
@@ -4734,6 +4739,12 @@
 				} else if (if_block2) {
 					if_block2.d(1);
 					if_block2 = null;
+				}
+
+				if (!current || dirty & /*colors*/ 4 && div8_class_value !== (div8_class_value = "p-2 " + (/*index*/ ctx[18] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[18] + 1
+				? 'last-delete-btn'
+				: 'delete-btn'))) {
+					attr(div8, "class", div8_class_value);
 				}
 
 				if ((!current || dirty & /*colors, conf*/ 5) && t6_value !== (t6_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
