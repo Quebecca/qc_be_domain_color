@@ -6,5 +6,6 @@ return [
     'dependencies' => ['backend'],
     'imports' => [
         '@qc/qc-be-domain-color/' => 'EXT:qc_be_domain_color/Resources/Public/WebComponents/DomainColorPickers/',
+        '@qc/qc-be-domain-color-js/' => 'EXT:qc_be_domain_color/Resources/Public/JavaScript/'
     ],
 ];

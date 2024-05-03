@@ -8,10 +8,15 @@ namespace Qc\QcBeDomainColor\Events;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
+
+use Qc\QcBeDomainColor\Domain\BackendUserRepository;
 use TYPO3\CMS\Backend\Controller\Event\AfterBackendPageRenderEvent;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility as LocalizationUtilityExtbase;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\Response;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Userfunc to render a js component
@@ -21,6 +26,14 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility as LocalizationUtilityExtbase;
 )]
 class ItemsProcFunc
 {
+
+    private string $colors = '';
+    private BackendUserRepository $backendUserRepository;
+    public function __construct(BackendUserRepository $backendUserRepository)
+    {
+        $this->backendUserRepository = $backendUserRepository;
+        $this->colors = $this->backendUserRepository->getBeUserColors() ?? '[]';
+    }
 
     /**
      * Generate a view component to associate domain's regexp to colors
@@ -39,7 +52,7 @@ class ItemsProcFunc
         ];
         $view->assignMultiple([
             'qcDomainColors' =>
-                html_entity_decode((string) (($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '[]') ?: '[]')),
+                html_entity_decode((($this->colors) ?: '[]')),
             "labels" => html_entity_decode(json_encode($labels))
         ]);
         return  $view->render();
@@ -63,10 +76,9 @@ class ItemsProcFunc
      */
     public function __invoke(AfterBackendPageRenderEvent $event): void
     {
-        $colors = $GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '';
         $domainColors =
             json_decode(
-                html_entity_decode( !empty($colors) ? $colors : '[]'),
+                html_entity_decode( !empty($this->colors) ? $this->colors : '[]'),
                 true,
                 512,
                 JSON_THROW_ON_ERROR
@@ -81,10 +93,25 @@ class ItemsProcFunc
         }
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     */
+    public function saveAction(ServerRequestInterface $request) : ResponseInterface {
+        $colors = $request->getQueryParams()['colors'];
+        $this->backendUserRepository->updateBeUserColors($colors);
+        return new Response('php://output', 200,
+            ['Content-Type' => 'text/csv; charset=utf-8',
+                'Content-Description' => '',
+            ]
+        );
+
+    }
     protected function translate($key):string
     {
         return LocalizationUtilityExtbase::translate(
             $key, "qc_be_domain_color");
     }
+
 
 }
