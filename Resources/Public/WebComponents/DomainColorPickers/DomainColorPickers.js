@@ -4053,13 +4053,13 @@
 
 	function get_each_context(ctx, list, i) {
 		const child_ctx = ctx.slice();
-		child_ctx[16] = list[i];
-		child_ctx[17] = list;
-		child_ctx[18] = i;
+		child_ctx[17] = list[i];
+		child_ctx[18] = list;
+		child_ctx[19] = i;
 		return child_ctx;
 	}
 
-	// (85:0) {#if conf.placeholder !== undefined}
+	// (116:0) {#if conf.placeholder !== undefined}
 	function create_if_block(ctx) {
 		let style;
 		let t1;
@@ -4118,7 +4118,7 @@
 		return {
 			c() {
 				style = element("style");
-				style.textContent = "button {\r\n            width: 100% !important;\r\n        }\r\n        .svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }\r\n        .delete-btn{\r\n            margin-left : 25px;\r\n        }\r\n        .last-delete-btn{\r\n            margin-left : 75px;\r\n        }";
+				style.textContent = "button {\r\n            width: 100% !important;\r\n        }\r\n        /* CSS for the color picker component */\r\n\r\n        .svelte-s8w54d {\r\n            height: 84%;\r\n        }\r\n        .input.svelte-s8w54d.svelte-s8w54d {\r\n\r\n            background-color: #fefefe;\r\n            background-clip: padding-box;\r\n            border: var(--bs-border-width) solid #bbb;\r\n            border-radius: var(--bs-border-radius);\r\n            box-shadow: var(--bs-box-shadow-inset);\r\n            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;\r\n        }\r\n        .svelte-s8w54d:focus-within {\r\n            color: #333;\r\n            background-color: #fefefe;\r\n            border-color: #80bcf3;\r\n            outline: 0;\r\n            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);\r\n        }\r\n        .invalidInput {\r\n            border: 2px solid red;\r\n        }\r\n        .invalidInput:focus {\r\n            border: 2px solid red;\r\n        }\r\n        .delete-btn{\r\n            margin-left : 25px;\r\n        }\r\n        .last-delete-btn{\r\n            margin-left : 75px;\r\n        }\r\n\r\n        .moveDomainColor {\r\n            width: 50%;\r\n        }\r\n\r\n        .svelte-s8w54d .show {\r\n            padding-top: 5px;\r\n        }\r\n        .to-top-section {\r\n            padding-left : 0 !important;\r\n            button {\r\n                width : 55%\r\n            }\r\n        }\r\n        .to-down-section {\r\n            padding-left : 0 !important;\r\n        }\r\n        .error-message-section {\r\n            margin-top : -20px;\r\n            color: red;\r\n        }\r\n        .error-message {\r\n            color: red;\r\n        }\r\n        .color-picker {\r\n            max-width: 126px\r\n        }\r\n        .input-element {\r\n            margin-right: 7px;\r\n        }";
 				t1 = space();
 				div11 = element("div");
 				input0 = element("input");
@@ -4222,9 +4222,10 @@
 
 				if (!mounted) {
 					dispose = [
-						listen(input0, "input", /*input0_input_handler*/ ctx[9]),
-						listen(input1, "input", /*input1_input_handler*/ ctx[10]),
-						listen(button, "click", /*addNewDomain*/ ctx[5])
+						listen(input0, "input", /*input0_input_handler*/ ctx[10]),
+						listen(input1, "input", /*input1_input_handler*/ ctx[11]),
+						listen(input1, "keydown", /*handleKeyDown*/ ctx[5]),
+						listen(button, "click", /*addNewDomain*/ ctx[6])
 					];
 
 					mounted = true;
@@ -4260,7 +4261,7 @@
 					button.disabled = button_disabled_value;
 				}
 
-				if (dirty & /*isValidDomainName, Array, colors, conf, deleteDomainColor, event, undefined, moveDomainColor*/ 197) {
+				if (dirty & /*isValidDomainName, Array, colors, conf, deleteDomainColor, event, undefined, moveDomainColor*/ 389) {
 					each_value = ensure_array_like(Array.from(/*colors*/ ctx[2]));
 					let i;
 
@@ -4319,7 +4320,7 @@
 		};
 	}
 
-	// (233:24) {#if index > 0}
+	// (263:24) {#if index > 0}
 	function create_if_block_4(ctx) {
 		let div;
 		let button;
@@ -4330,7 +4331,7 @@
 		let if_block = /*conf*/ ctx[0].toTopBtnLabel !== undefined && create_if_block_5(ctx);
 
 		function click_handler() {
-			return /*click_handler*/ ctx[13](/*index*/ ctx[18]);
+			return /*click_handler*/ ctx[14](/*index*/ ctx[19]);
 		}
 
 		return {
@@ -4386,7 +4387,7 @@
 		};
 	}
 
-	// (239:36) {#if conf.toTopBtnLabel !== undefined}
+	// (269:36) {#if conf.toTopBtnLabel !== undefined}
 	function create_if_block_5(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toTopBtnLabel + "";
@@ -4412,7 +4413,7 @@
 		};
 	}
 
-	// (252:24) {#if colors.length > index + 1}
+	// (282:24) {#if colors.length > index + 1}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4423,7 +4424,7 @@
 		let if_block = /*conf*/ ctx[0].toDownBtnLabel !== undefined && create_if_block_3(ctx);
 
 		function click_handler_1() {
-			return /*click_handler_1*/ ctx[14](/*index*/ ctx[18]);
+			return /*click_handler_1*/ ctx[15](/*index*/ ctx[19]);
 		}
 
 		return {
@@ -4479,7 +4480,7 @@
 		};
 	}
 
-	// (258:36) {#if conf.toDownBtnLabel !== undefined}
+	// (288:36) {#if conf.toDownBtnLabel !== undefined}
 	function create_if_block_3(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toDownBtnLabel + "";
@@ -4505,7 +4506,7 @@
 		};
 	}
 
-	// (277:32) {#if conf.DeleteBtnLabel !== undefined}
+	// (307:32) {#if conf.DeleteBtnLabel !== undefined}
 	function create_if_block_1(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].DeleteBtnLabel + "";
@@ -4531,7 +4532,7 @@
 		};
 	}
 
-	// (205:8) {#each Array.from(colors) as color, index}
+	// (235:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4560,7 +4561,7 @@
 		let div11;
 		let span2;
 
-		let t6_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
+		let t6_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
 		? ""
 		: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "";
 
@@ -4571,27 +4572,27 @@
 		let dispose;
 
 		function input_input_handler() {
-			/*input_input_handler*/ ctx[11].call(input, /*each_value*/ ctx[17], /*index*/ ctx[18]);
+			/*input_input_handler*/ ctx[12].call(input, /*each_value*/ ctx[18], /*index*/ ctx[19]);
 		}
 
 		function colorinput_color_binding(value) {
-			/*colorinput_color_binding*/ ctx[12](value, /*index*/ ctx[18]);
+			/*colorinput_color_binding*/ ctx[13](value, /*index*/ ctx[19]);
 		}
 
 		let colorinput_props = { showAlphaSlider: true };
 
-		if (/*colors*/ ctx[2][/*index*/ ctx[18]].color !== void 0) {
-			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[18]].color;
+		if (/*colors*/ ctx[2][/*index*/ ctx[19]].color !== void 0) {
+			colorinput_props.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
 		}
 
 		colorinput = new ColorInput({ props: colorinput_props });
 		binding_callbacks.push(() => bind(colorinput, 'color', colorinput_color_binding));
-		let if_block0 = /*index*/ ctx[18] > 0 && create_if_block_4(ctx);
-		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[18] + 1 && create_if_block_2(ctx);
+		let if_block0 = /*index*/ ctx[19] > 0 && create_if_block_4(ctx);
+		let if_block1 = /*colors*/ ctx[2].length > /*index*/ ctx[19] + 1 && create_if_block_2(ctx);
 		let if_block2 = /*conf*/ ctx[0].DeleteBtnLabel !== undefined && create_if_block_1(ctx);
 
 		function click_handler_2() {
-			return /*click_handler_2*/ ctx[15](/*index*/ ctx[18]);
+			return /*click_handler_2*/ ctx[16](/*index*/ ctx[19]);
 		}
 
 		return {
@@ -4628,7 +4629,7 @@
 				t7 = space();
 				attr(input, "type", "text");
 				attr(input, "class", "edit form-control mb-2");
-				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[16].domain));
+				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
 				attr(div2, "class", "form-control-wrap input-element");
@@ -4641,7 +4642,7 @@
 				attr(span1, "data-identifier", "actions-edit-delete");
 				attr(button, "class", "btn btn-default t3js-editform-delete-record");
 
-				attr(div8, "class", div8_class_value = "p-2 " + (/*index*/ ctx[18] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[18] + 1
+				attr(div8, "class", div8_class_value = "p-2 " + (/*index*/ ctx[19] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[19] + 1
 				? 'last-delete-btn'
 				: 'delete-btn'));
 
@@ -4659,7 +4660,7 @@
 				append(div2, div1);
 				append(div1, div0);
 				append(div0, input);
-				set_input_value(input, /*color*/ ctx[16].domain);
+				set_input_value(input, /*color*/ ctx[17].domain);
 				append(div9, t0);
 				append(div9, div7);
 				append(div7, div6);
@@ -4696,26 +4697,26 @@
 			p(new_ctx, dirty) {
 				ctx = new_ctx;
 
-				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[16].domain) {
-					set_input_value(input, /*color*/ ctx[16].domain);
+				if (dirty & /*Array, colors*/ 4 && input.value !== /*color*/ ctx[17].domain) {
+					set_input_value(input, /*color*/ ctx[17].domain);
 				}
 
 				if (!current || dirty & /*isValidDomainName, Array, colors*/ 4) {
-					toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[16].domain));
+					toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
 				}
 
 				const colorinput_changes = {};
 
 				if (!updating_color && dirty & /*colors*/ 4) {
 					updating_color = true;
-					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[18]].color;
+					colorinput_changes.color = /*colors*/ ctx[2][/*index*/ ctx[19]].color;
 					add_flush_callback(() => updating_color = false);
 				}
 
 				colorinput.$set(colorinput_changes);
-				if (/*index*/ ctx[18] > 0) if_block0.p(ctx, dirty);
+				if (/*index*/ ctx[19] > 0) if_block0.p(ctx, dirty);
 
-				if (/*colors*/ ctx[2].length > /*index*/ ctx[18] + 1) {
+				if (/*colors*/ ctx[2].length > /*index*/ ctx[19] + 1) {
 					if (if_block1) {
 						if_block1.p(ctx, dirty);
 					} else {
@@ -4741,13 +4742,13 @@
 					if_block2 = null;
 				}
 
-				if (!current || dirty & /*colors*/ 4 && div8_class_value !== (div8_class_value = "p-2 " + (/*index*/ ctx[18] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[18] + 1
+				if (!current || dirty & /*colors*/ 4 && div8_class_value !== (div8_class_value = "p-2 " + (/*index*/ ctx[19] === 0 || /*colors*/ ctx[2].length === /*index*/ ctx[19] + 1
 				? 'last-delete-btn'
 				: 'delete-btn'))) {
 					attr(div8, "class", div8_class_value);
 				}
 
-				if ((!current || dirty & /*colors, conf*/ 5) && t6_value !== (t6_value = (isValidDomainName(/*color*/ ctx[16].domain) === true
+				if ((!current || dirty & /*colors, conf*/ 5) && t6_value !== (t6_value = (isValidDomainName(/*color*/ ctx[17].domain) === true
 				? ""
 				: /*conf*/ ctx[0].regexpError + /*conf*/ ctx[0].ignoredItem) + "")) set_data(t6, t6_value);
 			},
@@ -4850,33 +4851,52 @@
 		let domainName = '';
 		let domainColorsJson = '{}';
 
-		function addNewDomain(e) {
-			e.preventDefault();
-
-			colors.push({
-				'domain': domainName,
-				'color': new Color("#CCC")
-			});
-
-			$$invalidate(2, colors = [...colors]);
-
-			domainColors.push({
-				'domain': domainName,
-				color: '#CCC',
-				errorClass: ''
-			});
-
-			$$invalidate(1, domainName = '');
-			$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(2, colors), $$invalidate(8, domainColors));
+		/**
+	 * Handle pressing "Enter" key
+	 * @param event
+	 */
+		function handleKeyDown(event) {
+			if (event.key === 'Enter') {
+				addNewDomain(event);
+			}
 		}
 
+		/**
+	 * Add new domain color
+	 * @param event
+	 */
+		function addNewDomain(event) {
+			event.preventDefault();
+
+			$$invalidate(2, colors = [
+				...colors,
+				{
+					domain: domainName,
+					color: new Color("#CCC")
+				}
+			]);
+
+			$$invalidate(9, domainColors = [
+				...domainColors,
+				{
+					domain: domainName,
+					color: '#CCC',
+					errorClass: ''
+				}
+			]);
+
+			$$invalidate(1, domainName = '');
+		}
+
+		/**
+	 * Deleting a domain color
+	 * @param event
+	 * @param index
+	 */
 		function deleteDomainColor(event, index) {
 			event.preventDefault();
-			colors.splice(index, 1);
-			domainColors.splice(index, 1);
-			$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-			($$invalidate(2, colors), $$invalidate(8, domainColors));
+			$$invalidate(2, colors = colors.filter((_, i) => i !== index));
+			$$invalidate(9, domainColors = domainColors.filter((_, i) => i !== index));
 		}
 
 		onMount(() => {
@@ -4887,12 +4907,17 @@
 						'color': new Color(obj.color)
 					};
 
-					colors.push(color);
-					$$invalidate(2, colors = [...colors]);
+					$$invalidate(2, colors = [...colors, color]);
 				}
 			});
 		});
 
+		/**
+	 * Moving domain color
+	 * @param event
+	 * @param action
+	 * @param index
+	 */
 		function moveDomainColor(event, action, index) {
 			event.preventDefault();
 			let targetIndex = action === 'toDown' ? index + 1 : index - 1;
@@ -4900,12 +4925,11 @@
 			let targetColor = colors[targetIndex];
 			$$invalidate(2, colors[targetIndex] = currentColor, colors);
 			$$invalidate(2, colors[index] = targetColor, colors);
-			$$invalidate(2, colors = [...colors]);
 		}
 
 		function input0_input_handler() {
 			domainColorsJson = this.value;
-			(($$invalidate(4, domainColorsJson), $$invalidate(2, colors)), $$invalidate(8, domainColors));
+			(($$invalidate(4, domainColorsJson), $$invalidate(2, colors)), $$invalidate(9, domainColors));
 		}
 
 		function input1_input_handler() {
@@ -4915,13 +4939,13 @@
 
 		function input_input_handler(each_value, index) {
 			each_value[index].domain = this.value;
-			($$invalidate(2, colors), $$invalidate(8, domainColors));
+			$$invalidate(2, colors);
 		}
 
 		function colorinput_color_binding(value, index) {
 			if ($$self.$$.not_equal(colors[index].color, value)) {
 				colors[index].color = value;
-				($$invalidate(2, colors), $$invalidate(8, domainColors));
+				$$invalidate(2, colors);
 			}
 		}
 
@@ -4930,7 +4954,7 @@
 		const click_handler_2 = index => deleteDomainColor(event, index);
 
 		$$self.$$set = $$props => {
-			if ('domainColors' in $$props) $$invalidate(8, domainColors = $$props.domainColors);
+			if ('domainColors' in $$props) $$invalidate(9, domainColors = $$props.domainColors);
 			if ('conf' in $$props) $$invalidate(0, conf = $$props.conf);
 		};
 
@@ -4942,15 +4966,14 @@
 				}
 			}
 
-			if ($$self.$$.dirty & /*colors, domainColors*/ 260) {
+			if ($$self.$$.dirty & /*colors, domainColors*/ 516) {
 				{
 					for (let i = 0; i < colors.length; i++) {
-						$$invalidate(8, domainColors[i].color = colors[i].color.toHexString(), domainColors);
-						$$invalidate(8, domainColors[i].domain = colors[i].domain, domainColors);
+						$$invalidate(9, domainColors[i].color = colors[i].color.toHexString(), domainColors);
+						$$invalidate(9, domainColors[i].domain = colors[i].domain, domainColors);
 					}
 
 					$$invalidate(4, domainColorsJson = JSON.stringify(domainColors));
-					($$invalidate(2, colors), $$invalidate(8, domainColors));
 				}
 			}
 		};
@@ -4964,6 +4987,7 @@
 			colors,
 			validInput,
 			domainColorsJson,
+			handleKeyDown,
 			addNewDomain,
 			deleteDomainColor,
 			moveDomainColor,
@@ -4981,11 +5005,11 @@
 	class DomainColorPickers extends SvelteComponent {
 		constructor(options) {
 			super();
-			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 8, conf: 0 });
+			init(this, options, instance, create_fragment, safe_not_equal, { domainColors: 9, conf: 0 });
 		}
 
 		get domainColors() {
-			return this.$$.ctx[8];
+			return this.$$.ctx[9];
 		}
 
 		set domainColors(domainColors) {

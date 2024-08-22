@@ -25,10 +25,13 @@
             domainColors[i].domain = colors[i].domain;
         }
         domainColorsJson = JSON.stringify(domainColors)
-        colors = colors;
     }
     let domainColorsJson = '{}';
 
+    /**
+     * Check if the domain name is valid
+     * @param domain
+     */
     function isValidDomainName(domain) {
         try {
             new RegExp('/' + domain + '/');
@@ -38,25 +41,49 @@
         return true;
     }
 
-    function addNewDomain(e) {
-        e.preventDefault();
-        colors.push({
-            'domain': domainName,
-            'color': new Color("#CCC")
-        })
-        colors = [...colors];
-        domainColors.push({'domain': domainName, color: '#CCC', errorClass: ''})
-        domainName = ''
-        domainColorsJson = JSON.stringify(domainColors)
-        colors = colors;
+    /**
+     * Handle pressing "Enter" key
+     * @param event
+     */
+    function handleKeyDown(event){
+        if (event.key === 'Enter') {
+            addNewDomain(event);
+        }
     }
 
+    /**
+     * Add new domain color
+     * @param event
+     */
+    function addNewDomain(event) {
+        event.preventDefault();
+        colors = [
+            ...colors,
+            {
+                domain: domainName,
+                color: new Color("#CCC")
+            }
+        ];
+        domainColors = [
+            ...domainColors,
+            {
+                domain: domainName,
+                color: '#CCC',
+                errorClass: ''
+            }
+        ];
+        domainName = ''
+    }
+
+    /**
+     * Deleting a domain color
+     * @param event
+     * @param index
+     */
     function deleteDomainColor(event, index) {
         event.preventDefault();
-        colors.splice(index, 1);
-        domainColors.splice(index, 1)
-        domainColorsJson = JSON.stringify(domainColors)
-        colors = colors;
+        colors = colors.filter((_, i) => i !== index);
+        domainColors = domainColors.filter((_, i) => i !== index);
     }
 
     onMount(() => {
@@ -66,12 +93,17 @@
                     'domain': obj.domain,
                     'color': new Color(obj.color)
                 };
-                colors.push(color);
-                colors = [...colors];
+                colors = [...colors, color];
             }
         });
     });
 
+    /**
+     * Moving domain color
+     * @param event
+     * @param action
+     * @param index
+     */
     function moveDomainColor(event, action, index) {
         event.preventDefault();
         let targetIndex = action === 'toDown' ? index + 1 : index - 1;
@@ -79,7 +111,6 @@
         let targetColor = colors[targetIndex]
         colors[targetIndex] = currentColor;
         colors[index] = targetColor;
-        colors = [...colors]
     }
 </script>
 {#if conf.placeholder !== undefined}
@@ -87,10 +118,11 @@
         button {
             width: 100% !important;
         }
+        /* CSS for the color picker component */
+
         .svelte-s8w54d {
             height: 84%;
         }
-
         .input.svelte-s8w54d.svelte-s8w54d {
 
             background-color: #fefefe;
@@ -100,6 +132,25 @@
             box-shadow: var(--bs-box-shadow-inset);
             transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
+        .svelte-s8w54d:focus-within {
+            color: #333;
+            background-color: #fefefe;
+            border-color: #80bcf3;
+            outline: 0;
+            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
+        }
+        .invalidInput {
+            border: 2px solid red;
+        }
+        .invalidInput:focus {
+            border: 2px solid red;
+        }
+        .delete-btn{
+            margin-left : 25px;
+        }
+        .last-delete-btn{
+            margin-left : 75px;
+        }
 
         .moveDomainColor {
             width: 50%;
@@ -108,15 +159,6 @@
         .svelte-s8w54d .show {
             padding-top: 5px;
         }
-
-        .svelte-s8w54d:focus-within {
-            color: #333;
-            background-color: #fefefe;
-            border-color: #80bcf3;
-            outline: 0;
-            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
-        }
-
         .to-top-section {
             padding-left : 0 !important;
             button {
@@ -136,23 +178,10 @@
         .color-picker {
             max-width: 126px
         }
-        .invalidInput {
-            border: 2px solid red;
-        }
-
-        .invalidInput:focus {
-            border: 2px solid red;
-        }
-
         .input-element {
             margin-right: 7px;
         }
-        .delete-btn{
-            margin-left : 25px;
-        }
-        .last-delete-btn{
-            margin-left : 75px;
-        }
+
     </style>
     <div>
         <input
@@ -180,6 +209,7 @@
                                        placeholder={conf.placeholder}
                                        class="new-domain form-control mb-2"
                                        class:invalidInput={!validInput}
+                                       on:keydown={handleKeyDown}
                                 />
                                 <span class="error-message">
                                     { validInput === true ? "" : conf.regexpError  }
