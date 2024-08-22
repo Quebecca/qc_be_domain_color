@@ -117,7 +117,7 @@ class ItemsProcFunc
     protected function translate($key):string
     {
         return LocalizationUtilityExtbase::translate(
-            $key, "qc_be_domain_color");
+            $key, "qc_be_domain_color") ?? '';
     }
 
 
