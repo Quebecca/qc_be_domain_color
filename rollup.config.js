@@ -5,7 +5,7 @@ import includePaths from 'rollup-plugin-includepaths';
 import sveltePreprocess from 'svelte-preprocess';
 import json from '@rollup/plugin-json'
 import {glob} from 'glob'
-
+import url from '@rollup/plugin-url';
 
 
 String.prototype.lcFirst = function() {
@@ -41,7 +41,7 @@ let
             @import "pgu/base/params";
             @import "pgu/base/helpers";
             @import "pgu/base/utilities";
-            
+
         `,
             }
         })
@@ -71,6 +71,9 @@ let
                     compact: true
                 }),
                 includePaths(includePathOptions),
+                url({
+                  include: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif'],
+                }),
                 svelte(svelteOptions),
                 resolve(resolveOptions),
                 commonjs()
@@ -94,6 +97,9 @@ glob
                 plugins: [
                     json({
                         compact: true
+                    }),
+                    url({
+                      include: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif'],
                     }),
                     includePaths(includePathOptions),
                     svelte(svelteOptions),

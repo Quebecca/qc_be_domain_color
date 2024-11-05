@@ -9,6 +9,9 @@
 <script>
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
+    import actionsDelete from '../../../Public/Icons/actions-delete.svg'
+    import actionsArrowUp from '../../../Public/Icons/actions-arrow-up.svg'
+    import actionsArrowDown from '../../../Public/Icons/actions-arrow-down.svg'
     export let
         domainColors = [],
         conf = {}
@@ -272,9 +275,8 @@
                           <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                 data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
-                                        <svg class="icon-color" role="img"><use
-                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-up"></use></svg>
-                                    </span>
+                                            <img src={actionsArrowUp} width="15" height="15" alt="">
+                                        </span>
                                 </span>
                                 </button>
                             </div>
@@ -291,8 +293,7 @@
                             <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                   data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
-                                        <svg class="icon-color" role="img"><use
-                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-arrow-down"></use></svg>
+                                       <img src={actionsArrowDown} width="15" height="15" alt="" />
                                     </span>
                                 </span>
                                 </button>
@@ -310,8 +311,7 @@
                                 <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
                                       data-identifier="actions-edit-delete">
                                     <span class="icon-markup">
-                                        <svg class="icon-color" role="img"><use
-                                                xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
+                                        <img src={actionsDelete} width="15" height="15" alt=""/>
                                     </span>
                                 </span>
                             </button>
