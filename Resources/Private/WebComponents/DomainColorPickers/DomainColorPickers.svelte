@@ -9,9 +9,6 @@
 <script>
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
-    import actionsDelete from '../../../Public/Icons/actions-delete.svg'
-    import actionsArrowUp from '../../../Public/Icons/actions-arrow-up.svg'
-    import actionsArrowDown from '../../../Public/Icons/actions-arrow-down.svg'
     export let
         domainColors = [],
         conf = {}
@@ -117,42 +114,69 @@
     }
 </script>
 {#if conf.placeholder !== undefined}
-    <style>
+    <style lang="scss">
+        .arrow-down-icon {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGZpbGw9ImN1cnJlbnRDb2xvciI+PHBhdGggZD0iTTcgMnY3LjNINWMtLjQgMC0uNi41LS40LjhsMyAzLjdjLjIuMi42LjIuOCAwbDMtMy43Yy4yLS4zIDAtLjgtLjQtLjhIOVYySDd6Ii8+PC9nPjwvc3ZnPg0K");
+        }
+
+        .arrow-up-icon {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNOSAxNFY2LjdoMmMuNCAwIC42LS41LjQtLjhsLTMtMy43Yy0uMi0uMi0uNi0uMi0uOCAwbC0zIDMuN2MtLjIuMyAwIC44LjQuOGgyVjE0aDJ6Ii8+PC9nPjwvc3ZnPg0K");
+        }
+
+        .delete-icon {
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNNyA1SDZ2OGgxek0xMCA1SDl2OGgxeiIvPjxwYXRoIGQ9Ik0xMyAzaC0ydi0uNzVDMTEgMS41NiAxMC40NCAxIDkuNzUgMWgtMy41QzUuNTYgMSA1IDEuNTYgNSAyLjI1VjNIM3YxMC43NWMwIC42OS41NiAxLjI1IDEuMjUgMS4yNWg3LjVjLjY5IDAgMS4yNS0uNTYgMS4yNS0xLjI1VjN6bS03LS43NUEuMjUuMjUgMCAwIDEgNi4yNSAyaDMuNWEuMjUuMjUgMCAwIDEgLjI1LjI1VjNINnYtLjc1em02IDExLjVhLjI1LjI1IDAgMCAxLS4yNS4yNWgtNy41YS4yNS4yNSAwIDAgMS0uMjUtLjI1VjRoOHY5Ljc1eiIvPjxwYXRoIGQ9Ik0xMy41IDRoLTExYS41LjUgMCAwIDEgMC0xaDExYS41LjUgMCAwIDEgMCAxeiIvPjwvZz48L3N2Zz4NCg==");
+        }
+
+        .arrow-up-icon, .arrow-down-icon, .delete-icon {
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 20px 18px;
+            height: 30px !important;
+            width: 40px !important;
+            padding: 10px;
+            border: 1px solid var(--bs-btn-hover-border-color);
+        }
+
         button {
             width: 100% !important;
         }
-        /* CSS for the color picker component */
 
+        /* CSS for the color picker component */
         .svelte-s8w54d {
             height: 84%;
         }
-        .input.svelte-s8w54d.svelte-s8w54d {
 
+        .input.svelte-s8w54d.svelte-s8w54d {
             background-color: #fefefe;
             background-clip: padding-box;
             border: var(--bs-border-width) solid #bbb;
             border-radius: var(--bs-border-radius);
             box-shadow: var(--bs-box-shadow-inset);
-            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
+
         .svelte-s8w54d:focus-within {
             color: #333;
             background-color: #fefefe;
             border-color: #80bcf3;
             outline: 0;
-            box-shadow: var(--bs-box-shadow-inset), 0 0 0 .25rem rgba(0, 120, 230, .25);
+            box-shadow: var(--bs-box-shadow-inset), 0 0 0 0.25rem rgba(0, 120, 230, 0.25);
         }
+
         .invalidInput {
             border: 2px solid red;
         }
+
         .invalidInput:focus {
             border: 2px solid red;
         }
-        .delete-btn{
-            margin-left : 25px;
+
+        .delete-btn {
+            margin-left: 25px;
         }
-        .last-delete-btn{
-            margin-left : 75px;
+
+        .last-delete-btn {
+            margin-left: 75px;
         }
 
         .moveDomainColor {
@@ -162,29 +186,34 @@
         .svelte-s8w54d .show {
             padding-top: 5px;
         }
+
         .to-top-section {
-            padding-left : 0 !important;
-            button {
-                width : 55%
-            }
+            padding-left: 0 !important;
         }
+        .to-top-section button {
+            width: 55%;
+        }
+
         .to-down-section {
-            padding-left : 0 !important;
+            padding-left: 0 !important;
         }
+
         .error-message-section {
-            margin-top : -20px;
+            margin-top: -20px;
             color: red;
         }
+
         .error-message {
             color: red;
         }
+
         .color-picker {
-            max-width: 126px
+            max-width: 126px;
         }
+
         .input-element {
             margin-right: 7px;
         }
-
     </style>
     <div>
         <input
@@ -266,54 +295,37 @@
                         {#if index > 0}
                             <div class="p-2 to-top-section">
                                 <button
-                                        class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                        class="arrow-up-icon btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toTop',index)}
                                 >
                                     {#if conf.toTopBtnLabel !== undefined}
                                         <span>{conf.toTopBtnLabel}</span>
                                     {/if}
-                          <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                                data-identifier="actions-edit-delete">
-                                    <span class="icon-markup">
-                                            <img src={actionsArrowUp} width="15" height="15" alt="">
-                                        </span>
-                                </span>
                                 </button>
                             </div>
                         {/if}
                         {#if colors.length > index + 1}
                             <div class="p-2 to-down-section">
                                 <button
-                                        class="btn btn-default  t3js-editform-delete-record moveDomainColor"
+                                        class="arrow-down-icon btn btn-default  t3js-editform-delete-record moveDomainColor"
                                         on:click={() => moveDomainColor(event,'toDown',index)}
                                 >
                                     {#if conf.toDownBtnLabel !== undefined}
                                         <span>{conf.toDownBtnLabel}</span>
                                     {/if}
-                            <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                                  data-identifier="actions-edit-delete">
-                                    <span class="icon-markup">
-                                       <img src={actionsArrowDown} width="15" height="15" alt="" />
-                                    </span>
-                                </span>
+
                                 </button>
                             </div>
                         {/if}
 
                         <div class="p-2 { (index === 0 || colors.length === index + 1 ) ? 'last-delete-btn' : 'delete-btn' }" >
                             <button
-                                    class="btn btn-default  t3js-editform-delete-record"
+                                    class="delete-icon btn btn-default  t3js-editform-delete-record"
                                     on:click={() => deleteDomainColor(event,index)}
                             >
                                 {#if conf.DeleteBtnLabel !== undefined}
                                     <span>{conf.DeleteBtnLabel}</span>
                                 {/if}
-                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                                      data-identifier="actions-edit-delete">
-                                    <span class="icon-markup">
-                                        <img src={actionsDelete} width="15" height="15" alt=""/>
-                                    </span>
-                                </span>
                             </button>
                         </div>
                     </div>

@@ -6,13 +6,12 @@ import sveltePreprocess from 'svelte-preprocess';
 import json from '@rollup/plugin-json'
 import {glob} from 'glob'
 import url from '@rollup/plugin-url';
-
+import postcss from 'rollup-plugin-postcss';
 
 String.prototype.lcFirst = function() {
     return this.charAt(0).toLowerCase() + this.slice(1);
 }
 
-// console.log(process.cwd() + '../gabarit_pgu/Resources/Public/scss')
 let
     includePathOptions = {
         paths: ['..'],
@@ -29,22 +28,7 @@ let
 
             handler(warning);
         },
-        preprocess: sveltePreprocess({
-            scss: {
-                includePaths: [
-                    '../gabarit_pgu/Resources/Public/scss',
-                    '../pgu_web_components/Resources/Public/Scss',
-                    'Resources/Public/Scss',
-
-                ],
-                prependData: `
-            @import "pgu/base/params";
-            @import "pgu/base/helpers";
-            @import "pgu/base/utilities";
-
-        `,
-            }
-        })
+        preprocess: sveltePreprocess(),
     },
     resolveOptions = {
         browser: true,
@@ -75,6 +59,11 @@ let
                   include: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.gif'],
                 }),
                 svelte(svelteOptions),
+                postcss({
+                  extract: true,  // Extracts the CSS into a separate file
+                  minimize: true, // Minify the CSS (optional)
+                  use: ['sass'],  // Enable if using SCSS or any preprocessor
+                }),
                 resolve(resolveOptions),
                 commonjs()
             ],
