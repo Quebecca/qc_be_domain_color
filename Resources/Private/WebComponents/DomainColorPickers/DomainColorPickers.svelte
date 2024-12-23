@@ -142,20 +142,16 @@
         }
 
         /* CSS for the color picker component */
-        .svelte-s8w54d {
-            height: 84%;
-        }
-
-        .input.svelte-s8w54d.svelte-s8w54d {
+        .input {
             background-color: #fefefe;
             background-clip: padding-box;
-            border: var(--bs-border-width) solid #bbb;
-            border-radius: var(--bs-border-radius);
+            border: var(--bs-border-width) solid #bbb !important;
+            border-radius: 0 !important;
             box-shadow: var(--bs-box-shadow-inset);
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
-        .svelte-s8w54d:focus-within {
+        .input:focus-within {
             color: #333;
             background-color: #fefefe;
             border-color: #80bcf3;
@@ -181,10 +177,6 @@
 
         .moveDomainColor {
             width: 50%;
-        }
-
-        .svelte-s8w54d .show {
-            padding-top: 5px;
         }
 
         .to-top-section {
