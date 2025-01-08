@@ -1,150 +1,21 @@
 <html
-        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-        data-namespace-typo3-fluid="true">
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
 <f:be.pageRenderer
     includeJavaScriptModules="{
-         0: '@qc/qc-be-domain-color/DomainColorsPicker.js'
+         0: '@qc/qc-be-domain-color/DomainColorPickers.js',
+         1: '@qc/qc-be-domain-color-js/QcBeDomainColor.js'
       }"
 />
-<f:variable name="l">{</f:variable>
-<f:variable name="r">}</f:variable>
+
 <section class="domainColorapp">
-
-    <span class="text-muted">{f:translate(key:'description', extensionName:'QcBeDomainColor')}</span>
-
-<!--    {l}{l}domainColorsJson{r}{r}-->
-    <input
-            type="hidden"
-            name="data[tx_qc_be_domain_color]"
-            :value="domainColorsJson"
-            id="field_tx_qc_be_domain_color"
-    />
-    <div class="row">
-        <div class="form-group t3js-formengine-validation-marker
-                    t3js-formengine-palette-field checkbox-column col-sm-6 col-md-4">
-            <div :class="'formengine-field-item t3js-formengine-field-item ' + newDomainHasErrorClass">
-                <div class="form-control-wrap">
-                    <div class="form-wizards-wrap">
-                        <div class="form-wizards-element">
-                            <input
-                                    id="new-domain"
-                                    class="new-domain form-control"
-                                    autofocus
-                                    autocomplete="off"
-                                    placeholder="{f:translate(key:'new.placeholder', extensionName:'QcBeDomainColor')}"
-                                    v-model="newDomain"
-                                    @keyup="validateNew(newDomain)"
-                                    @keydown.enter.prevent="add"
-                            />
-                            <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomainColor')}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group t3js-formengine-validation-marker
-                    t3js-formengine-palette-field checkbox-column  col-sm-6 col-md-4">
-            <div :class="'formengine-field-item t3js-formengine-field-item ' + newDomainHasErrorClass">
-                <div class="form-control-wrap">
-                        <div class="btn-group">
-                            <button @click.prevent.stop="add"
-                                    class="btn btn-default"
-                                    :disabled="newDomainHasErrorClass != '' || newDomain == ''"
-                            >
-                                {f:translate(key:'new', extensionName:'QcBeDomainColor')}
-                            </button>
-                        </div>
-                </div>
-            </div>
-        </div>
+    <div id="qc-be-domain-color">
     </div>
-    <div class="clearfix"></div>
-    <section class="main" >
-
-        <div
-                v-for="(domainColor,index) in domainColors"
-                class="d-flex"
-        >
-            <div class="t3js-formengine-validation-marker checkbox-column mr-2 ">
-                <div :class="'formengine-field-item t3js-formengine-field-item ' + domainColor.errorClass ">
-                    <div class="form-control-wrap">
-                        <div class="form-wizards-wrap">
-                            <div class="form-wizards-element">
-                                <input
-                                        class="edit form-control"
-                                        type="text"
-                                        v-model="domainColor.domain"
-                                        v-domaincolor-focus="domainColor == editedDomainColor"
-                                        @keydown.enter.prevent=""
-                                        @keyup="validateEdit(domainColor)"
-                                />
-                                <span class="error-message">{f:translate(key:'regexp-error', extensionName:'QcBeDomainColor')}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="t3js-formengine-validation-marker  mr-2">
-                <div class="formengine-field-item t3js-formengine-field-item">
-                    <div class="form-control-wrap" style="max-width: 156px">
-                        <div class="form-wizards-wrap">
-                            <div class="form-wizards-element">
-                                <input
-                                        type="text"
-                                        autocomplete="off"
-                                        :id="'domain-color-' + domainColor.id + '-picker'"
-                                        class="form-control hasDefaultValue t3js-clearable t3js-color-picker"
-                                        :data-formengine-input-name="'domain-color-' + index"
-                                        v-model="domainColor.color"
-                                />
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="t3js-formengine-validation-marker checkbox-column  col-md-2 col-sm-3">
-                <div class="formengine-field-item t3js-formengine-field-item">
-
-                    <div class="form-control-wrap">
-                        <div class="form-wizards-wrap">
-                            <div class="form-wizards-element">
-                                <button
-                                        aria-label="{f:translate(key:'delete', extensionName:'QcBeDomainColor')}"
-                                        class="btn btn-default  t3js-editform-delete-record"
-                                        @click.prevent="remove(domainColor)">
-                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete" data-identifier="actions-edit-delete">
-                                        <span class="icon-markup">
-                                            <svg class="icon-color" role="img"><use xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete"></use></svg>
-                                        </span>
-	                                </span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <f:variable name="labels" value="{labels -> f:format.raw()}" />
+    <f:variable name="qcDomainColors" value="{qcDomainColors -> f:format.raw()}" />
+    <div class="d-none" id="labels" data-labels="{labels}"></div>
+    <div class="d-none" id="qcDomainColors" data-qcDomainColors="{qcDomainColors}"></div>
 
 </section>
-<script>
-    const qcDomainColors = {qcDomainColors -> f:format.raw()}
-</script>
-<style>
-    .error-message {
-        display:none;
-        color: #c83c3c;
-    }
-    .has-error .error-message {
-        display: inline;
-    }
-    .mr-2 {
-        margin-right: .5rem;
-    }
-</style>
-
 </html>
 
