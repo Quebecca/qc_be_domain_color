@@ -131,7 +131,7 @@
             background-position: center;
             background-repeat: no-repeat;
             background-size: 20px 18px;
-            height: 30px !important;
+            height: 38px !important;
             width: 40px !important;
             padding: 10px;
             border: 1px solid var(--bs-btn-hover-border-color);
@@ -206,6 +206,10 @@
         .input-element {
             margin-right: 7px;
         }
+        .domain-name {
+          padding : 0.6rem 0.75rem;
+        }
+
     </style>
     <div>
         <input
@@ -266,7 +270,7 @@
                                     <input
                                             type="text"
                                             bind:value={color.domain}
-                                            class="edit form-control mb-2"
+                                            class="edit form-control mb-2 domain-name"
                                             class:invalidInput={!isValidDomainName(color.domain)}
                                     />
 

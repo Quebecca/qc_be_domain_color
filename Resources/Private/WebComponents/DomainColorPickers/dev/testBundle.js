@@ -4158,7 +4158,7 @@
 		return {
 			c() {
 				style = element("style");
-				style.textContent = ".arrow-down-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGZpbGw9ImN1cnJlbnRDb2xvciI+PHBhdGggZD0iTTcgMnY3LjNINWMtLjQgMC0uNi41LS40LjhsMyAzLjdjLjIuMi42LjIuOCAwbDMtMy43Yy4yLS4zIDAtLjgtLjQtLjhIOVYySDd6Ii8+PC9nPjwvc3ZnPg0K\");\n}\n\n.arrow-up-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNOSAxNFY2LjdoMmMuNCAwIC42LS41LjQtLjhsLTMtMy43Yy0uMi0uMi0uNi0uMi0uOCAwbC0zIDMuN2MtLjIuMyAwIC44LjQuOGgyVjE0aDJ6Ii8+PC9nPjwvc3ZnPg0K\");\n}\n\n.delete-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNNyA1SDZ2OGgxek0xMCA1SDl2OGgxeiIvPjxwYXRoIGQ9Ik0xMyAzaC0ydi0uNzVDMTEgMS41NiAxMC40NCAxIDkuNzUgMWgtMy41QzUuNTYgMSA1IDEuNTYgNSAyLjI1VjNIM3YxMC43NWMwIC42OS41NiAxLjI1IDEuMjUgMS4yNWg3LjVjLjY5IDAgMS4yNS0uNTYgMS4yNS0xLjI1VjN6bS03LS43NUEuMjUuMjUgMCAwIDEgNi4yNSAyaDMuNWEuMjUuMjUgMCAwIDEgLjI1LjI1VjNINnYtLjc1em02IDExLjVhLjI1LjI1IDAgMCAxLS4yNS4yNWgtNy41YS4yNS4yNSAwIDAgMS0uMjUtLjI1VjRoOHY5Ljc1eiIvPjxwYXRoIGQ9Ik0xMy41IDRoLTExYS41LjUgMCAwIDEgMC0xaDExYS41LjUgMCAwIDEgMCAxeiIvPjwvZz48L3N2Zz4NCg==\");\n}\n\n.arrow-up-icon, .arrow-down-icon, .delete-icon {\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: 20px 18px;\n  height: 30px !important;\n  width: 40px !important;\n  padding: 10px;\n  border: 1px solid var(--bs-btn-hover-border-color);\n}\n\nbutton {\n  width: 100% !important;\n}\n\n/* CSS for the color picker component */\n.input {\n  background-color: #fefefe;\n  background-clip: padding-box;\n  border: var(--bs-border-width) solid #bbb !important;\n  border-radius: 0 !important;\n  box-shadow: var(--bs-box-shadow-inset);\n  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;\n}\n\n.input:focus-within {\n  color: #333;\n  background-color: #fefefe;\n  border-color: #80bcf3;\n  outline: 0;\n  box-shadow: var(--bs-box-shadow-inset), 0 0 0 0.25rem rgba(0, 120, 230, 0.25);\n}\n\n.invalidInput {\n  border: 2px solid red;\n}\n\n.invalidInput:focus {\n  border: 2px solid red;\n}\n\n.delete-btn {\n  margin-left: 25px;\n}\n\n.last-delete-btn {\n  margin-left: 75px;\n}\n\n.moveDomainColor {\n  width: 50%;\n}\n\n.to-top-section {\n  padding-left: 0 !important;\n}\n\n.to-top-section button {\n  width: 55%;\n}\n\n.to-down-section {\n  padding-left: 0 !important;\n}\n\n.error-message-section {\n  margin-top: -20px;\n  color: red;\n}\n\n.error-message {\n  color: red;\n}\n\n.color-picker {\n  max-width: 126px;\n}\n\n.input-element {\n  margin-right: 7px;\n}";
+				style.textContent = ".arrow-down-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxnIGZpbGw9ImN1cnJlbnRDb2xvciI+PHBhdGggZD0iTTcgMnY3LjNINWMtLjQgMC0uNi41LS40LjhsMyAzLjdjLjIuMi42LjIuOCAwbDMtMy43Yy4yLS4zIDAtLjgtLjQtLjhIOVYySDd6Ii8+PC9nPjwvc3ZnPg0K\");\n}\n\n.arrow-up-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNOSAxNFY2LjdoMmMuNCAwIC42LS41LjQtLjhsLTMtMy43Yy0uMi0uMi0uNi0uMi0uOCAwbC0zIDMuN2MtLjIuMyAwIC44LjQuOGgyVjE0aDJ6Ii8+PC9nPjwvc3ZnPg0K\");\n}\n\n.delete-icon {\n  background-image: url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNNyA1SDZ2OGgxek0xMCA1SDl2OGgxeiIvPjxwYXRoIGQ9Ik0xMyAzaC0ydi0uNzVDMTEgMS41NiAxMC40NCAxIDkuNzUgMWgtMy41QzUuNTYgMSA1IDEuNTYgNSAyLjI1VjNIM3YxMC43NWMwIC42OS41NiAxLjI1IDEuMjUgMS4yNWg3LjVjLjY5IDAgMS4yNS0uNTYgMS4yNS0xLjI1VjN6bS03LS43NUEuMjUuMjUgMCAwIDEgNi4yNSAyaDMuNWEuMjUuMjUgMCAwIDEgLjI1LjI1VjNINnYtLjc1em02IDExLjVhLjI1LjI1IDAgMCAxLS4yNS4yNWgtNy41YS4yNS4yNSAwIDAgMS0uMjUtLjI1VjRoOHY5Ljc1eiIvPjxwYXRoIGQ9Ik0xMy41IDRoLTExYS41LjUgMCAwIDEgMC0xaDExYS41LjUgMCAwIDEgMCAxeiIvPjwvZz48L3N2Zz4NCg==\");\n}\n\n.arrow-up-icon, .arrow-down-icon, .delete-icon {\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: 20px 18px;\n  height: 38px !important;\n  width: 40px !important;\n  padding: 10px;\n  border: 1px solid var(--bs-btn-hover-border-color);\n}\n\nbutton {\n  width: 100% !important;\n}\n\n/* CSS for the color picker component */\n.input {\n  background-color: #fefefe;\n  background-clip: padding-box;\n  border: var(--bs-border-width) solid #bbb !important;\n  border-radius: 0 !important;\n  box-shadow: var(--bs-box-shadow-inset);\n  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;\n}\n\n.input:focus-within {\n  color: #333;\n  background-color: #fefefe;\n  border-color: #80bcf3;\n  outline: 0;\n  box-shadow: var(--bs-box-shadow-inset), 0 0 0 0.25rem rgba(0, 120, 230, 0.25);\n}\n\n.invalidInput {\n  border: 2px solid red;\n}\n\n.invalidInput:focus {\n  border: 2px solid red;\n}\n\n.delete-btn {\n  margin-left: 25px;\n}\n\n.last-delete-btn {\n  margin-left: 75px;\n}\n\n.moveDomainColor {\n  width: 50%;\n}\n\n.to-top-section {\n  padding-left: 0 !important;\n}\n\n.to-top-section button {\n  width: 55%;\n}\n\n.to-down-section {\n  padding-left: 0 !important;\n}\n\n.error-message-section {\n  margin-top: -20px;\n  color: red;\n}\n\n.error-message {\n  color: red;\n}\n\n.color-picker {\n  max-width: 126px;\n}\n\n.input-element {\n  margin-right: 7px;\n}\n\n.domain-name {\n  padding: 0.6rem 0.75rem;\n}";
 				t1 = space();
 				div11 = element("div");
 				input0 = element("input");
@@ -4361,7 +4361,7 @@
 		};
 	}
 
-	// (286:24) {#if index > 0}
+	// (290:24) {#if index > 0}
 	function create_if_block_4(ctx) {
 		let div;
 		let button;
@@ -4419,7 +4419,7 @@
 		};
 	}
 
-	// (292:36) {#if conf.toTopBtnLabel !== undefined}
+	// (296:36) {#if conf.toTopBtnLabel !== undefined}
 	function create_if_block_5(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toTopBtnLabel + "";
@@ -4445,7 +4445,7 @@
 		};
 	}
 
-	// (298:24) {#if colors.length > index + 1}
+	// (302:24) {#if colors.length > index + 1}
 	function create_if_block_2(ctx) {
 		let div;
 		let button;
@@ -4503,7 +4503,7 @@
 		};
 	}
 
-	// (304:36) {#if conf.toDownBtnLabel !== undefined}
+	// (308:36) {#if conf.toDownBtnLabel !== undefined}
 	function create_if_block_3(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].toDownBtnLabel + "";
@@ -4529,7 +4529,7 @@
 		};
 	}
 
-	// (317:32) {#if conf.DeleteBtnLabel !== undefined}
+	// (321:32) {#if conf.DeleteBtnLabel !== undefined}
 	function create_if_block_1(ctx) {
 		let span;
 		let t_value = /*conf*/ ctx[0].DeleteBtnLabel + "";
@@ -4555,7 +4555,7 @@
 		};
 	}
 
-	// (258:8) {#each Array.from(colors) as color, index}
+	// (262:8) {#each Array.from(colors) as color, index}
 	function create_each_block(ctx) {
 		let div12;
 		let div10;
@@ -4646,7 +4646,7 @@
 				t5 = text(t5_value);
 				t6 = space();
 				attr(input, "type", "text");
-				attr(input, "class", "edit form-control mb-2");
+				attr(input, "class", "edit form-control mb-2 domain-name");
 				toggle_class(input, "invalidInput", !isValidDomainName(/*color*/ ctx[17].domain));
 				attr(div0, "class", "form-wizards-element pr-2");
 				attr(div1, "class", "form-wizards-wrap");
