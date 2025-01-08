@@ -77,7 +77,7 @@ class ItemsProcFunc
     public function __invoke(AfterBackendPageRenderEvent $event): void
     {
         // Code for migration from other old versions
-        $beUserColors = htmlspecialchars_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '') ?? '';
+        $beUserColors = htmlspecialchars_decode($GLOBALS['BE_USER']->uc['tx_qc_be_domain_color'] ?? '');
         if(!empty($beUserColors) && $beUserColors !== $this->colors){
             $this->backendUserRepository->updateBeUserColors($beUserColors);
             $this->colors = $beUserColors;
