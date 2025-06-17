@@ -14,6 +14,9 @@
 			<trans-unit id="be_users.fields.beDomainColor" >
 				<source>Domain color</source>
 			</trans-unit>
+			<trans-unit id="module.settings.title">
+				<source>Domain Color Settings</source>
+			</trans-unit>
 
 
 		</body>
