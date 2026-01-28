@@ -10,12 +10,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class BackendUserRepository
 {
     private readonly Context $context;
+
     private $backendUserId;
+
     public function __construct(Context $context)
     {
         $this->context = $context;
         $this->backendUserId = $this->context->getPropertyFromAspect('backend.user', 'id');
-
     }
 
     /**
@@ -37,6 +38,7 @@ class BackendUserRepository
 
     /**
      * @return mixed
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getBeUserColors(){
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -47,8 +49,7 @@ class BackendUserRepository
             ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($this->backendUserId))
             )
-            ->execute()
+            ->executeQuery()
             ->fetchAssociative()['tx_qc_be_domain_color_values'];
     }
-
 }
