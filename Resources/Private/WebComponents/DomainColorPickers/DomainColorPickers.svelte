@@ -9,24 +9,21 @@
 <script>
     import {Color, ColorInput} from 'color-picker-svelte'
     import {onMount} from 'svelte';
-    export let
-        domainColors = [],
+    let {
+        domainColors = $bindable([]),
         conf = {}
-    $: validInput = false;
-    let domainName = '';
-    $: {
-        validInput = isValidDomainName(domainName);
-        validInput = validInput;
-    }
-    $: colors = [];
-    $: {
+    } = $props();
+    let domainName = $state('');
+    let colors = $state([]);
+    let domainColorsJson = $state('{}');
+    let validInput = $derived(isValidDomainName(domainName));
+    $effect(() => {
         for (let i = 0; i < colors.length; i++) {
             domainColors[i].color = colors[i].color.toHexString();
             domainColors[i].domain = colors[i].domain;
         }
-        domainColorsJson = JSON.stringify(domainColors)
-    }
-    let domainColorsJson = '{}';
+        domainColorsJson = JSON.stringify(domainColors);
+    });
 
     /**
      * Check if the domain name is valid
@@ -237,7 +234,7 @@
                                        placeholder={conf.placeholder}
                                        class="new-domain form-control mb-2"
                                        class:invalidInput={!validInput}
-                                       on:keydown={handleKeyDown}
+                                       onkeydown={handleKeyDown}
                                 />
                                 <span class="error-message">
                                     { validInput === true ? "" : conf.regexpError  }
@@ -252,7 +249,7 @@
                 <div class="formengine-field-item t3js-formengine-field-item ">
                     <div class="form-control-wrap">
                         <div class="btn-group">
-                            <button on:click={addNewDomain} disabled={validInput === false || domainName.length === 0} class="btn btn-default">
+                            <button onclick={addNewDomain} disabled={validInput === false || domainName.length === 0} class="btn btn-default">
                                 {conf.buttonLabel}
                             </button>
                         </div>
@@ -292,7 +289,7 @@
                             <div class="p-2 to-top-section">
                                 <button
                                         class="arrow-up-icon btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                        on:click={() => moveDomainColor(event,'toTop',index)}
+                                        onclick={(event) => moveDomainColor(event,'toTop',index)}
                                 >
                                     {#if conf.toTopBtnLabel !== undefined}
                                         <span>{conf.toTopBtnLabel}</span>
@@ -304,7 +301,7 @@
                             <div class="p-2 to-down-section">
                                 <button
                                         class="arrow-down-icon btn btn-default  t3js-editform-delete-record moveDomainColor"
-                                        on:click={() => moveDomainColor(event,'toDown',index)}
+                                        onclick={(event) => moveDomainColor(event,'toDown',index)}
                                 >
                                     {#if conf.toDownBtnLabel !== undefined}
                                         <span>{conf.toDownBtnLabel}</span>
@@ -317,7 +314,7 @@
                         <div class="p-2 { (index === 0 || colors.length === index + 1 ) ? 'last-delete-btn' : 'delete-btn' }" >
                             <button
                                     class="delete-icon btn btn-default  t3js-editform-delete-record"
-                                    on:click={() => deleteDomainColor(event,index)}
+                                    onclick={(event) => deleteDomainColor(event,index)}
                             >
                                 {#if conf.DeleteBtnLabel !== undefined}
                                     <span>{conf.DeleteBtnLabel}</span>

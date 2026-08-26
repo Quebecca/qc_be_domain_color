@@ -10,24 +10,11 @@
 		((window.__svelte ??= {}).v ??= new Set()).add(PUBLIC_VERSION);
 	}
 
-	/** True if experimental.async=true */
-	/** True if we're not certain that we only have Svelte 5 code in the compilation */
-	let legacy_mode_flag = false;
-	/** True if $inspect.trace is used */
-	let tracing_mode_flag = false;
-
-	function enable_legacy_mode_flag() {
-		legacy_mode_flag = true;
-	}
-
-	enable_legacy_mode_flag();
-
 	const EACH_ITEM_REACTIVE = 1;
 	const EACH_INDEX_REACTIVE = 1 << 1;
 	const EACH_ITEM_IMMUTABLE = 1 << 4;
 
 	const PROPS_IS_IMMUTABLE = 1;
-	const PROPS_IS_RUNES = 1 << 1;
 	const PROPS_IS_UPDATED = 1 << 2;
 	const PROPS_IS_BINDABLE = 1 << 3;
 	const PROPS_IS_LAZY_INITIAL = 1 << 4;
@@ -65,11 +52,6 @@
 	var is_extensible = Object.isExtensible;
 
 	const noop = () => {};
-
-	/** @param {Function} fn */
-	function run(fn) {
-		return fn();
-	}
 
 	/** @param {Array<() => void>} arr */
 	function run_all(arr) {
@@ -486,6 +468,10 @@
 		return !safe_not_equal(value, this.v);
 	}
 
+	/** True if experimental.async=true */
+	/** True if $inspect.trace is used */
+	let tracing_mode_flag = false;
+
 	/** @import { ComponentContext, DevStackEntry, Effect } from '#client' */
 
 	/** @type {ComponentContext | null} */
@@ -511,7 +497,7 @@
 			s: props,
 			x: null,
 			r: /** @type {Effect} */ (active_effect),
-			l: legacy_mode_flag && !runes ? { s: null, u: null, $: [] } : null
+			l: null
 		};
 	}
 
@@ -545,7 +531,7 @@
 
 	/** @returns {boolean} */
 	function is_runes() {
-		return !legacy_mode_flag || (component_context !== null && component_context.l === null);
+		return true;
 	}
 
 	/** @type {Array<() => void>} */
@@ -1396,7 +1382,7 @@
 	 * @param {(values: Value[]) => any} fn
 	 */
 	function flatten(blockers, sync, async, fn) {
-		const d = is_runes() ? derived : derived_safe_equal;
+		const d = derived ;
 
 		// Filter out already-settled blockers - no need to wait for them
 		var pending = blockers.filter((b) => !b.settled);
@@ -1684,6 +1670,20 @@
 
 			next(promise);
 		});
+	}
+
+	/**
+	 * @template V
+	 * @param {() => V} fn
+	 * @returns {Derived<V>}
+	 */
+	/*#__NO_SIDE_EFFECTS__*/
+	function user_derived(fn) {
+		const d = derived(fn);
+
+		push_reaction_value(d);
+
+		return d;
 	}
 
 	/**
@@ -3018,26 +3018,7 @@
 			s.equals = safe_equals;
 		}
 
-		// bind the signal to the component context, in case we need to
-		// track updates to trigger beforeUpdate/afterUpdate callbacks
-		if (legacy_mode_flag && trackable && component_context !== null && component_context.l !== null) {
-			(component_context.l.s ??= []).push(s);
-		}
-
 		return s;
-	}
-
-	/**
-	 * @template V
-	 * @param {Value<V>} source
-	 * @param {V} value
-	 */
-	function mutate(source, value) {
-		set(
-			source,
-			untrack(() => get(source))
-		);
-		return value;
 	}
 
 	/**
@@ -3111,7 +3092,6 @@
 			// properly for itself, we need to ensure the current effect actually gets
 			// scheduled. i.e: `$effect(() => x++)`
 			if (
-				is_runes() &&
 				active_effect !== null &&
 				(active_effect.f & CLEAN) !== 0 &&
 				(active_effect.f & (BRANCH_EFFECT | ROOT_EFFECT)) === 0
@@ -3177,16 +3157,11 @@
 	function mark_reactions(signal, status, updated_during_traversal) {
 		var reactions = signal.reactions;
 		if (reactions === null) return;
-
-		var runes = is_runes();
 		var length = reactions.length;
 
 		for (var i = 0; i < length; i++) {
 			var reaction = reactions[i];
 			var flags = reaction.f;
-
-			// In legacy mode, skip the current effect to prevent infinite loops
-			if (!runes && reaction === active_effect) continue;
 
 			var not_dirty = (flags & DIRTY) === 0;
 
@@ -3925,16 +3900,6 @@
 	}
 
 	/**
-	 * Internal representation of `$effect.pre(...)`
-	 * @param {() => void | (() => void)} fn
-	 * @returns {Effect}
-	 */
-	function user_pre_effect(fn) {
-		validate_effect();
-		return create_effect(RENDER_EFFECT | USER_EFFECT, fn);
-	}
-
-	/**
 	 * Internal representation of `$effect.root(...)`
 	 * @param {() => void | (() => void)} fn
 	 * @returns {() => void}
@@ -3978,68 +3943,6 @@
 	 */
 	function effect(fn) {
 		return create_effect(EFFECT, fn);
-	}
-
-	/**
-	 * Internal representation of `$: ..`
-	 * @param {() => any} deps
-	 * @param {() => void | (() => void)} fn
-	 */
-	function legacy_pre_effect(deps, fn) {
-		var context = /** @type {ComponentContextLegacy} */ (component_context);
-
-		/** @type {{ effect: null | Effect, ran: boolean, deps: () => any }} */
-		var token = { effect: null, ran: false, deps };
-
-		context.l.$.push(token);
-
-		token.effect = render_effect(() => {
-			deps();
-
-			// If this legacy pre effect has already run before the end of the reset, then
-			// bail out to emulate the same behavior.
-			if (token.ran) return;
-
-			token.ran = true;
-
-			var effect = /** @type {Effect} */ (active_effect);
-
-			// here, we lie: by setting `active_effect` to be the parent branch, any writes
-			// that happen inside `fn` will _not_ cause an unnecessary reschedule, because
-			// the affected effects will be children of `active_effect`. this is safe
-			// because these effects are known to run in the correct order
-			try {
-				set_active_effect(effect.parent);
-				untrack(fn);
-			} finally {
-				set_active_effect(effect);
-			}
-		});
-	}
-
-	function legacy_pre_effect_reset() {
-		var context = /** @type {ComponentContextLegacy} */ (component_context);
-
-		render_effect(() => {
-			// Run dirty `$:` statements
-			for (var token of context.l.$) {
-				token.deps();
-
-				var effect = token.effect;
-
-				// If the effect is CLEAN, then make it MAYBE_DIRTY. This ensures we traverse through
-				// the effects dependencies and correctly ensure each dependency is up-to-date.
-				if ((effect.f & CLEAN) !== 0 && effect.deps !== null) {
-					set_signal_status(effect, MAYBE_DIRTY);
-				}
-
-				if (is_dirty(effect)) {
-					update_effect(effect);
-				}
-
-				token.ran = false;
-			}
-		});
 	}
 
 	/**
@@ -4384,51 +4287,6 @@
 
 			fragment.append(node);
 			node = next;
-		}
-	}
-
-	/** @import { Value } from '#client' */
-
-	/**
-	 * @type {Set<Value> | null}
-	 * @deprecated
-	 */
-	let captured_signals = null;
-
-	/**
-	 * Capture an array of all the signals that are read when `fn` is called
-	 * @template T
-	 * @param {() => T} fn
-	 */
-	function capture_signals(fn) {
-		var previous_captured_signals = captured_signals;
-
-		try {
-			captured_signals = new Set();
-
-			untrack(fn);
-
-			if (previous_captured_signals !== null) {
-				for (var signal of captured_signals) {
-					previous_captured_signals.add(signal);
-				}
-			}
-
-			return captured_signals;
-		} finally {
-			captured_signals = previous_captured_signals;
-		}
-	}
-
-	/**
-	 * Invokes a function and captures all signals that are read during the invocation,
-	 * then invalidates them.
-	 * @param {() => any} fn
-	 * @deprecated
-	 */
-	function invalidate_inner_signals(fn) {
-		for (var signal of capture_signals(fn)) {
-			internal_set(signal, signal.v);
 		}
 	}
 
@@ -4875,8 +4733,6 @@
 		var flags = signal.f;
 		var is_derived = (flags & DERIVED) !== 0;
 
-		captured_signals?.add(signal);
-
 		// Register the dependency on the current reaction signal.
 		if (active_reaction !== null && !untracking) {
 			// if we're in a derived that is being read inside an _async_ derived,
@@ -5051,80 +4907,6 @@
 	}
 
 	/**
-	 * Possibly traverse an object and read all its properties so that they're all reactive in case this is `$state`.
-	 * Does only check first level of an object for performance reasons (heuristic should be good for 99% of all cases).
-	 * @param {any} value
-	 * @returns {void}
-	 */
-	function deep_read_state(value) {
-		if (typeof value !== 'object' || !value || value instanceof EventTarget) {
-			return;
-		}
-
-		if (STATE_SYMBOL in value) {
-			deep_read(value);
-		} else if (!Array.isArray(value)) {
-			for (let key in value) {
-				const prop = value[key];
-				if (typeof prop === 'object' && prop && STATE_SYMBOL in prop) {
-					deep_read(prop);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Deeply traverse an object and read all its properties
-	 * so that they're all reactive in case this is `$state`
-	 * @param {any} value
-	 * @param {Set<any>} visited
-	 * @returns {void}
-	 */
-	function deep_read(value, visited = new Set()) {
-		if (
-			typeof value === 'object' &&
-			value !== null &&
-			// We don't want to traverse DOM elements
-			!(value instanceof EventTarget) &&
-			!visited.has(value)
-		) {
-			visited.add(value);
-			// When working with a possible SvelteDate, this
-			// will ensure we capture changes to it.
-			if (value instanceof Date) {
-				value.getTime();
-			}
-			for (let key in value) {
-				try {
-					deep_read(value[key], visited);
-				} catch (e) {
-					// continue
-				}
-			}
-			const proto = get_prototype_of(value);
-			if (
-				proto !== Object.prototype &&
-				proto !== Array.prototype &&
-				proto !== Map.prototype &&
-				proto !== Set.prototype &&
-				proto !== Date.prototype
-			) {
-				const descriptors = get_descriptors(proto);
-				for (let key in descriptors) {
-					const get = descriptors[key].get;
-					if (get) {
-						try {
-							get.call(value);
-						} catch (e) {
-							// continue
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * Used on elements, as a map of event type -> event handler,
 	 * and on events themselves to track which element handled an event
 	 */
@@ -5185,7 +4967,7 @@
 	 * @param {boolean} [passive]
 	 * @returns {void}
 	 */
-	function event$1(event_name, dom, handler, capture, passive) {
+	function event(event_name, dom, handler, capture, passive) {
 		var options = { capture, passive };
 		var target_handler = create_event(event_name, dom, handler, options);
 
@@ -5201,6 +4983,31 @@
 			teardown(() => {
 				dom.removeEventListener(event_name, target_handler, options);
 			});
+		}
+	}
+
+	/**
+	 * @param {string} event_name
+	 * @param {Element} element
+	 * @param {EventListener} [handler]
+	 * @returns {void}
+	 */
+	function delegated(event_name, element, handler) {
+		// @ts-expect-error
+		(element[event_symbol] ??= {})[event_name] = handler;
+	}
+
+	/**
+	 * @param {Array<string>} events
+	 * @returns {void}
+	 */
+	function delegate(events) {
+		for (var i = 0; i < events.length; i++) {
+			all_registered_events.add(events[i]);
+		}
+
+		for (var fn of root_event_handles) {
+			fn(events);
 		}
 	}
 
@@ -6029,6 +5836,27 @@
 		}
 	}
 
+	/** @import { Snippet } from 'svelte' */
+	/** @import { TemplateNode } from '#client' */
+	/** @import { Getters } from '#shared' */
+
+	/**
+	 * @template {(node: TemplateNode, ...args: any[]) => void} SnippetFn
+	 * @param {TemplateNode} node
+	 * @param {() => SnippetFn | null | undefined} get_snippet
+	 * @param {(() => any)[]} args
+	 * @returns {void}
+	 */
+	function snippet(node, get_snippet, ...args) {
+		var branches = new BranchManager(node);
+
+		block(() => {
+			const snippet = get_snippet() ?? null;
+
+			branches.ensure(snippet, snippet && ((anchor) => snippet(anchor, ...args)));
+		}, EFFECT_TRANSPARENT);
+	}
+
 	/** @import { ComponentContext, ComponentContextLegacy } from '#client' */
 	/** @import { EventDispatcher } from './index.js' */
 	/** @import { NotFunction } from './internal/types.js' */
@@ -6052,23 +5880,12 @@
 			lifecycle_outside_component();
 		}
 
-		if (legacy_mode_flag && component_context.l !== null) {
-			init_update_callbacks(component_context).m.push(fn);
-		} else {
+		{
 			user_effect(() => {
 				const cleanup = untrack(fn);
 				if (typeof cleanup === 'function') return /** @type {() => void} */ (cleanup);
 			});
 		}
-	}
-
-	/**
-	 * Legacy-mode: Init callbacks object for onMount/beforeUpdate/afterUpdate
-	 * @param {ComponentContext} context
-	 */
-	function init_update_callbacks(context) {
-		var l = /** @type {ComponentContextLegacy} */ (context).l;
-		return (l.u ??= { a: [], b: [], m: [] });
 	}
 
 	/** @import { TemplateNode } from '#client' */
@@ -6761,35 +6578,6 @@
 			state.effect.last = prev;
 		} else {
 			next.prev = prev;
-		}
-	}
-
-	/**
-	 * @param {Comment} anchor
-	 * @param {Record<string, any>} $$props
-	 * @param {string} name
-	 * @param {Record<string, unknown>} slot_props
-	 * @param {null | ((anchor: Comment) => void)} fallback_fn
-	 */
-	function slot(anchor, $$props, name, slot_props, fallback_fn) {
-		if (hydrating) {
-			hydrate_next();
-		}
-
-		var slot_fn = $$props.$$slots?.[name];
-		// Interop: Can use snippets to fill slots
-		var is_interop = false;
-		if (slot_fn === true) {
-			slot_fn = $$props['children' ];
-			is_interop = true;
-		}
-
-		if (slot_fn === undefined) {
-			if (fallback_fn !== null) {
-				fallback_fn(anchor);
-			}
-		} else {
-			slot_fn(anchor, is_interop ? () => slot_props : slot_props);
 		}
 	}
 
@@ -7530,118 +7318,6 @@
 		return element_or_component;
 	}
 
-	/**
-	 * Substitute for the `preventDefault` event modifier
-	 * @deprecated
-	 * @param {(event: Event, ...args: Array<unknown>) => void} fn
-	 * @returns {(event: Event, ...args: unknown[]) => void}
-	 */
-	function preventDefault(fn) {
-		return function (...args) {
-			var event = /** @type {Event} */ (args[0]);
-			event.preventDefault();
-			// @ts-ignore
-			return fn?.apply(this, args);
-		};
-	}
-
-	/** @import { ComponentContextLegacy } from '#client' */
-
-	/**
-	 * Legacy-mode only: Call `onMount` callbacks and set up `beforeUpdate`/`afterUpdate` effects
-	 * @param {boolean} [immutable]
-	 */
-	function init(immutable = false) {
-		const context = /** @type {ComponentContextLegacy} */ (component_context);
-
-		const callbacks = context.l.u;
-		if (!callbacks) return;
-
-		let props = () => deep_read_state(context.s);
-
-		if (immutable) {
-			let version = 0;
-			let prev = /** @type {Record<string, any>} */ ({});
-
-			// In legacy immutable mode, before/afterUpdate only fire if the object identity of a prop changes
-			const d = derived(() => {
-				let changed = false;
-				const props = context.s;
-				for (const key in props) {
-					if (props[key] !== prev[key]) {
-						prev[key] = props[key];
-						changed = true;
-					}
-				}
-				if (changed) version++;
-				return version;
-			});
-
-			props = () => get(d);
-		}
-
-		// beforeUpdate
-		if (callbacks.b.length) {
-			user_pre_effect(() => {
-				observe_all(context, props);
-				run_all(callbacks.b);
-			});
-		}
-
-		// onMount (must run before afterUpdate)
-		user_effect(() => {
-			const fns = untrack(() => callbacks.m.map(run));
-			return () => {
-				for (const fn of fns) {
-					if (typeof fn === 'function') {
-						fn();
-					}
-				}
-			};
-		});
-
-		// afterUpdate
-		if (callbacks.a.length) {
-			user_effect(() => {
-				observe_all(context, props);
-				run_all(callbacks.a);
-			});
-		}
-	}
-
-	/**
-	 * Invoke the getter of all signals associated with a component
-	 * so they can be registered to the effect this function is called in.
-	 * @param {ComponentContextLegacy} context
-	 * @param {(() => void)} props
-	 */
-	function observe_all(context, props) {
-		if (context.l.s) {
-			for (const signal of context.l.s) get(signal);
-		}
-
-		props();
-	}
-
-	/**
-	 * @this {any}
-	 * @param {Record<string, unknown>} $$props
-	 * @param {Event} event
-	 * @returns {void}
-	 */
-	function bubble_event($$props, event) {
-		var events = /** @type {Record<string, Function[] | Function>} */ ($$props.$$events)?.[
-			event.type
-		];
-
-		var callbacks = is_array(events) ? events.slice() : events == null ? [] : [events];
-
-		for (var fn of callbacks) {
-			// Preserve "this" context
-			fn.call(this, event);
-		}
-	}
-
 	/** @import { Derived, Effect, Source } from './types.js' */
 
 	/**
@@ -7655,7 +7331,7 @@
 	 * @returns {(() => V | ((arg: V) => V) | ((arg: V, mutation: boolean) => V))}
 	 */
 	function prop(props, key, flags, fallback) {
-		var runes = !legacy_mode_flag || (flags & PROPS_IS_RUNES) !== 0;
+		var runes = true;
 		var bindable = (flags & PROPS_IS_BINDABLE) !== 0;
 		var lazy = (flags & PROPS_IS_LAZY_INITIAL) !== 0;
 
@@ -7707,7 +7383,7 @@
 			initial_value = get_fallback();
 
 			if (setter) {
-				if (runes) props_invalid_value();
+				props_invalid_value();
 				setter(initial_value);
 			}
 		}
@@ -7715,31 +7391,17 @@
 		/** @type {() => V} */
 		var getter;
 
-		if (runes) {
+		{
 			getter = () => {
 				var value = /** @type {V} */ (props[key]);
 				if (value === undefined) return get_fallback();
 				fallback_dirty = true;
 				return value;
 			};
-		} else {
-			getter = () => {
-				var value = /** @type {V} */ (props[key]);
-
-				if (value !== undefined) {
-					// in legacy mode, we don't revert to the fallback value
-					// if the prop goes from defined to undefined. The easiest
-					// way to model this is to make the fallback undefined
-					// as soon as the prop has a value
-					fallback_value = /** @type {V} */ (undefined);
-				}
-
-				return value === undefined ? fallback_value : value;
-			};
 		}
 
 		// prop is never written to — we only need a getter
-		if (runes && (flags & PROPS_IS_UPDATED) === 0) {
+		if ((flags & PROPS_IS_UPDATED) === 0) {
 			return getter;
 		}
 
@@ -7754,7 +7416,7 @@
 						// In that case the state proxy (if it exists) should take care of the notification.
 						// If the parent is not in runes mode, we need to notify on mutation, too, that the prop
 						// has changed because the parent will not be able to detect the change otherwise.
-						if (!runes || !mutation || legacy_parent || is_store_sub) {
+						if (!mutation || legacy_parent || is_store_sub) {
 							/** @type {Function} */ (setter)(mutation ? getter() : value);
 						}
 
@@ -7785,7 +7447,7 @@
 		return /** @type {() => V} */ (
 			function (/** @type {any} */ value, /** @type {boolean} */ mutation) {
 				if (arguments.length > 0) {
-					const new_value = mutation ? get(d) : runes && bindable ? proxy(value) : value;
+					const new_value = mutation ? get(d) : bindable ? proxy(value) : value;
 
 					set(d, new_value);
 					overridden = true;
@@ -8294,7 +7956,7 @@
 	    if (isOnePointZero(n)) {
 	        n = '100%';
 	    }
-	    var isPercent = isPercentage(n);
+	    const isPercent = isPercentage(n);
 	    n = max === 360 ? n : Math.min(max, Math.max(0, parseFloat(n)));
 	    // Automatically convert percentage into number
 	    if (isPercent) {
@@ -8356,8 +8018,8 @@
 	 * @hidden
 	 */
 	function convertToPercentage(n) {
-	    if (n <= 1) {
-	        return "".concat(Number(n) * 100, "%");
+	    if (Number(n) <= 1) {
+	        return `${Number(n) * 100}%`;
 	    }
 	    return n;
 	}
@@ -8393,17 +8055,17 @@
 	    r = bound01(r, 255);
 	    g = bound01(g, 255);
 	    b = bound01(b, 255);
-	    var max = Math.max(r, g, b);
-	    var min = Math.min(r, g, b);
-	    var h = 0;
-	    var s = 0;
-	    var l = (max + min) / 2;
+	    const max = Math.max(r, g, b);
+	    const min = Math.min(r, g, b);
+	    let h = 0;
+	    let s = 0;
+	    const l = (max + min) / 2;
 	    if (max === min) {
 	        s = 0;
 	        h = 0; // achromatic
 	    }
 	    else {
-	        var d = max - min;
+	        const d = max - min;
 	        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 	        switch (max) {
 	            case r:
@@ -8418,7 +8080,7 @@
 	        }
 	        h /= 6;
 	    }
-	    return { h: h, s: s, l: l };
+	    return { h, s, l };
 	}
 	function hue2rgb(p, q, t) {
 	    if (t < 0) {
@@ -8445,9 +8107,9 @@
 	 * *Returns:* { r, g, b } in the set [0, 255]
 	 */
 	function hslToRgb(h, s, l) {
-	    var r;
-	    var g;
-	    var b;
+	    let r;
+	    let g;
+	    let b;
 	    h = bound01(h, 360);
 	    s = bound01(s, 100);
 	    l = bound01(l, 100);
@@ -8458,8 +8120,8 @@
 	        r = l;
 	    }
 	    else {
-	        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-	        var p = 2 * l - q;
+	        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+	        const p = 2 * l - q;
 	        r = hue2rgb(p, q, h + 1 / 3);
 	        g = hue2rgb(p, q, h);
 	        b = hue2rgb(p, q, h - 1 / 3);
@@ -8476,12 +8138,12 @@
 	    r = bound01(r, 255);
 	    g = bound01(g, 255);
 	    b = bound01(b, 255);
-	    var max = Math.max(r, g, b);
-	    var min = Math.min(r, g, b);
-	    var h = 0;
-	    var v = max;
-	    var d = max - min;
-	    var s = max === 0 ? 0 : d / max;
+	    const max = Math.max(r, g, b);
+	    const min = Math.min(r, g, b);
+	    let h = 0;
+	    const v = max;
+	    const d = max - min;
+	    const s = max === 0 ? 0 : d / max;
 	    if (max === min) {
 	        h = 0; // achromatic
 	    }
@@ -8499,7 +8161,7 @@
 	        }
 	        h /= 6;
 	    }
-	    return { h: h, s: s, v: v };
+	    return { h, s, v };
 	}
 	/**
 	 * Converts an HSV color value to RGB.
@@ -8511,25 +8173,25 @@
 	    h = bound01(h, 360) * 6;
 	    s = bound01(s, 100);
 	    v = bound01(v, 100);
-	    var i = Math.floor(h);
-	    var f = h - i;
-	    var p = v * (1 - s);
-	    var q = v * (1 - f * s);
-	    var t = v * (1 - (1 - f) * s);
-	    var mod = i % 6;
-	    var r = [v, q, p, p, t, v][mod];
-	    var g = [t, v, v, q, p, p][mod];
-	    var b = [p, p, t, v, v, q][mod];
+	    const i = Math.floor(h);
+	    const f = h - i;
+	    const p = v * (1 - s);
+	    const q = v * (1 - f * s);
+	    const t = v * (1 - (1 - f) * s);
+	    const mod = i % 6;
+	    const r = [v, q, p, p, t, v][mod];
+	    const g = [t, v, v, q, p, p][mod];
+	    const b = [p, p, t, v, v, q][mod];
 	    return { r: r * 255, g: g * 255, b: b * 255 };
 	}
 	/**
 	 * Converts an RGB color to hex
 	 *
-	 * Assumes r, g, and b are contained in the set [0, 255]
-	 * Returns a 3 or 6 character hex
+	 * *Assumes:* r, g, and b are contained in the set [0, 255]
+	 * *Returns:* a 3 or 6 character hex
 	 */
 	function rgbToHex(r, g, b, allow3Char) {
-	    var hex = [
+	    const hex = [
 	        pad2(Math.round(r).toString(16)),
 	        pad2(Math.round(g).toString(16)),
 	        pad2(Math.round(b).toString(16)),
@@ -8546,12 +8208,12 @@
 	/**
 	 * Converts an RGBA color plus alpha transparency to hex
 	 *
-	 * Assumes r, g, b are contained in the set [0, 255] and
-	 * a in [0, 1]. Returns a 4 or 8 character rgba hex
+	 * *Assumes:* r, g, b are contained in the set [0, 255] and a in [0, 1]
+	 * *Returns:* a 4 or 8 character rgba hex
 	 */
 	// eslint-disable-next-line max-params
 	function rgbaToHex(r, g, b, a, allow4Char) {
-	    var hex = [
+	    const hex = [
 	        pad2(Math.round(r).toString(16)),
 	        pad2(Math.round(g).toString(16)),
 	        pad2(Math.round(b).toString(16)),
@@ -8566,6 +8228,43 @@
 	        return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0) + hex[3].charAt(0);
 	    }
 	    return hex.join('');
+	}
+	/**
+	 * Converts CMYK to RBG
+	 * Assumes c, m, y, k are in the set [0, 100]
+	 */
+	function cmykToRgb(c, m, y, k) {
+	    const cConv = c / 100;
+	    const mConv = m / 100;
+	    const yConv = y / 100;
+	    const kConv = k / 100;
+	    const r = 255 * (1 - cConv) * (1 - kConv);
+	    const g = 255 * (1 - mConv) * (1 - kConv);
+	    const b = 255 * (1 - yConv) * (1 - kConv);
+	    return { r, g, b };
+	}
+	function rgbToCmyk(r, g, b) {
+	    let c = 1 - r / 255;
+	    let m = 1 - g / 255;
+	    let y = 1 - b / 255;
+	    let k = Math.min(c, m, y);
+	    if (k === 1) {
+	        c = 0;
+	        m = 0;
+	        y = 0;
+	    }
+	    else {
+	        c = ((c - k) / (1 - k)) * 100;
+	        m = ((m - k) / (1 - k)) * 100;
+	        y = ((y - k) / (1 - k)) * 100;
+	    }
+	    k *= 100;
+	    return {
+	        c: Math.round(c),
+	        m: Math.round(m),
+	        y: Math.round(y),
+	        k: Math.round(k),
+	    };
 	}
 	/** Converts a decimal to a hex value */
 	function convertDecimalToHex(d) {
@@ -8591,7 +8290,7 @@
 	/**
 	 * @hidden
 	 */
-	var names = {
+	const names = {
 	    aliceblue: '#f0f8ff',
 	    antiquewhite: '#faebd7',
 	    aqua: '#00ffff',
@@ -8742,7 +8441,6 @@
 	    yellowgreen: '#9acd32',
 	};
 
-	/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 	/**
 	 * Given a string or object, convert that input to RGB
 	 *
@@ -8759,16 +8457,17 @@
 	 * "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
 	 * "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
 	 * "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
+	 * "cmyk(0, 20, 0, 0)" or "cmyk 0 20 0 0"
 	 * ```
 	 */
 	function inputToRGB(color) {
-	    var rgb = { r: 0, g: 0, b: 0 };
-	    var a = 1;
-	    var s = null;
-	    var v = null;
-	    var l = null;
-	    var ok = false;
-	    var format = false;
+	    let rgb = { r: 0, g: 0, b: 0 };
+	    let a = 1;
+	    let s = null;
+	    let v = null;
+	    let l = null;
+	    let ok = false;
+	    let format = false;
 	    if (typeof color === 'string') {
 	        color = stringInputToObject(color);
 	    }
@@ -8792,32 +8491,43 @@
 	            ok = true;
 	            format = 'hsl';
 	        }
+	        else if (isValidCSSUnit(color.c) &&
+	            isValidCSSUnit(color.m) &&
+	            isValidCSSUnit(color.y) &&
+	            isValidCSSUnit(color.k)) {
+	            rgb = cmykToRgb(color.c, color.m, color.y, color.k);
+	            ok = true;
+	            format = 'cmyk';
+	        }
 	        if (Object.prototype.hasOwnProperty.call(color, 'a')) {
 	            a = color.a;
 	        }
 	    }
 	    a = boundAlpha(a);
 	    return {
-	        ok: ok,
+	        ok,
 	        format: color.format || format,
 	        r: Math.min(255, Math.max(rgb.r, 0)),
 	        g: Math.min(255, Math.max(rgb.g, 0)),
 	        b: Math.min(255, Math.max(rgb.b, 0)),
-	        a: a,
+	        a,
 	    };
 	}
 	// <http://www.w3.org/TR/css3-values/#integers>
-	var CSS_INTEGER = '[-\\+]?\\d+%?';
+	const CSS_INTEGER = '[-\\+]?\\d+%?';
 	// <http://www.w3.org/TR/css3-values/#number-value>
-	var CSS_NUMBER = '[-\\+]?\\d*\\.\\d+%?';
+	const CSS_NUMBER = '[-\\+]?\\d*\\.\\d+%?';
 	// Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
-	var CSS_UNIT = "(?:".concat(CSS_NUMBER, ")|(?:").concat(CSS_INTEGER, ")");
+	const CSS_UNIT = '(?:' + CSS_NUMBER + ')|(?:' + CSS_INTEGER + ')';
 	// Actual matching.
 	// Parentheses and commas are optional, but not required.
 	// Whitespace can take the place of commas or opening paren
-	var PERMISSIVE_MATCH3 = "[\\s|\\(]+(".concat(CSS_UNIT, ")[,|\\s]+(").concat(CSS_UNIT, ")[,|\\s]+(").concat(CSS_UNIT, ")\\s*\\)?");
-	var PERMISSIVE_MATCH4 = "[\\s|\\(]+(".concat(CSS_UNIT, ")[,|\\s]+(").concat(CSS_UNIT, ")[,|\\s]+(").concat(CSS_UNIT, ")[,|\\s]+(").concat(CSS_UNIT, ")\\s*\\)?");
-	var matchers = {
+	// eslint-disable-next-line prettier/prettier
+	const PERMISSIVE_MATCH3 = '[\\s|\\(]+(' + CSS_UNIT + ')[,|\\s]+(' + CSS_UNIT + ')[,|\\s]+(' + CSS_UNIT + ')\\s*\\)?';
+	const PERMISSIVE_MATCH4 = 
+	// eslint-disable-next-line prettier/prettier
+	'[\\s|\\(]+(' + CSS_UNIT + ')[,|\\s]+(' + CSS_UNIT + ')[,|\\s]+(' + CSS_UNIT + ')[,|\\s]+(' + CSS_UNIT + ')\\s*\\)?';
+	const matchers = {
 	    CSS_UNIT: new RegExp(CSS_UNIT),
 	    rgb: new RegExp('rgb' + PERMISSIVE_MATCH3),
 	    rgba: new RegExp('rgba' + PERMISSIVE_MATCH4),
@@ -8825,6 +8535,7 @@
 	    hsla: new RegExp('hsla' + PERMISSIVE_MATCH4),
 	    hsv: new RegExp('hsv' + PERMISSIVE_MATCH3),
 	    hsva: new RegExp('hsva' + PERMISSIVE_MATCH4),
+	    cmyk: new RegExp('cmyk' + PERMISSIVE_MATCH4),
 	    hex3: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
 	    hex6: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
 	    hex4: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
@@ -8832,14 +8543,14 @@
 	};
 	/**
 	 * Permissive string parsing.  Take in a number of formats, and output an object
-	 * based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
+	 * based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}` or `{c, m, y, k}` or `{c, m, y, k, a}`
 	 */
 	function stringInputToObject(color) {
 	    color = color.trim().toLowerCase();
 	    if (color.length === 0) {
 	        return false;
 	    }
-	    var named = false;
+	    let named = false;
 	    if (names[color]) {
 	        color = names[color];
 	        named = true;
@@ -8851,7 +8562,7 @@
 	    // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
 	    // Just return an object and let the conversion functions handle that.
 	    // This way the result will be the same whether the tinycolor is initialized with string or object.
-	    var match = matchers.rgb.exec(color);
+	    let match = matchers.rgb.exec(color);
 	    if (match) {
 	        return { r: match[1], g: match[2], b: match[3] };
 	    }
@@ -8874,6 +8585,15 @@
 	    match = matchers.hsva.exec(color);
 	    if (match) {
 	        return { h: match[1], s: match[2], v: match[3], a: match[4] };
+	    }
+	    match = matchers.cmyk.exec(color);
+	    if (match) {
+	        return {
+	            c: match[1],
+	            m: match[2],
+	            y: match[3],
+	            k: match[4],
+	        };
 	    }
 	    match = matchers.hex8.exec(color);
 	    if (match) {
@@ -8920,14 +8640,14 @@
 	 * (see `matchers` above for definition).
 	 */
 	function isValidCSSUnit(color) {
-	    return Boolean(matchers.CSS_UNIT.exec(String(color)));
+	    if (typeof color === 'number') {
+	        return !Number.isNaN(color);
+	    }
+	    return matchers.CSS_UNIT.test(color);
 	}
 
-	var TinyColor = /** @class */ (function () {
-	    function TinyColor(color, opts) {
-	        if (color === void 0) { color = ''; }
-	        if (opts === void 0) { opts = {}; }
-	        var _a;
+	class TinyColor {
+	    constructor(color = '', opts = {}) {
 	        // If input is already a tinycolor, return itself
 	        if (color instanceof TinyColor) {
 	            // eslint-disable-next-line no-constructor-return
@@ -8937,14 +8657,14 @@
 	            color = numberInputToObject(color);
 	        }
 	        this.originalInput = color;
-	        var rgb = inputToRGB(color);
+	        const rgb = inputToRGB(color);
 	        this.originalInput = color;
 	        this.r = rgb.r;
 	        this.g = rgb.g;
 	        this.b = rgb.b;
 	        this.a = rgb.a;
 	        this.roundA = Math.round(100 * this.a) / 100;
-	        this.format = (_a = opts.format) !== null && _a !== void 0 ? _a : rgb.format;
+	        this.format = opts.format ?? rgb.format;
 	        this.gradientType = opts.gradientType;
 	        // Don't let the range of [0,255] come back in [0,1].
 	        // Potentially lose a little bit of precision here, but will fix issues where
@@ -8961,32 +8681,32 @@
 	        }
 	        this.isValid = rgb.ok;
 	    }
-	    TinyColor.prototype.isDark = function () {
+	    isDark() {
 	        return this.getBrightness() < 128;
-	    };
-	    TinyColor.prototype.isLight = function () {
+	    }
+	    isLight() {
 	        return !this.isDark();
-	    };
+	    }
 	    /**
 	     * Returns the perceived brightness of the color, from 0-255.
 	     */
-	    TinyColor.prototype.getBrightness = function () {
+	    getBrightness() {
 	        // http://www.w3.org/TR/AERT#color-contrast
-	        var rgb = this.toRgb();
+	        const rgb = this.toRgb();
 	        return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-	    };
+	    }
 	    /**
 	     * Returns the perceived luminance of a color, from 0-1.
 	     */
-	    TinyColor.prototype.getLuminance = function () {
+	    getLuminance() {
 	        // http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-	        var rgb = this.toRgb();
-	        var R;
-	        var G;
-	        var B;
-	        var RsRGB = rgb.r / 255;
-	        var GsRGB = rgb.g / 255;
-	        var BsRGB = rgb.b / 255;
+	        const rgb = this.toRgb();
+	        let R;
+	        let G;
+	        let B;
+	        const RsRGB = rgb.r / 255;
+	        const GsRGB = rgb.g / 255;
+	        const BsRGB = rgb.b / 255;
 	        if (RsRGB <= 0.03928) {
 	            R = RsRGB / 12.92;
 	        }
@@ -9009,173 +8729,176 @@
 	            B = Math.pow((BsRGB + 0.055) / 1.055, 2.4);
 	        }
 	        return 0.2126 * R + 0.7152 * G + 0.0722 * B;
-	    };
+	    }
 	    /**
 	     * Returns the alpha value of a color, from 0-1.
 	     */
-	    TinyColor.prototype.getAlpha = function () {
+	    getAlpha() {
 	        return this.a;
-	    };
+	    }
 	    /**
 	     * Sets the alpha value on the current color.
 	     *
 	     * @param alpha - The new alpha value. The accepted range is 0-1.
 	     */
-	    TinyColor.prototype.setAlpha = function (alpha) {
+	    setAlpha(alpha) {
 	        this.a = boundAlpha(alpha);
 	        this.roundA = Math.round(100 * this.a) / 100;
 	        return this;
-	    };
+	    }
 	    /**
 	     * Returns whether the color is monochrome.
 	     */
-	    TinyColor.prototype.isMonochrome = function () {
-	        var s = this.toHsl().s;
+	    isMonochrome() {
+	        const { s } = this.toHsl();
 	        return s === 0;
-	    };
+	    }
 	    /**
 	     * Returns the object as a HSVA object.
 	     */
-	    TinyColor.prototype.toHsv = function () {
-	        var hsv = rgbToHsv(this.r, this.g, this.b);
+	    toHsv() {
+	        const hsv = rgbToHsv(this.r, this.g, this.b);
 	        return { h: hsv.h * 360, s: hsv.s, v: hsv.v, a: this.a };
-	    };
+	    }
 	    /**
 	     * Returns the hsva values interpolated into a string with the following format:
 	     * "hsva(xxx, xxx, xxx, xx)".
 	     */
-	    TinyColor.prototype.toHsvString = function () {
-	        var hsv = rgbToHsv(this.r, this.g, this.b);
-	        var h = Math.round(hsv.h * 360);
-	        var s = Math.round(hsv.s * 100);
-	        var v = Math.round(hsv.v * 100);
-	        return this.a === 1 ? "hsv(".concat(h, ", ").concat(s, "%, ").concat(v, "%)") : "hsva(".concat(h, ", ").concat(s, "%, ").concat(v, "%, ").concat(this.roundA, ")");
-	    };
+	    toHsvString() {
+	        const hsv = rgbToHsv(this.r, this.g, this.b);
+	        const h = Math.round(hsv.h * 360);
+	        const s = Math.round(hsv.s * 100);
+	        const v = Math.round(hsv.v * 100);
+	        return this.a === 1 ? `hsv(${h}, ${s}%, ${v}%)` : `hsva(${h}, ${s}%, ${v}%, ${this.roundA})`;
+	    }
 	    /**
 	     * Returns the object as a HSLA object.
 	     */
-	    TinyColor.prototype.toHsl = function () {
-	        var hsl = rgbToHsl(this.r, this.g, this.b);
+	    toHsl() {
+	        const hsl = rgbToHsl(this.r, this.g, this.b);
 	        return { h: hsl.h * 360, s: hsl.s, l: hsl.l, a: this.a };
-	    };
+	    }
 	    /**
 	     * Returns the hsla values interpolated into a string with the following format:
 	     * "hsla(xxx, xxx, xxx, xx)".
 	     */
-	    TinyColor.prototype.toHslString = function () {
-	        var hsl = rgbToHsl(this.r, this.g, this.b);
-	        var h = Math.round(hsl.h * 360);
-	        var s = Math.round(hsl.s * 100);
-	        var l = Math.round(hsl.l * 100);
-	        return this.a === 1 ? "hsl(".concat(h, ", ").concat(s, "%, ").concat(l, "%)") : "hsla(".concat(h, ", ").concat(s, "%, ").concat(l, "%, ").concat(this.roundA, ")");
-	    };
+	    toHslString() {
+	        const hsl = rgbToHsl(this.r, this.g, this.b);
+	        const h = Math.round(hsl.h * 360);
+	        const s = Math.round(hsl.s * 100);
+	        const l = Math.round(hsl.l * 100);
+	        return this.a === 1 ? `hsl(${h}, ${s}%, ${l}%)` : `hsla(${h}, ${s}%, ${l}%, ${this.roundA})`;
+	    }
 	    /**
 	     * Returns the hex value of the color.
 	     * @param allow3Char will shorten hex value to 3 char if possible
 	     */
-	    TinyColor.prototype.toHex = function (allow3Char) {
-	        if (allow3Char === void 0) { allow3Char = false; }
+	    toHex(allow3Char = false) {
 	        return rgbToHex(this.r, this.g, this.b, allow3Char);
-	    };
+	    }
 	    /**
 	     * Returns the hex value of the color -with a # prefixed.
 	     * @param allow3Char will shorten hex value to 3 char if possible
 	     */
-	    TinyColor.prototype.toHexString = function (allow3Char) {
-	        if (allow3Char === void 0) { allow3Char = false; }
+	    toHexString(allow3Char = false) {
 	        return '#' + this.toHex(allow3Char);
-	    };
+	    }
 	    /**
 	     * Returns the hex 8 value of the color.
 	     * @param allow4Char will shorten hex value to 4 char if possible
 	     */
-	    TinyColor.prototype.toHex8 = function (allow4Char) {
-	        if (allow4Char === void 0) { allow4Char = false; }
+	    toHex8(allow4Char = false) {
 	        return rgbaToHex(this.r, this.g, this.b, this.a, allow4Char);
-	    };
+	    }
 	    /**
 	     * Returns the hex 8 value of the color -with a # prefixed.
 	     * @param allow4Char will shorten hex value to 4 char if possible
 	     */
-	    TinyColor.prototype.toHex8String = function (allow4Char) {
-	        if (allow4Char === void 0) { allow4Char = false; }
+	    toHex8String(allow4Char = false) {
 	        return '#' + this.toHex8(allow4Char);
-	    };
+	    }
 	    /**
 	     * Returns the shorter hex value of the color depends on its alpha -with a # prefixed.
 	     * @param allowShortChar will shorten hex value to 3 or 4 char if possible
 	     */
-	    TinyColor.prototype.toHexShortString = function (allowShortChar) {
-	        if (allowShortChar === void 0) { allowShortChar = false; }
+	    toHexShortString(allowShortChar = false) {
 	        return this.a === 1 ? this.toHexString(allowShortChar) : this.toHex8String(allowShortChar);
-	    };
+	    }
 	    /**
 	     * Returns the object as a RGBA object.
 	     */
-	    TinyColor.prototype.toRgb = function () {
+	    toRgb() {
 	        return {
 	            r: Math.round(this.r),
 	            g: Math.round(this.g),
 	            b: Math.round(this.b),
 	            a: this.a,
 	        };
-	    };
+	    }
 	    /**
 	     * Returns the RGBA values interpolated into a string with the following format:
 	     * "RGBA(xxx, xxx, xxx, xx)".
 	     */
-	    TinyColor.prototype.toRgbString = function () {
-	        var r = Math.round(this.r);
-	        var g = Math.round(this.g);
-	        var b = Math.round(this.b);
-	        return this.a === 1 ? "rgb(".concat(r, ", ").concat(g, ", ").concat(b, ")") : "rgba(".concat(r, ", ").concat(g, ", ").concat(b, ", ").concat(this.roundA, ")");
-	    };
+	    toRgbString() {
+	        const r = Math.round(this.r);
+	        const g = Math.round(this.g);
+	        const b = Math.round(this.b);
+	        return this.a === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${this.roundA})`;
+	    }
 	    /**
 	     * Returns the object as a RGBA object.
 	     */
-	    TinyColor.prototype.toPercentageRgb = function () {
-	        var fmt = function (x) { return "".concat(Math.round(bound01(x, 255) * 100), "%"); };
+	    toPercentageRgb() {
+	        const fmt = (x) => `${Math.round(bound01(x, 255) * 100)}%`;
 	        return {
 	            r: fmt(this.r),
 	            g: fmt(this.g),
 	            b: fmt(this.b),
 	            a: this.a,
 	        };
-	    };
+	    }
 	    /**
 	     * Returns the RGBA relative values interpolated into a string
 	     */
-	    TinyColor.prototype.toPercentageRgbString = function () {
-	        var rnd = function (x) { return Math.round(bound01(x, 255) * 100); };
+	    toPercentageRgbString() {
+	        const rnd = (x) => Math.round(bound01(x, 255) * 100);
 	        return this.a === 1
-	            ? "rgb(".concat(rnd(this.r), "%, ").concat(rnd(this.g), "%, ").concat(rnd(this.b), "%)")
-	            : "rgba(".concat(rnd(this.r), "%, ").concat(rnd(this.g), "%, ").concat(rnd(this.b), "%, ").concat(this.roundA, ")");
-	    };
+	            ? `rgb(${rnd(this.r)}%, ${rnd(this.g)}%, ${rnd(this.b)}%)`
+	            : `rgba(${rnd(this.r)}%, ${rnd(this.g)}%, ${rnd(this.b)}%, ${this.roundA})`;
+	    }
+	    toCmyk() {
+	        return {
+	            ...rgbToCmyk(this.r, this.g, this.b),
+	        };
+	    }
+	    toCmykString() {
+	        const { c, m, y, k } = rgbToCmyk(this.r, this.g, this.b);
+	        return `cmyk(${c}, ${m}, ${y}, ${k})`;
+	    }
 	    /**
 	     * The 'real' name of the color -if there is one.
 	     */
-	    TinyColor.prototype.toName = function () {
+	    toName() {
 	        if (this.a === 0) {
 	            return 'transparent';
 	        }
 	        if (this.a < 1) {
 	            return false;
 	        }
-	        var hex = '#' + rgbToHex(this.r, this.g, this.b, false);
-	        for (var _i = 0, _a = Object.entries(names); _i < _a.length; _i++) {
-	            var _b = _a[_i], key = _b[0], value = _b[1];
+	        const hex = '#' + rgbToHex(this.r, this.g, this.b, false);
+	        for (const [key, value] of Object.entries(names)) {
 	            if (hex === value) {
 	                return key;
 	            }
 	        }
 	        return false;
-	    };
-	    TinyColor.prototype.toString = function (format) {
-	        var formatSet = Boolean(format);
-	        format = format !== null && format !== void 0 ? format : this.format;
-	        var formattedString = false;
-	        var hasAlpha = this.a < 1 && this.a >= 0;
-	        var needsAlphaFormat = !formatSet && hasAlpha && (format.startsWith('hex') || format === 'name');
+	    }
+	    toString(format) {
+	        const formatSet = Boolean(format);
+	        format = format ?? this.format;
+	        let formattedString = false;
+	        const hasAlpha = this.a < 1 && this.a >= 0;
+	        const needsAlphaFormat = !formatSet && hasAlpha && (format.startsWith('hex') || format === 'name');
 	        if (needsAlphaFormat) {
 	            // Special case for "transparent", all other non-alpha formats
 	            // will return rgba when there is transparency.
@@ -9211,215 +8934,214 @@
 	        if (format === 'hsv') {
 	            formattedString = this.toHsvString();
 	        }
+	        if (format === 'cmyk') {
+	            formattedString = this.toCmykString();
+	        }
 	        return formattedString || this.toHexString();
-	    };
-	    TinyColor.prototype.toNumber = function () {
+	    }
+	    toNumber() {
 	        return (Math.round(this.r) << 16) + (Math.round(this.g) << 8) + Math.round(this.b);
-	    };
-	    TinyColor.prototype.clone = function () {
+	    }
+	    clone() {
 	        return new TinyColor(this.toString());
-	    };
+	    }
 	    /**
 	     * Lighten the color a given amount. Providing 100 will always return white.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.lighten = function (amount) {
-	        if (amount === void 0) { amount = 10; }
-	        var hsl = this.toHsl();
+	    lighten(amount = 10) {
+	        const hsl = this.toHsl();
 	        hsl.l += amount / 100;
 	        hsl.l = clamp01(hsl.l);
 	        return new TinyColor(hsl);
-	    };
+	    }
 	    /**
 	     * Brighten the color a given amount, from 0 to 100.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.brighten = function (amount) {
-	        if (amount === void 0) { amount = 10; }
-	        var rgb = this.toRgb();
+	    brighten(amount = 10) {
+	        const rgb = this.toRgb();
 	        rgb.r = Math.max(0, Math.min(255, rgb.r - Math.round(255 * -(amount / 100))));
 	        rgb.g = Math.max(0, Math.min(255, rgb.g - Math.round(255 * -(amount / 100))));
 	        rgb.b = Math.max(0, Math.min(255, rgb.b - Math.round(255 * -(amount / 100))));
 	        return new TinyColor(rgb);
-	    };
+	    }
 	    /**
 	     * Darken the color a given amount, from 0 to 100.
 	     * Providing 100 will always return black.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.darken = function (amount) {
-	        if (amount === void 0) { amount = 10; }
-	        var hsl = this.toHsl();
+	    darken(amount = 10) {
+	        const hsl = this.toHsl();
 	        hsl.l -= amount / 100;
 	        hsl.l = clamp01(hsl.l);
 	        return new TinyColor(hsl);
-	    };
+	    }
 	    /**
 	     * Mix the color with pure white, from 0 to 100.
 	     * Providing 0 will do nothing, providing 100 will always return white.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.tint = function (amount) {
-	        if (amount === void 0) { amount = 10; }
+	    tint(amount = 10) {
 	        return this.mix('white', amount);
-	    };
+	    }
 	    /**
 	     * Mix the color with pure black, from 0 to 100.
 	     * Providing 0 will do nothing, providing 100 will always return black.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.shade = function (amount) {
-	        if (amount === void 0) { amount = 10; }
+	    shade(amount = 10) {
 	        return this.mix('black', amount);
-	    };
+	    }
 	    /**
 	     * Desaturate the color a given amount, from 0 to 100.
 	     * Providing 100 will is the same as calling greyscale
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.desaturate = function (amount) {
-	        if (amount === void 0) { amount = 10; }
-	        var hsl = this.toHsl();
+	    desaturate(amount = 10) {
+	        const hsl = this.toHsl();
 	        hsl.s -= amount / 100;
 	        hsl.s = clamp01(hsl.s);
 	        return new TinyColor(hsl);
-	    };
+	    }
 	    /**
 	     * Saturate the color a given amount, from 0 to 100.
 	     * @param amount - valid between 1-100
 	     */
-	    TinyColor.prototype.saturate = function (amount) {
-	        if (amount === void 0) { amount = 10; }
-	        var hsl = this.toHsl();
+	    saturate(amount = 10) {
+	        const hsl = this.toHsl();
 	        hsl.s += amount / 100;
 	        hsl.s = clamp01(hsl.s);
 	        return new TinyColor(hsl);
-	    };
+	    }
 	    /**
 	     * Completely desaturates a color into greyscale.
 	     * Same as calling `desaturate(100)`
 	     */
-	    TinyColor.prototype.greyscale = function () {
+	    greyscale() {
 	        return this.desaturate(100);
-	    };
+	    }
 	    /**
 	     * Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
 	     * Values outside of this range will be wrapped into this range.
 	     */
-	    TinyColor.prototype.spin = function (amount) {
-	        var hsl = this.toHsl();
-	        var hue = (hsl.h + amount) % 360;
+	    spin(amount) {
+	        const hsl = this.toHsl();
+	        const hue = (hsl.h + amount) % 360;
 	        hsl.h = hue < 0 ? 360 + hue : hue;
 	        return new TinyColor(hsl);
-	    };
+	    }
 	    /**
 	     * Mix the current color a given amount with another color, from 0 to 100.
 	     * 0 means no mixing (return current color).
 	     */
-	    TinyColor.prototype.mix = function (color, amount) {
-	        if (amount === void 0) { amount = 50; }
-	        var rgb1 = this.toRgb();
-	        var rgb2 = new TinyColor(color).toRgb();
-	        var p = amount / 100;
-	        var rgba = {
+	    mix(color, amount = 50) {
+	        const rgb1 = this.toRgb();
+	        const rgb2 = new TinyColor(color).toRgb();
+	        const p = amount / 100;
+	        const rgba = {
 	            r: (rgb2.r - rgb1.r) * p + rgb1.r,
 	            g: (rgb2.g - rgb1.g) * p + rgb1.g,
 	            b: (rgb2.b - rgb1.b) * p + rgb1.b,
 	            a: (rgb2.a - rgb1.a) * p + rgb1.a,
 	        };
 	        return new TinyColor(rgba);
-	    };
-	    TinyColor.prototype.analogous = function (results, slices) {
-	        if (results === void 0) { results = 6; }
-	        if (slices === void 0) { slices = 30; }
-	        var hsl = this.toHsl();
-	        var part = 360 / slices;
-	        var ret = [this];
+	    }
+	    analogous(results = 6, slices = 30) {
+	        const hsl = this.toHsl();
+	        const part = 360 / slices;
+	        const ret = [this];
 	        for (hsl.h = (hsl.h - ((part * results) >> 1) + 720) % 360; --results;) {
 	            hsl.h = (hsl.h + part) % 360;
 	            ret.push(new TinyColor(hsl));
 	        }
 	        return ret;
-	    };
+	    }
 	    /**
 	     * taken from https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js
 	     */
-	    TinyColor.prototype.complement = function () {
-	        var hsl = this.toHsl();
+	    complement() {
+	        const hsl = this.toHsl();
 	        hsl.h = (hsl.h + 180) % 360;
 	        return new TinyColor(hsl);
-	    };
-	    TinyColor.prototype.monochromatic = function (results) {
-	        if (results === void 0) { results = 6; }
-	        var hsv = this.toHsv();
-	        var h = hsv.h;
-	        var s = hsv.s;
-	        var v = hsv.v;
-	        var res = [];
-	        var modification = 1 / results;
+	    }
+	    monochromatic(results = 6) {
+	        const hsv = this.toHsv();
+	        const { h } = hsv;
+	        const { s } = hsv;
+	        let { v } = hsv;
+	        const res = [];
+	        const modification = 1 / results;
 	        while (results--) {
-	            res.push(new TinyColor({ h: h, s: s, v: v }));
+	            res.push(new TinyColor({ h, s, v }));
 	            v = (v + modification) % 1;
 	        }
 	        return res;
-	    };
-	    TinyColor.prototype.splitcomplement = function () {
-	        var hsl = this.toHsl();
-	        var h = hsl.h;
+	    }
+	    splitcomplement() {
+	        const hsl = this.toHsl();
+	        const { h } = hsl;
 	        return [
 	            this,
 	            new TinyColor({ h: (h + 72) % 360, s: hsl.s, l: hsl.l }),
 	            new TinyColor({ h: (h + 216) % 360, s: hsl.s, l: hsl.l }),
 	        ];
-	    };
+	    }
 	    /**
 	     * Compute how the color would appear on a background
 	     */
-	    TinyColor.prototype.onBackground = function (background) {
-	        var fg = this.toRgb();
-	        var bg = new TinyColor(background).toRgb();
-	        var alpha = fg.a + bg.a * (1 - fg.a);
+	    onBackground(background) {
+	        const fg = this.toRgb();
+	        const bg = new TinyColor(background).toRgb();
+	        const alpha = fg.a + bg.a * (1 - fg.a);
 	        return new TinyColor({
 	            r: (fg.r * fg.a + bg.r * bg.a * (1 - fg.a)) / alpha,
 	            g: (fg.g * fg.a + bg.g * bg.a * (1 - fg.a)) / alpha,
 	            b: (fg.b * fg.a + bg.b * bg.a * (1 - fg.a)) / alpha,
 	            a: alpha,
 	        });
-	    };
+	    }
 	    /**
 	     * Alias for `polyad(3)`
 	     */
-	    TinyColor.prototype.triad = function () {
+	    triad() {
 	        return this.polyad(3);
-	    };
+	    }
 	    /**
 	     * Alias for `polyad(4)`
 	     */
-	    TinyColor.prototype.tetrad = function () {
+	    tetrad() {
 	        return this.polyad(4);
-	    };
+	    }
 	    /**
 	     * Get polyad colors, like (for 1, 2, 3, 4, 5, 6, 7, 8, etc...)
 	     * monad, dyad, triad, tetrad, pentad, hexad, heptad, octad, etc...
 	     */
-	    TinyColor.prototype.polyad = function (n) {
-	        var hsl = this.toHsl();
-	        var h = hsl.h;
-	        var result = [this];
-	        var increment = 360 / n;
-	        for (var i = 1; i < n; i++) {
+	    polyad(n) {
+	        const hsl = this.toHsl();
+	        const { h } = hsl;
+	        const result = [this];
+	        const increment = 360 / n;
+	        for (let i = 1; i < n; i++) {
 	            result.push(new TinyColor({ h: (h + i * increment) % 360, s: hsl.s, l: hsl.l }));
 	        }
 	        return result;
-	    };
+	    }
 	    /**
 	     * compare color vs current color
 	     */
-	    TinyColor.prototype.equals = function (color) {
-	        return this.toRgbString() === new TinyColor(color).toRgbString();
-	    };
-	    return TinyColor;
-	}());
+	    equals(color) {
+	        const comparedColor = new TinyColor(color);
+	        /**
+	         * RGB and CMYK do not have the same color gamut, so a CMYK conversion will never be 100%.
+	         * This means we need to compare CMYK to CMYK to ensure accuracy of the equals function.
+	         */
+	        if (this.format === 'cmyk' || comparedColor.format === 'cmyk') {
+	            return this.toCmykString() === comparedColor.toCmykString();
+	        }
+	        return this.toRgbString() === comparedColor.toRgbString();
+	    }
+	}
 
 	function clamp(min, max, x) {
 	    if (x < min) {
@@ -9431,6 +9153,21 @@
 	    else {
 	        return x;
 	    }
+	}
+	var Position;
+	(function (Position) {
+	    Position[Position["Auto"] = 0] = "Auto";
+	    Position[Position["Above"] = 1] = "Above";
+	    Position[Position["Below"] = 2] = "Below";
+	})(Position || (Position = {}));
+	/** Determines if `popupElement` should be shown above `positioningContextElement` */
+	function shouldShowAbove(popupElement, positioningContextElement) {
+	    const inputBounds = positioningContextElement.getBoundingClientRect();
+	    const spaceAbove = inputBounds.top;
+	    const spaceBelow = window.innerHeight - (inputBounds.top + inputBounds.height);
+	    const enoughSpaceAbove = spaceAbove > popupElement.clientHeight;
+	    const enoughSpaceBelow = spaceBelow > popupElement.clientHeight;
+	    return !enoughSpaceBelow && enoughSpaceAbove;
 	}
 	let isMac;
 	function checkModifiers(e, options = {}) {
@@ -9460,70 +9197,119 @@
 	    return checkModifiers(e, options);
 	}
 
+	/* color.svelte.js generated by Svelte v5.56.10 */
+
 	class Color {
-	    h;
-	    s;
-	    v;
-	    a;
-	    constructor(value) {
-	        if (typeof value === 'string') {
-	            const hsv = new TinyColor(value).toHsv();
-	            this.h = hsv.h;
-	            this.s = hsv.s;
-	            this.v = hsv.v;
-	            this.a = hsv.a;
-	        }
-	        else {
-	            this.h = clamp(0, 360, value.h);
-	            this.s = clamp(0, 1, value.s);
-	            this.v = clamp(0, 1, value.v);
-	            this.a = clamp(0, 1, value.a);
-	        }
-	    }
-	    toHexString() {
-	        return new TinyColor({ h: this.h, s: this.s, v: this.v }).toHexString();
-	    }
-	    toHex8String() {
-	        return new TinyColor({ h: this.h, s: this.s, v: this.v, a: this.a }).toHex8String();
-	    }
+		#h;
+
+		get h() {
+			return get(this.#h);
+		}
+
+		set h(value) {
+			set(this.#h, value, true);
+		}
+
+		#s;
+
+		get s() {
+			return get(this.#s);
+		}
+
+		set s(value) {
+			set(this.#s, value, true);
+		}
+
+		#v;
+
+		get v() {
+			return get(this.#v);
+		}
+
+		set v(value) {
+			set(this.#v, value, true);
+		}
+
+		#a;
+
+		get a() {
+			return get(this.#a);
+		}
+
+		set a(value) {
+			set(this.#a, value, true);
+		}
+
+		constructor(value) {
+			let hsv;
+
+			if (typeof value === 'string') {
+				hsv = new TinyColor(value).toHsv();
+			} else {
+				hsv = value;
+			}
+
+			this.#h = state(proxy(clamp(0, 360, hsv.h)));
+			this.#s = state(proxy(clamp(0, 1, hsv.s)));
+			this.#v = state(proxy(clamp(0, 1, hsv.v)));
+			this.#a = state(proxy(clamp(0, 1, hsv.a)));
+		}
+
+		toHexString() {
+			return new TinyColor({ h: this.h, s: this.s, v: this.v }).toHexString();
+		}
+
+		toHex8String() {
+			return new TinyColor({ h: this.h, s: this.s, v: this.v, a: this.a }).toHex8String();
+		}
 	}
 
 	var root$4 = from_html(`<div role="button" aria-label="Open color picker"><div class="color-frame svelte-7gb28q"><div class="color-frame-color svelte-7gb28q"></div></div> <div class="text svelte-7gb28q"><input type="text"/> <span> </span></div> <!></div>`);
 
 	const $$css$3 = {
 		hash: 'svelte-7gb28q',
-		code: '.input.svelte-7gb28q {width:var(--input-width, 100%);display:flex;justify-items:center;align-items:center;box-sizing:border-box;border-radius:4px;padding:0px 10px;background:var(--picker-background, #ffffff);border:1px solid hsla(222, 14%, 47%, 0.3);box-shadow:0px 1px 2px 0px rgba(0, 0, 0, 0.05);position:relative;user-select:none;outline:none;cursor:default;}.input.disabled.svelte-7gb28q {opacity:0.5;}.input.svelte-7gb28q:focus-within {border-color:#0269f7;box-shadow:0px 0px 0px 3px rgba(2, 105, 247, 0.4);}.text.svelte-7gb28q {position:relative;}.title.svelte-7gb28q {position:absolute;top:0px;left:0px;width:100%;pointer-events:none;display:none;}.title.show.svelte-7gb28q {display:block;}.color-frame.svelte-7gb28q {pointer-events:none;height:20px;margin:8px 0px;margin-right:11px;width:38px;flex-shrink:0;border-radius:4px;box-sizing:border-box;box-shadow:0px 1px 2px 0px rgba(0, 0, 0, 0.05);background-image:repeating-conic-gradient(#cccccc 0 25%, #ffffff 0 50%);background-size:0.5rem 0.5rem;background-position:0 0, 0.25rem 0.25rem;}.color-frame.svelte-7gb28q .color-frame-color:where(.svelte-7gb28q) {width:100%;height:100%;box-sizing:border-box;border-radius:inherit;border:1px solid hsla(0, 0%, 100%, 0.3);}input.svelte-7gb28q {color:inherit;font-family:inherit;font-size:inherit;background-color:transparent;width:100%;outline:none;border:none;padding:0px;margin:0px;opacity:0;cursor:inherit;line-height:normal;}input.svelte-7gb28q:focus {box-shadow:none;}input.show.svelte-7gb28q {opacity:1;cursor:text;}'
+		code: '.input.svelte-7gb28q {width:var(--input-width, 100%);display:flex;justify-items:center;align-items:center;box-sizing:border-box;border-radius:4px;padding:0px 10px;background:var(--picker-background, #ffffff);border:1px solid hsla(222, 14%, 47%, 0.3);box-shadow:0px 1px 2px 0px rgba(0, 0, 0, 0.05);position:relative;user-select:none;outline:none;cursor:default;}.input.disabled.svelte-7gb28q {opacity:0.5;}.input.svelte-7gb28q:focus-within {border-color:#0269f7;box-shadow:0px 0px 0px 3px rgba(2, 105, 247, 0.4);}.text.svelte-7gb28q {position:relative;flex-grow:1;}.title.svelte-7gb28q {position:absolute;top:0px;left:0px;width:100%;pointer-events:none;display:none;}.title.show.svelte-7gb28q {display:block;}.color-frame.svelte-7gb28q {pointer-events:none;height:20px;margin:8px 0px;margin-right:11px;width:38px;flex-shrink:0;border-radius:4px;box-sizing:border-box;box-shadow:0px 1px 2px 0px rgba(0, 0, 0, 0.05);background-image:repeating-conic-gradient(#cccccc 0 25%, #ffffff 0 50%);background-size:0.5rem 0.5rem;background-position:0 0, 0.25rem 0.25rem;}.color-frame.svelte-7gb28q .color-frame-color:where(.svelte-7gb28q) {width:100%;height:100%;box-sizing:border-box;border-radius:inherit;border:1px solid hsla(0, 0%, 100%, 0.3);}input.svelte-7gb28q {color:inherit;font-family:inherit;font-size:inherit;background-color:transparent;width:100%;outline:none;border:none;padding:0px;margin:0px;opacity:0;cursor:inherit;line-height:normal;}input.svelte-7gb28q:focus {box-shadow:none;}input.show.svelte-7gb28q {opacity:1;cursor:text;}'
 	};
 
 	function ColorInput($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 		append_styles$1($$anchor, $$css$3);
 
-		let color = prop($$props, 'color', 12);
-		let title = prop($$props, 'title', 12, 'Color');
-		let isOpen = prop($$props, 'isOpen', 12, false);
-		let showAlphaSlider = prop($$props, 'showAlphaSlider', 12, false);
-		let disabled = prop($$props, 'disabled', 12, false);
+		let inputElement = state(void 0);
 
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
+		let color = prop($$props, 'color', 15),
+			title = prop($$props, 'title', 7, 'Color'),
+			isOpen = prop($$props, 'isOpen', 15, false),
+			showAlphaSlider = prop($$props, 'showAlphaSlider', 7, false),
+			disabled = prop($$props, 'disabled', 7, false),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			}),
+			onClose = prop($$props, 'onClose', 7, () => {
+				/* noop */
+			}),
+			classes = prop($$props, 'class', 7, ''),
+			position = prop($$props, 'position', 31, () => proxy(Position.Auto)),
+			children = prop($$props, 'children', 7);
 
-		let onClose = prop($$props, 'onClose', 12, () => {
-			/* noop */
-		});
+		let wasOpen = isOpen();
 
-		let skipCloseEvent = mutable_source(!isOpen());
-		let classes = prop($$props, 'class', 12, '');
-
-		function update(color) {
-			if (color.h !== lastColor.h || color.s !== lastColor.s || color.v !== lastColor.v || color.a !== lastColor.a) {
-				set(text, color.a === 1 ? color.toHexString() : color.toHex8String());
-				lastColor = new Color(color);
+		user_effect(() => {
+			if (wasOpen === true && isOpen() === false) {
+				onClose()();
 			}
-		}
 
-		let text = mutable_source(color().a === 1 ? color().toHexString() : color().toHex8String());
+			wasOpen = isOpen();
+		});
+
+		user_effect(() => {
+			if (color().h !== lastColor.h || color().s !== lastColor.s || color().v !== lastColor.v || color().a !== lastColor.a) {
+				set(text, color().a === 1 ? color().toHexString() : color().toHex8String(), true);
+				lastColor = new Color(color());
+			}
+		});
+
+		let text = state(proxy(color().a === 1 ? color().toHexString() : color().toHex8String()));
 		let lastColor = new Color(color());
 
 		function textInputHandler() {
@@ -9537,13 +9323,13 @@
 			onInput()();
 		}
 
-		let parent = mutable_source();
+		let parent = state(void 0);
 
 		function focusout(e) {
 			if (e.relatedTarget === null) {
 				isOpen(false);
 			} else if (e.relatedTarget instanceof HTMLElement) {
-				const stayingInParent = get(parent).contains(e.relatedTarget);
+				const stayingInParent = get(parent) === null || get(parent) === void 0 ? void 0 : get(parent).contains(e.relatedTarget);
 
 				if (!stayingInParent) {
 					isOpen(false);
@@ -9559,14 +9345,11 @@
 			}
 		}
 
-		let inputElement = mutable_source();
-		let position = prop($$props, 'position', 28, () => Position.Auto);
-
 		function open() {
 			if (!isOpen() && !disabled()) {
 				isOpen(true);
-				get(inputElement).focus();
-				get(inputElement).select();
+				get(inputElement) === null || get(inputElement) === void 0 ? void 0 : get(inputElement).focus();
+				get(inputElement) === null || get(inputElement) === void 0 ? void 0 : get(inputElement).select();
 
 				return true;
 			}
@@ -9578,34 +9361,11 @@
 			}
 		}
 
-		function init$1(el) {
+		function init(el) {
 			if (document.activeElement === el) {
 				isOpen(true);
 			}
 		}
-
-		legacy_pre_effect(
-			() => (
-				deep_read_state(isOpen()),
-				get(skipCloseEvent),
-				deep_read_state(onClose())
-			),
-			() => {
-				if (!isOpen()) {
-					if (!get(skipCloseEvent)) {
-						onClose()();
-					}
-
-					set(skipCloseEvent, false);
-				}
-			}
-		);
-
-		legacy_pre_effect(() => (deep_read_state(color())), () => {
-			update(color());
-		});
-
-		legacy_pre_effect_reset();
 
 		var $$exports = {
 			get color() {
@@ -9621,7 +9381,7 @@
 				return title();
 			},
 
-			set title($$value) {
+			set title($$value = 'Color') {
 				title($$value);
 				flushSync();
 			},
@@ -9630,7 +9390,7 @@
 				return isOpen();
 			},
 
-			set isOpen($$value) {
+			set isOpen($$value = false) {
 				isOpen($$value);
 				flushSync();
 			},
@@ -9639,7 +9399,7 @@
 				return showAlphaSlider();
 			},
 
-			set showAlphaSlider($$value) {
+			set showAlphaSlider($$value = false) {
 				showAlphaSlider($$value);
 				flushSync();
 			},
@@ -9648,7 +9408,7 @@
 				return disabled();
 			},
 
-			set disabled($$value) {
+			set disabled($$value = false) {
 				disabled($$value);
 				flushSync();
 			},
@@ -9657,7 +9417,11 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			},
@@ -9666,7 +9430,11 @@
 				return onClose();
 			},
 
-			set onClose($$value) {
+			set onClose(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onClose($$value);
 				flushSync();
 			},
@@ -9675,7 +9443,7 @@
 				return classes();
 			},
 
-			set class($$value) {
+			set class($$value = '') {
 				classes($$value);
 				flushSync();
 			},
@@ -9684,13 +9452,20 @@
 				return position();
 			},
 
-			set position($$value) {
+			set position($$value = Position.Auto) {
 				position($$value);
+				flushSync();
+			},
+
+			get children() {
+				return children();
+			},
+
+			set children($$value) {
+				children($$value);
 				flushSync();
 			}
 		};
-
-		init();
 
 		var div = root$4();
 		let classes_1;
@@ -9709,9 +9484,7 @@
 
 		bind_this(input, ($$value) => set(inputElement, $$value), () => get(inputElement));
 		effect(() => bind_value(input, () => get(text), ($$value) => set(text, $$value)));
-		effect(() => event$1('input', input, textInputHandler));
-		effect(() => event$1('focus', input, open));
-		action(input, ($$node) => init$1?.($$node));
+		action(input, ($$node) => init?.($$node));
 
 		var span = sibling(input, 2);
 		let classes_3;
@@ -9722,16 +9495,16 @@
 
 		var node = sibling(div_3, 2);
 
-		slot(
-			node,
-			$$props,
-			'default',
-			{
-				get isOpen() {
-					return isOpen();
-				}
-			},
-			($$anchor) => {
+		{
+			var consequent = ($$anchor) => {
+				var fragment = comment();
+				var node_1 = first_child(fragment);
+
+				snippet(node_1, children, () => ({ isOpen: isOpen() }));
+				append($$anchor, fragment);
+			};
+
+			var alternate = ($$anchor) => {
 				ColorPicker($$anchor, {
 					get positioningContextElement() {
 						return get(inputElement);
@@ -9759,11 +9532,14 @@
 
 					set color($$value) {
 						color($$value);
-					},
-					$$legacy: true
+					}
 				});
-			}
-		);
+			};
+
+			if_block(node, ($$render) => {
+				if (children()) $$render(consequent); else $$render(alternate, -1);
+			});
+		}
 
 		reset(div);
 		bind_this(div, ($$value) => set(parent, $$value), () => get(parent));
@@ -9778,23 +9554,20 @@
 				classes_3 = set_class(span, 1, 'title svelte-7gb28q', null, classes_3, { show: !isOpen() });
 				set_text(text_1, title());
 			},
-			[
-				() => ({
-					'background-color': (
-						deep_read_state(color()),
-						untrack(() => color().toHex8String())
-					)
-				})
-			]
+			[() => ({ 'background-color': color().toHex8String() })]
 		);
 
-		event$1('mousedown', div, openAndPreventDefault);
-		event$1('keydown', div, keydown);
-		event$1('focusout', div, focusout);
+		delegated('mousedown', div, openAndPreventDefault);
+		delegated('keydown', div, keydown);
+		delegated('focusout', div, focusout);
+		delegated('input', input, textInputHandler);
+		event('focus', input, open);
 		append($$anchor, div);
 
 		return pop($$exports);
 	}
+
+	delegate(['mousedown', 'keydown', 'focusout', 'input']);
 
 	create_custom_element(
 		ColorInput,
@@ -9807,9 +9580,10 @@
 			onInput: {},
 			onClose: {},
 			class: {},
-			position: {}
+			position: {},
+			children: {}
 		},
-		['default'],
+		[],
 		[],
 		{ mode: 'open' }
 	);
@@ -9822,43 +9596,31 @@
 	};
 
 	function ColorPicker$1($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 		append_styles$1($$anchor, $$css$2);
 
-		let color = prop($$props, 'color', 12);
-		let isOpen = prop($$props, 'isOpen', 12, false);
-		let showAlphaSlider = prop($$props, 'showAlphaSlider', 12, false);
-		let position = prop($$props, 'position', 28, () => Position.Auto);
+		let pickerEl = state(void 0);
 
-		/** Element used to figure out position (probably an input element) */
-		let positioningContextElement = prop($$props, 'positioningContextElement', 12);
+		let color = prop($$props, 'color', 15),
+			isOpen = prop($$props, 'isOpen', 7, false),
+			showAlphaSlider = prop($$props, 'showAlphaSlider', 7, false),
+			position = prop($$props, 'position', 23, () => Position.Auto),
+			positioningContextElement = prop($$props, 'positioningContextElement', 7),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			});
 
-		let pickerEl = mutable_source();
-
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
-
-		let showAbove = mutable_source(false);
-
-		legacy_pre_effect(() => (deep_read_state(color()), deep_read_state(onInput())), () => {
+		user_effect(() => {
 			if (color()) onInput()();
 		});
 
-		legacy_pre_effect(
-			() => (
-				get(pickerEl),
-				deep_read_state(positioningContextElement()),
-				shouldShowAbove
-			),
-			() => {
-				if (get(pickerEl) && positioningContextElement()) {
-					set(showAbove, shouldShowAbove(get(pickerEl), positioningContextElement()));
-				}
+		let showAbove = user_derived(() => {
+			if (!get(pickerEl)) {
+				return false;
 			}
-		);
 
-		legacy_pre_effect_reset();
+			shouldShowAbove(get(pickerEl), positioningContextElement());
+		});
 
 		var $$exports = {
 			get color() {
@@ -9874,7 +9636,7 @@
 				return isOpen();
 			},
 
-			set isOpen($$value) {
+			set isOpen($$value = false) {
 				isOpen($$value);
 				flushSync();
 			},
@@ -9883,7 +9645,7 @@
 				return showAlphaSlider();
 			},
 
-			set showAlphaSlider($$value) {
+			set showAlphaSlider($$value = false) {
 				showAlphaSlider($$value);
 				flushSync();
 			},
@@ -9892,7 +9654,7 @@
 				return position();
 			},
 
-			set position($$value) {
+			set position($$value = Position.Auto) {
 				position($$value);
 				flushSync();
 			},
@@ -9910,13 +9672,15 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			}
 		};
-
-		init();
 
 		var fragment = comment();
 		var node = first_child(fragment);
@@ -9938,8 +9702,7 @@
 
 					set color($$value) {
 						color($$value);
-					},
-					$$legacy: true
+					}
 				});
 
 				var node_2 = sibling(node_1, 2);
@@ -9955,8 +9718,7 @@
 
 					set color($$value) {
 						color($$value);
-					},
-					$$legacy: true
+					}
 				});
 
 				var node_3 = sibling(node_2, 2);
@@ -9974,8 +9736,7 @@
 
 							set color($$value) {
 								color($$value);
-							},
-							$$legacy: true
+							}
 						});
 					};
 
@@ -9992,9 +9753,12 @@
 					hidden: !isOpen()
 				}));
 
-				event$1('touchstart', div, preventDefault(function ($$arg) {
-					bubble_event.call(this, $$props, $$arg);
-				}));
+				delegated(
+					'touchstart',
+					div,
+					(e) => {
+						e.preventDefault();
+					});
 
 				append($$anchor, div);
 			};
@@ -10008,6 +9772,8 @@
 
 		return pop($$exports);
 	}
+
+	delegate(['touchstart']);
 
 	create_custom_element(
 		ColorPicker$1,
@@ -10025,13 +9791,12 @@
 	);
 
 	function HueSlider$1($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 
-		let color = prop($$props, 'color', 12);
-
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
+		let color = prop($$props, 'color', 15),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			});
 
 		var $$exports = {
 			get color() {
@@ -10047,13 +9812,15 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			}
 		};
-
-		init();
 
 		Slider($$anchor, {
 			get color() {
@@ -10061,7 +9828,7 @@
 			},
 			max: 360,
 			get handleColor() {
-				return `hsl(${(deep_read_state(color()), untrack(() => color().h)) ?? ''},100%,50%)`;
+				return `hsl(${color().h ?? ''},100%,50%)`;
 			},
 			style: 'hue',
 			get onInput() {
@@ -10074,8 +9841,7 @@
 
 			set value($$value) {
 				color(color().h = $$value, true);
-			},
-			$$legacy: true
+			}
 		});
 
 		return pop($$exports);
@@ -10084,13 +9850,12 @@
 	create_custom_element(HueSlider$1, { color: {}, onInput: {} }, [], [], { mode: 'open' });
 
 	function AlphaSlider$1($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 
-		let color = prop($$props, 'color', 12);
-
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
+		let color = prop($$props, 'color', 15),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			});
 
 		var $$exports = {
 			get color() {
@@ -10106,19 +9871,21 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			}
 		};
 
-		init();
-
 		{
-			let $0 = derived_safe_equal(() => (deep_read_state(color()), untrack(() => color().h)));
-			let $1 = derived_safe_equal(() => (deep_read_state(color()), untrack(() => color().s * 100)));
-			let $2 = derived_safe_equal(() => (deep_read_state(color()), untrack(() => color().v * 100)));
-			let $3 = derived_safe_equal(() => (deep_read_state(color()), untrack(() => color().a)));
+			let $0 = user_derived(() => color().h);
+			let $1 = user_derived(() => color().s * 100);
+			let $2 = user_derived(() => color().v * 100);
+			let $3 = user_derived(() => color().a);
 
 			Slider($$anchor, {
 				get color() {
@@ -10139,8 +9906,7 @@
 
 				set value($$value) {
 					color(color().a = $$value, true);
-				},
-				$$legacy: true
+				}
 			});
 		}
 
@@ -10157,20 +9923,23 @@
 	};
 
 	function ColorArea$1($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 		append_styles$1($$anchor, $$css$1);
 
-		let color = prop($$props, 'color', 12);
-		let clientHeight = prop($$props, 'clientHeight', 12, 0);
+		let color = prop($$props, 'color', 15),
+			clientHeight = prop($$props, 'clientHeight', 15, 0),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			});
 
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
-
-		let hue = mutable_source(color().h);
-		let parent = mutable_source();
+		let hue = user_derived(() => color().h);
+		let parent = state(void 0);
 
 		function pickPos(clientX, clientY) {
+			if (!get(parent)) {
+				return;
+			}
+
 			const rect = get(parent).getBoundingClientRect();
 			const x = clientX - rect.left;
 			const y = clientY - rect.top;
@@ -10213,6 +9982,8 @@
 		}
 
 		function touchStart(e) {
+			e.preventDefault();
+
 			if (e.touches.length === 1) {
 				touching = true;
 				pickPos(e.touches[0].clientX, e.touches[0].clientY);
@@ -10222,12 +9993,6 @@
 		function touchEnd() {
 			touching = false;
 		}
-
-		legacy_pre_effect(() => (deep_read_state(color())), () => {
-			set(hue, color().h);
-		});
-
-		legacy_pre_effect_reset();
 
 		var $$exports = {
 			get color() {
@@ -10243,7 +10008,7 @@
 				return clientHeight();
 			},
 
-			set clientHeight($$value) {
+			set clientHeight($$value = 0) {
 				clientHeight($$value);
 				flushSync();
 			},
@@ -10252,20 +10017,22 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			}
 		};
 
-		init();
-
 		var div = root$2();
 
-		event$1('mousemove', $window, onMouse);
-		event$1('mouseup', $window, mouseUp);
-		event$1('touchmove', $window, onTouch);
-		event$1('touchend', $window, touchEnd);
+		event('mousemove', $window, onMouse);
+		event('mouseup', $window, mouseUp);
+		event('touchmove', $window, onTouch, void 0, true);
+		event('touchend', $window, touchEnd);
 
 		let styles;
 		var div_1 = child(div);
@@ -10280,40 +10047,24 @@
 				styles_1 = set_style(div_1, '', styles_1, $1);
 			},
 			[
+				() => ({ '--hue-color': `hsl(${Math.round(get(hue))},100%,50%)` }),
 				() => ({
-					'--hue-color': (
-						get(hue),
-						untrack(() => `hsl(${Math.round(get(hue))},100%,50%)`)
-					)
-				}),
-
-				() => ({
-					top: (
-						deep_read_state(color()),
-						untrack(() => (1 - color().v) * 100 + '%')
-					),
-
-					left: (
-						deep_read_state(color()),
-						untrack(() => color().s * 100 + '%')
-					),
-
-					'background-color': (
-						deep_read_state(color()),
-						untrack(() => color().toHexString())
-					)
+					top: (1 - color().v) * 100 + '%',
+					left: color().s * 100 + '%',
+					'background-color': color().toHexString()
 				})
 			]
 		);
 
+		delegated('mousedown', div, mouseDown);
+		delegated('touchstart', div, touchStart);
 		bind_element_size(div, 'clientHeight', clientHeight);
-		event$1('mousedown', div, mouseDown);
-		event$1('touchstart', div, preventDefault(touchStart));
 		append($$anchor, div);
 
 		return pop($$exports);
 	}
 
+	delegate(['mousedown', 'touchstart']);
 	create_custom_element(ColorArea$1, { color: {}, clientHeight: {}, onInput: {} }, [], [], { mode: 'open' });
 
 	var root$1 = from_html(`<div role="slider" tabindex="-1"><div class="slider-track svelte-1ia9vwu"><div class="slider-track-overlay svelte-1ia9vwu"></div></div> <div class="slider-handle svelte-1ia9vwu"></div></div>`);
@@ -10324,22 +10075,25 @@
 	};
 
 	function Slider$1($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 		append_styles$1($$anchor, $$css);
 
-		let value = prop($$props, 'value', 12);
-		let max = prop($$props, 'max', 12);
-		let color = prop($$props, 'color', 12);
-		let handleColor = prop($$props, 'handleColor', 12, undefined);
-		let style = prop($$props, 'style', 12);
+		let value = prop($$props, 'value', 15),
+			max = prop($$props, 'max', 7),
+			color = prop($$props, 'color', 7),
+			handleColor = prop($$props, 'handleColor', 7, undefined),
+			style = prop($$props, 'style', 7),
+			onInput = prop($$props, 'onInput', 7, () => {
+				/* noop */
+			});
 
-		let onInput = prop($$props, 'onInput', 12, () => {
-			/* noop */
-		});
-
-		let parent = mutable_source();
+		let parent = state(void 0);
 
 		function pickPos(clientY) {
+			if (!get(parent)) {
+				return;
+			}
+
 			const rect = get(parent).getBoundingClientRect();
 			const y = clientY - rect.top;
 			const percentage = y / rect.height;
@@ -10376,6 +10130,8 @@
 		}
 
 		function touchStart(e) {
+			e.preventDefault();
+
 			if (e.touches.length === 1) {
 				touching = true;
 				pickPos(e.touches[0].clientY);
@@ -10418,7 +10174,7 @@
 				return handleColor();
 			},
 
-			set handleColor($$value) {
+			set handleColor($$value = undefined) {
 				handleColor($$value);
 				flushSync();
 			},
@@ -10436,20 +10192,22 @@
 				return onInput();
 			},
 
-			set onInput($$value) {
+			set onInput(
+				$$value = () => {
+					/* noop */
+				}
+			) {
 				onInput($$value);
 				flushSync();
 			}
 		};
 
-		init();
-
 		var div = root$1();
 
-		event$1('mousemove', $window, onMouse);
-		event$1('mouseup', $window, mouseUp);
-		event$1('touchmove', $window, onTouch);
-		event$1('touchend', $window, touchEnd);
+		event('mousemove', $window, onMouse);
+		event('mouseup', $window, mouseUp);
+		event('touchmove', $window, onTouch, void 0, true);
+		event('touchend', $window, touchEnd);
 
 		let classes;
 		var div_1 = sibling(child(div), 2);
@@ -10470,20 +10228,17 @@
 					'background-color': handleColor()
 				});
 			},
-			[
-				() => (
-					deep_read_state(color()),
-					untrack(() => color().toHexString())
-				)
-			]
+			[() => color().toHexString()]
 		);
 
-		event$1('mousedown', div, mouseDown);
-		event$1('touchstart', div, preventDefault(touchStart));
+		delegated('mousedown', div, mouseDown);
+		delegated('touchstart', div, touchStart);
 		append($$anchor, div);
 
 		return pop($$exports);
 	}
+
+	delegate(['mousedown', 'touchstart']);
 
 	create_custom_element(
 		Slider$1,
@@ -10499,22 +10254,6 @@
 		[],
 		{ mode: 'open' }
 	);
-
-	var Position;
-	(function (Position) {
-	    Position[Position["Auto"] = 0] = "Auto";
-	    Position[Position["Above"] = 1] = "Above";
-	    Position[Position["Below"] = 2] = "Below";
-	})(Position || (Position = {}));
-	/** Determines if `popupElement` should be shown above `positioningContextElement` */
-	function shouldShowAbove(popupElement, positioningContextElement) {
-	    const inputBounds = positioningContextElement.getBoundingClientRect();
-	    const spaceAbove = inputBounds.top;
-	    const spaceBelow = window.innerHeight - (inputBounds.top + inputBounds.height);
-	    const enoughSpaceAbove = spaceAbove > popupElement.clientHeight;
-	    const enoughSpaceBelow = spaceBelow > popupElement.clientHeight;
-	    return !enoughSpaceBelow && enoughSpaceAbove;
-	}
 
 	var root = from_html(`<span> </span>`);
 	var root_1 = from_html(`<div class="p-2 to-top-section"><button class="arrow-up-icon btn btn-default  t3js-editform-delete-record moveDomainColor"><!></button></div>`);
@@ -10624,14 +10363,24 @@ button {
 	);
 
 	function DomainColorPickers($$anchor, $$props) {
-		push($$props, false);
+		push($$props, true);
 
-		const validInput = mutable_source();
-		const colors = mutable_source();
-		let domainColors = prop($$props, 'domainColors', 28, () => []);
-		let conf = prop($$props, 'conf', 28, () => ({}));
-		let domainName = mutable_source('');
-		let domainColorsJson = mutable_source('{}');
+		let domainColors = prop($$props, 'domainColors', 31, () => proxy([])),
+			conf = prop($$props, 'conf', 23, () => ({}));
+
+		let domainName = state('');
+		let colors = state(proxy([]));
+		let domainColorsJson = state('{}');
+		let validInput = user_derived(() => isValidDomainName(get(domainName)));
+
+		user_effect(() => {
+			for (let i = 0; i < get(colors).length; i++) {
+				domainColors(domainColors()[i].color = get(colors)[i].color.toHexString(), true);
+				domainColors(domainColors()[i].domain = get(colors)[i].domain, true);
+			}
+
+			set(domainColorsJson, JSON.stringify(domainColors()), true);
+		});
 
 		/**
 		 * Check if the domain name is valid
@@ -10664,10 +10413,14 @@ button {
 		function addNewDomain(event) {
 			event.preventDefault();
 
-			set(colors, [
-				...get(colors),
-				{ domain: get(domainName), color: new Color("#CCC") }
-			]);
+			set(
+				colors,
+				[
+					...get(colors),
+					{ domain: get(domainName), color: new Color("#CCC") }
+				],
+				true
+			);
 
 			domainColors([
 				...domainColors(),
@@ -10684,7 +10437,7 @@ button {
 		 */
 		function deleteDomainColor(event, index) {
 			event.preventDefault();
-			set(colors, get(colors).filter((_, i) => i !== index));
+			set(colors, get(colors).filter((_, i) => i !== index), true);
 			domainColors(domainColors().filter((_, i) => i !== index));
 		}
 
@@ -10693,7 +10446,7 @@ button {
 				if (obj.color !== undefined) {
 					let color = { 'domain': obj.domain, 'color': new Color(obj.color) };
 
-					set(colors, [...get(colors), color]);
+					set(colors, [...get(colors), color], true);
 				}
 			});
 		});
@@ -10711,40 +10464,16 @@ button {
 			let currentColor = get(colors)[index];
 			let targetColor = get(colors)[targetIndex];
 
-			mutate(colors, get(colors)[targetIndex] = currentColor);
-			mutate(colors, get(colors)[index] = targetColor);
+			get(colors)[targetIndex] = currentColor;
+			get(colors)[index] = targetColor;
 		}
-
-		legacy_pre_effect(() => {}, () => {
-			set(validInput, false);
-		});
-
-		legacy_pre_effect(() => (get(validInput), get(domainName)), () => {
-			set(validInput, isValidDomainName(get(domainName)));
-			set(validInput, get(validInput));
-		});
-
-		legacy_pre_effect(() => {}, () => {
-			set(colors, []);
-		});
-
-		legacy_pre_effect(() => (get(colors), deep_read_state(domainColors())), () => {
-			for (let i = 0; i < get(colors).length; i++) {
-				domainColors(domainColors()[i].color = get(colors)[i].color.toHexString(), true);
-				domainColors(domainColors()[i].domain = get(colors)[i].domain, true);
-			}
-
-			set(domainColorsJson, JSON.stringify(domainColors()));
-		});
-
-		legacy_pre_effect_reset();
 
 		var $$exports = {
 			get domainColors() {
 				return domainColors();
 			},
 
-			set domainColors($$value) {
+			set domainColors($$value = []) {
 				domainColors($$value);
 				flushSync();
 			},
@@ -10753,13 +10482,11 @@ button {
 				return conf();
 			},
 
-			set conf($$value) {
+			set conf($$value = {}) {
 				conf($$value);
 				flushSync();
 			}
 		};
-
-		init();
 
 		var fragment = comment();
 		var node = first_child(fragment);
@@ -10821,7 +10548,7 @@ button {
 
 				var node_1 = sibling(div_1, 2);
 
-				each(node_1, 1, () => (get(colors), untrack(() => Array.from(get(colors)))), index, ($$anchor, color, index) => {
+				each(node_1, 17, () => Array.from(get(colors)), index, ($$anchor, color, index) => {
 					var div_12 = root_3();
 					var div_13 = child(div_12);
 					var div_14 = child(div_13);
@@ -10852,9 +10579,8 @@ button {
 						},
 
 						set color($$value) {
-							mutate(colors, get(colors)[index].color = $$value);
-						},
-						$$legacy: true
+							get(colors)[index].color = $$value;
+						}
 					});
 
 					reset(div_22);
@@ -10877,26 +10603,18 @@ button {
 									var text_4 = child(span_3, true);
 
 									reset(span_3);
-
-									template_effect(() => set_text(text_4, (
-										deep_read_state(conf()),
-										untrack(() => conf().toTopBtnLabel)
-									)));
-
+									template_effect(() => set_text(text_4, conf().toTopBtnLabel));
 									append($$anchor, span_3);
 								};
 
 								if_block(node_4, ($$render) => {
-									if ((
-										deep_read_state(conf()),
-										untrack(() => conf().toTopBtnLabel !== undefined)
-									)) $$render(consequent);
+									if (conf().toTopBtnLabel !== undefined) $$render(consequent);
 								});
 							}
 
 							reset(button_1);
 							reset(div_23);
-							event$1('click', button_1, () => moveDomainColor(event, 'toTop', index));
+							delegated('click', button_1, (event) => moveDomainColor(event, 'toTop', index));
 							append($$anchor, div_23);
 						};
 
@@ -10919,34 +10637,23 @@ button {
 									var text_5 = child(span_4, true);
 
 									reset(span_4);
-
-									template_effect(() => set_text(text_5, (
-										deep_read_state(conf()),
-										untrack(() => conf().toDownBtnLabel)
-									)));
-
+									template_effect(() => set_text(text_5, conf().toDownBtnLabel));
 									append($$anchor, span_4);
 								};
 
 								if_block(node_6, ($$render) => {
-									if ((
-										deep_read_state(conf()),
-										untrack(() => conf().toDownBtnLabel !== undefined)
-									)) $$render(consequent_2);
+									if (conf().toDownBtnLabel !== undefined) $$render(consequent_2);
 								});
 							}
 
 							reset(button_2);
 							reset(div_24);
-							event$1('click', button_2, () => moveDomainColor(event, 'toDown', index));
+							delegated('click', button_2, (event) => moveDomainColor(event, 'toDown', index));
 							append($$anchor, div_24);
 						};
 
 						if_block(node_5, ($$render) => {
-							if ((
-								get(colors),
-								untrack(() => get(colors).length > index + 1)
-							)) $$render(consequent_3);
+							if (get(colors).length > index + 1) $$render(consequent_3);
 						});
 					}
 
@@ -10960,20 +10667,12 @@ button {
 							var text_6 = child(span_5, true);
 
 							reset(span_5);
-
-							template_effect(() => set_text(text_6, (
-								deep_read_state(conf()),
-								untrack(() => conf().DeleteBtnLabel)
-							)));
-
+							template_effect(() => set_text(text_6, conf().DeleteBtnLabel));
 							append($$anchor, span_5);
 						};
 
 						if_block(node_7, ($$render) => {
-							if ((
-								deep_read_state(conf()),
-								untrack(() => conf().DeleteBtnLabel !== undefined)
-							)) $$render(consequent_4);
+							if (conf().DeleteBtnLabel !== undefined) $$render(consequent_4);
 						});
 					}
 
@@ -10993,83 +10692,41 @@ button {
 					template_effect(
 						($0, $1) => {
 							classes_1 = set_class(input_2, 1, 'edit form-control mb-2 domain-name', null, classes_1, $0);
-
-							set_class(div_25, 1, `p-2 ${(
-							get(colors),
-							untrack(() => index === 0 || get(colors).length === index + 1 ? 'last-delete-btn' : 'delete-btn')
-						) ?? ''}`);
-
+							set_class(div_25, 1, `p-2 ${index === 0 || get(colors).length === index + 1 ? 'last-delete-btn' : 'delete-btn'}`);
 							set_text(text_7, $1);
 						},
 						[
 							() => ({ invalidInput: !isValidDomainName(get(color).domain) }),
-							() => (
-								get(color),
-								deep_read_state(conf()),
-								untrack(() => isValidDomainName(get(color).domain) === true ? "" : conf().regexpError + conf().ignoredItem)
-							)
+							() => isValidDomainName(get(color).domain) === true ? "" : conf().regexpError + conf().ignoredItem
 						]
 					);
 
-					bind_value(input_2, () => get(color).domain, ($$value) => (
-						get(color).domain = $$value,
-						invalidate_inner_signals(() => (get(colors)))
-					));
-
-					event$1('click', button_3, () => deleteDomainColor(event, index));
+					bind_value(input_2, () => get(color).domain, ($$value) => (get(color).domain = $$value));
+					delegated('click', button_3, (event) => deleteDomainColor(event, index));
 					append($$anchor, div_12);
 				});
 
 				reset(div);
 
 				template_effect(() => {
-					set_text(text, (
-						deep_read_state(conf()),
-						untrack(() => conf().description)
-					));
-
-					set_text(text_1, (
-						deep_read_state(conf()),
-						untrack(() => conf().description_2)
-					));
-
-					set_attribute(input_1, 'placeholder', (
-						deep_read_state(conf()),
-						untrack(() => conf().placeholder)
-					));
-
+					set_text(text, conf().description);
+					set_text(text_1, conf().description_2);
+					set_attribute(input_1, 'placeholder', conf().placeholder);
 					classes = set_class(input_1, 1, 'new-domain form-control mb-2', null, classes, { invalidInput: !get(validInput) });
-
-					set_text(text_2, (
-						get(validInput),
-						deep_read_state(conf()),
-						untrack(() => get(validInput) === true ? "" : conf().regexpError)
-					));
-
-					button.disabled = (
-						get(validInput),
-						get(domainName),
-						untrack(() => get(validInput) === false || get(domainName).length === 0)
-					);
-
-					set_text(text_3, (
-						deep_read_state(conf()),
-						untrack(() => conf().buttonLabel)
-					));
+					set_text(text_2, get(validInput) === true ? "" : conf().regexpError);
+					button.disabled = get(validInput) === false || get(domainName).length === 0;
+					set_text(text_3, conf().buttonLabel);
 				});
 
 				bind_value(input, () => get(domainColorsJson), ($$value) => set(domainColorsJson, $$value));
+				delegated('keydown', input_1, handleKeyDown);
 				bind_value(input_1, () => get(domainName), ($$value) => set(domainName, $$value));
-				event$1('keydown', input_1, handleKeyDown);
-				event$1('click', button, addNewDomain);
+				delegated('click', button, addNewDomain);
 				append($$anchor, fragment_1);
 			};
 
 			if_block(node, ($$render) => {
-				if ((
-					deep_read_state(conf()),
-					untrack(() => conf().placeholder !== undefined)
-				)) $$render(consequent_5);
+				if (conf().placeholder !== undefined) $$render(consequent_5);
 			});
 		}
 
@@ -11077,6 +10734,8 @@ button {
 
 		return pop($$exports);
 	}
+
+	delegate(['keydown', 'click']);
 
 	customElements.define('qc-domain-color-pickers', create_custom_element(
 		DomainColorPickers,

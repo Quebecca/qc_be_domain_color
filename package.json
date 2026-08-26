@@ -14,7 +14,7 @@
     "@rollup/plugin-commonjs": "*",
     "@rollup/plugin-node-resolve": "*",
     "@rollup/plugin-url": "^8.0.2",
-    "color-picker-svelte": "^1.4.1",
+    "color-picker-svelte": "^2.0.4",
     "js-beautify": "^1.15.1",
     "jsonformatter": "^0.7.0",
     "lodash": "^4.17.21",
