@@ -13,4 +13,4 @@
 
 <qc-domain-color-pickers
         data-conf='{JSON.stringify(conf)}'
-        domain-colors='{JSON.stringify(fixtures)}'></qc-domain-color-pickers>
+        domain-colors='{JSON.stringify(fixtures)}'/>
