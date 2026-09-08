@@ -22,3 +22,7 @@
 # Ignore temp directory.
 /typo3temp/
 /Resources/Private/WebComponents/DomainColorPickers/dev/testBundle.js
+# Dépendances Node et bruit IDE/OS
+/node_modules/
+/.idea/
+.DS_Store

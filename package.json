@@ -4,7 +4,12 @@
   "description": "This extension inject CSS in the BE interface to modify the color of the left/Modules frame. The color is associated to one or many domains. It can be useful when you get many TYPO3 instances, local DDEV/Docker installations or development servers and you want to really make the production server stand out.",
   "main": "index.js",
   "scripts": {
-    "dev": "rollup -c -w",
+    "build": "vite build",
+    "build:test": "BUILD_TARGET=test vite build",
+    "dev": "vite build --watch",
+    "dev:test": "BUILD_TARGET=test vite build --watch",
+    "build:rollup": "rollup -c",
+    "dev:rollup": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
@@ -29,6 +34,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "glob": "^10.3.10",
     "gulp": "^5.0.0",
     "gulp-sass": "^5.1.0",
@@ -38,7 +44,8 @@
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.80.6",
     "svelte-preprocess": "^5.1.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.6.1"
