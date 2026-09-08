@@ -57,8 +57,8 @@ export default defineConfig({
         outDir: target.outDir,
         // Ne pas vider le dossier de sortie (il contient d'autres assets publics suivis).
         emptyOutDir: false,
-        // JS non minifié, comme le build Rollup actuel (aucun terser dans rollup.config.js).
-        minify: false,
+        // Minification esbuild (défaut Vite). Le JS de BackOffice n'a pas besoin d'être lisible.
+        minify: 'esbuild',
         lib: {
             entry: path.resolve(__dirname, target.entry),
             formats: ['iife'],
