@@ -1,0 +1,29 @@
+# CI : vérifie que l'extension compile à chaque PR et sur master.
+# Lance `npm ci && npm run build` — le même build que celui qui produit
+# l'artefact livré (Resources/Public/WebComponents/.../DomainColorPickers.js).
+# S'applique aussi aux PR Dependabot : un bump qui casse le build vire au rouge.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# Annule un run précédent encore en cours sur la même réf (économie de minutes).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installer les dépendances
+        run: npm ci
+      - name: Build
+        run: npm run build
