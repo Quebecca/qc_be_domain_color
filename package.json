@@ -4,17 +4,17 @@
   "description": "This extension inject CSS in the BE interface to modify the color of the left/Modules frame. The color is associated to one or many domains. It can be useful when you get many TYPO3 instances, local DDEV/Docker installations or development servers and you want to really make the production server stand out.",
   "main": "index.js",
   "scripts": {
-    "dev": "rollup -c -w",
+    "build": "vite build",
+    "build:test": "BUILD_TARGET=test vite build",
+    "dev": "vite build --watch",
+    "dev:test": "BUILD_TARGET=test vite build --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rollup/plugin-commonjs": "*",
-    "@rollup/plugin-node-resolve": "*",
-    "@rollup/plugin-url": "^8.0.2",
-    "color-picker-svelte": "^1.4.1",
+    "color-picker-svelte": "^2.0.4",
     "js-beautify": "^1.15.1",
     "jsonformatter": "^0.7.0",
     "lodash": "^4.17.21",
@@ -22,26 +22,17 @@
     "md5": "^2.3.0",
     "papaparse": "^5.4.1",
     "qc-trousse-sdg": "^1.2.1",
-    "rollup": "*",
-    "rollup-plugin-includepaths": "^0.2.4",
-    "rollup-plugin-svelte": "*",
-    "svelte": "^4"
+    "svelte": "^5.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^6.1.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "glob": "^10.3.10",
     "gulp": "^5.0.0",
     "gulp-sass": "^5.1.0",
     "postcss": "^8.4.47",
-    "rollup-plugin-glob-import": "^0.5.0",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.80.6",
-    "svelte-preprocess": "^5.1.0",
-    "typescript": "^5.9.3"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.6.1"
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
   },
   "overrides": {
     "minimatch": "^10.2.1"
