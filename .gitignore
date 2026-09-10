@@ -26,3 +26,5 @@
 /node_modules/
 /.idea/
 .DS_Store
+# Projet yarn-only : le lock npm ne doit pas être committé
+/package-lock.json

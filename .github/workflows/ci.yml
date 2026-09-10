@@ -1,6 +1,6 @@
 # CI : vérifie que l'extension compile à chaque PR et sur master.
-# Lance `npm ci && npm run build` — le même build que celui qui produit
-# l'artefact livré (Resources/Public/WebComponents/.../DomainColorPickers.js).
+# Lance `yarn install --frozen-lockfile && yarn build` — le même build que celui
+# qui produit l'artefact livré (Resources/Public/WebComponents/.../DomainColorPickers.js).
 # S'applique aussi aux PR Dependabot : un bump qui casse le build vire au rouge.
 name: CI
 
@@ -22,8 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: yarn
       - name: Installer les dépendances
-        run: npm ci
+        run: yarn install --frozen-lockfile
       - name: Build
-        run: npm run build
+        run: yarn build
