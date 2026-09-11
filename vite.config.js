@@ -57,8 +57,10 @@ export default defineConfig({
         outDir: target.outDir,
         // Ne pas vider le dossier de sortie (il contient d'autres assets publics suivis).
         emptyOutDir: false,
-        // Minification esbuild (défaut Vite). Le JS de BackOffice n'a pas besoin d'être lisible.
-        minify: 'esbuild',
+        // Minification par le minifieur par défaut de Vite (Oxc depuis Vite 8 /
+        // rolldown-vite ; esbuild n'est plus embarqué). Le JS de BackOffice n'a
+        // pas besoin d'être lisible.
+        minify: true,
         lib: {
             entry: path.resolve(__dirname, target.entry),
             formats: ['iife'],
